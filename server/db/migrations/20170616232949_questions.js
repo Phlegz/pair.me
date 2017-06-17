@@ -15,9 +15,7 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-   return Promise.all([
-    knex.schema.dropTable('questions')
-  ])
+   return knex.raw("drop table questions cascade");
 };
 
 

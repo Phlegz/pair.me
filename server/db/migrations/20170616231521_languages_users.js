@@ -12,9 +12,7 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-   return Promise.all([
-    knex.schema.dropTable('languages_users')
-  ])
+   return knex.raw("drop table languages_users cascade")
 };
 
 

@@ -8,8 +8,5 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-   return Promise.all([
-    knex.schema.dropTable('challenges')
-  ])
+   return knex.raw("drop table relationships cascade");
 };
-``
