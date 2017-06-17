@@ -1,10 +1,30 @@
 import React, {Component} from 'react';
+import {
+  HashRouter as Router,
+  Route,
+  Link
+} from 'react-router-dom'
 
-class App extends Component {
-  render() {
-    return (
-      <h1>Hello React :)</h1>
-    );
-  }
-}
+import Home from './home.jsx'
+import About from './about.jsx'
+import Topics from './topics.jsx'
+
+const App = () => (
+  <Router>
+    <div>
+      <ul>
+        <li><Link to="/">Home</Link></li>
+        <li><Link to="/about">About</Link></li>
+        <li><Link to="/topics">Topics</Link></li>
+      </ul>
+
+      <hr/>
+
+      <Route exact path="/" component={Home}/>
+      <Route path="/about" component={About}/>
+      <Route path="/topics" component={Topics}/>
+    </div>
+  </Router>
+)
+
 export default App;
