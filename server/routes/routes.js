@@ -14,8 +14,9 @@ module.exports = (knex) => {
 
 
 
-  // router.get("/dashboard", (req, res) => {
-  // });
+  router.get("/dashboard", (req, res) => {
+    res.render(dashboard)
+  });
 
   // router.post("/dashboard", (req, res) => {
 
