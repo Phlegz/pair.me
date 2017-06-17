@@ -14,8 +14,11 @@
     "dotenv": "^2.0.0",
     "ejs": "^2.4.1",
     "express": "^4.13.4",
+    "express-session": "^1.15.3",
     "knex": "^0.11.7",
     "node-sass-middleware": "^0.9.8",
+    "passport": "^0.3.2",
+    "passport-github2": "^0.1.10",
     "pg": "^6.0.2",
     "socket.io": "^2.0.3"
   },
