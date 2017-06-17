@@ -1,9 +1,8 @@
-"use strict";
-
 require('dotenv').config();
 
 const PORT        = process.env.PORT || 8080;
 const ENV         = process.env.ENV || "development";
+
 const express     = require("express");
 const app         = express();
 const server      = require('http').Server(app);
@@ -14,6 +13,7 @@ const sass        = require("node-sass-middleware");
 
 const knexConfig  = require("./knexfile");
 const knex        = require("knex")(knexConfig[ENV]);
+
 const morgan      = require('morgan');
 const knexLogger  = require('knex-logger');
 
@@ -21,9 +21,10 @@ const knexLogger  = require('knex-logger');
 const Routes      = require("./routes/routes");
 
 
-// Load the logger first so all (static) HTTP requests are logged to STDOUT
-// 'dev' = Concise output colored by response status for development use.
-//         The :status token will be colored red for server error codes, yellow for client error codes, cyan for redirection codes, and uncolored for all other codes.
+//Only use knexLogger and morgan in development.
+//Load the logger first so all (static) HTTP requests are logged to STDOUT
+//'dev' = Concise output colored by response status for development use.
+//The :status token will be colored red for server error codes, yellow for client error codes, cyan for redirection codes, and uncolored for all other codes.
 if (ENV === 'development') {
   const morgan = require('morgan');
   app.use(morgan('dev'));
@@ -32,6 +33,7 @@ if (ENV === 'development') {
 }
 
 app.set("view engine", "ejs");
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/styles", sass({
   src: __dirname + "/styles",
