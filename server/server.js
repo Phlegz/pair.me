@@ -11,7 +11,6 @@ const session     = require('express-session');
 
 const GitHubStrategy = require('passport-github2').Strategy;
 const passport = require('passport');
-// const Strategy = require('passport-github').Strategy;
 
 
 const bodyParser  = require("body-parser");
@@ -64,13 +63,7 @@ passport.use(new GitHubStrategy({
     callbackURL: "http://localhost:8080/auth/github/callback"
   },
  function(accessToken, refreshToken, profile, done) {
-    // asynchronous verification, for effect...
     process.nextTick(function () {
-
-      // To keep the example simple, the user's GitHub profile is returned to
-      // represent the logged-in user.  In a typical application, you would want
-      // to associate the GitHub account with a user record in your database,
-      // and return that user instead.
       return done(null, profile);
     });
   }
@@ -114,8 +107,6 @@ app.get('/auth/github/callback',
   function(req, res) {
     res.redirect('/');
   });
-
-
 
 
 // Mount all resource routes
