@@ -6,7 +6,6 @@ exports.up = function(knex, Promise) {
       table.foreign('user_id').references('users.id')
       table.integer('challenge_id').unsigned();
       table.foreign('challenge_id').references('challenges.id')
-      table.unique(['user_id', 'challenge_id']);
     })
   ])
 };
