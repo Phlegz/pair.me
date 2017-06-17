@@ -4,16 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint src",
+    "lint": "eslint --ext .jsx,.js src",
     "knex": "./node_modules/.bin/knex",
-    "start": "./node_modules/.bin/webpack-dev-server",
+    "start": "node server.js",
     "build": "webpack -p --config webpack.production.config.js"
   },
   "dependencies": {
     "moment": "^2.18.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
-    "react-fontawesome": "^1.5.0"
+    "react-fontawesome": "^1.5.0",
+    "react-router-dom": "^4.1.1"
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",
