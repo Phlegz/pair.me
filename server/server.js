@@ -44,7 +44,9 @@ app.use("/styles", sass({
 app.use(express.static("public"));
 
 // Mount all resource routes
-app.use("/", Routes(knex));
+
+let bundleGenerated = 'http://localhost:3000/build/bundle-generated.js';
+app.use("/", Routes(knex, bundleGenerated));
 
 app.listen(PORT, () => {
   console.log(`Listening on ${PORT}`);

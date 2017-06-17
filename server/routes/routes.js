@@ -3,7 +3,15 @@
 const express = require("express");
 const router  = express.Router();
 
-module.exports = (knex) => {
+module.exports = (knex, bundleGenerated) => {
+
+  router.get('/', (req, res) => {
+    res.render('index')
+  })
+
+  router.get('/dashboard', (req, res) => {
+    res.render('dashboard', {bundleGenerated :bundleGenerated } )
+  })
 
   // router.get("/", (req, res) => {
   // });
