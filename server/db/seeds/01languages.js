@@ -1,6 +1,6 @@
 
 exports.seed = function(knex, Promise) {
-  return knex('languages').del()
+  return knex.raw('TRUNCATE TABLE languages CASCADE')
     .then(function () {
       return Promise.all([
         knex('languages').insert({id: 1, name: "Javascript"}),

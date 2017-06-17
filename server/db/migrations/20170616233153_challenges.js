@@ -5,6 +5,7 @@ exports.up = function(knex, Promise) {
       table.integer('duration');
       table.integer('question_id').unsigned();
       table.foreign('question_id').references('questions.id');
+      table.string('users_answer', 5000);
       table.boolean('completed');
     })
   ])
