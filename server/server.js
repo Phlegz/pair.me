@@ -63,12 +63,28 @@ passport.use(new GitHubStrategy({
     callbackURL: "http://localhost:8080/auth/github/callback"
   },
  function(accessToken, refreshToken, profile, done) {
-    process.nextTick(function () {
-      return done(null, profile);
-    });
+    knex('users').where('github_id', profile.id).then(user => {
+      let userQuery;
+      if (user.length === 0) {
+        console.log('userid', user.id)
+        userQuery = knex('users').insert({
+          github_login: profile.username,
+          github_avatar: profile._json.avatar_url,
+          github_name: profile.displayName,
+          github_id: profile.id,
+          github_token: accessToken
+        }).returning('github_id')
+      } else {
+        userQuery = knex('users').where('github_id', profile.id).update({
+          github_token: accessToken
+        }). returning('github_id')
+      }
+      userQuery.then((github_id) => {
+        return done(null, github_id[0]);
+      })
+    })
   }
 ));
-
 
 app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 // Initialize Passport!  Also use passport.session() middleware, to support
@@ -97,11 +113,6 @@ app.get('/auth/github',
     // function will not be called.
   });
 
-// GET /auth/github/callback
-//   Use passport.authenticate() as route middleware to authenticate the
-//   request.  If authentication fails, the user will be redirected back to the
-//   login page.  Otherwise, the primary route function will be called,
-//   which, in this example, will redirect the user to the home page.
 app.get('/auth/github/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
   function(req, res) {
