@@ -6,6 +6,6 @@ import {
   Link
 } from 'react-router-dom'
 
-import App from './app.jsx'
+import Dashboard from './components/dashboard.jsx'
 
-ReactDOM.render(<App />, document.getElementById('react-root'));
+ReactDOM.render(<Dashboard />, document.getElementById('react-root'));
