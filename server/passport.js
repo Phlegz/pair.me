@@ -3,12 +3,16 @@ const passport = require('passport');
 
 module.exports = function(knex, passport) {
 
+  //required for persistent login sessions
+  //passport needs ability to serialize and deserialize users out of sessions
   passport.serializeUser(function(user, done) {
     done(null, user);
   });
 
-  passport.deserializeUser(function(obj, done) {
-    done(null, obj);
+  passport.deserializeUser(function(id, done) {
+    knex('users').where('github_id',id)
+    .then(user => {done(null, user[0])
+    })
   });
 
   passport.use(new GitHubStrategy({
@@ -17,20 +21,22 @@ module.exports = function(knex, passport) {
       callbackURL: "http://localhost:8080/auth/github/callback"
     },
    function(accessToken, refreshToken, profile, done) {
+      //find a user whose id is the same as the profile id
+      //if the user doesnt exist, create new user entry
       knex('users').where('github_id', profile.id).then(user => {
         let userQuery;
         if (user.length === 0) {
-          console.log('userid', user.id)
           userQuery = knex('users').insert({
-            github_login: profile.username,
-            github_avatar: profile._json.avatar_url,
-            github_name: profile.displayName,
+            name: null,
+            email: null,
+            github_username: profile.username,
+            access_token: accessToken,
+            avatar: profile._json.avatar_url,
             github_id: profile.id,
-            github_token: accessToken
           }).returning('github_id')
         } else {
           userQuery = knex('users').where('github_id', profile.id).update({
-            github_token: accessToken
+            access_token: accessToken
           }). returning('github_id')
         }
         userQuery.then((github_id) => {
@@ -39,25 +45,5 @@ module.exports = function(knex, passport) {
       })
     }
   ));
-
-
-  // function ensureAuthenticated(req, res, next) {
-  //   if (req.isAuthenticated()) { return next(); }
-  //   res.redirect('/login')
-  // }
-
-
-  // app.get('/auth/github',
-  //   passport.authenticate('github', { scope: [ 'user:email' ] }),
-  //   function(req, res){
-  //     // The request will be redirected to GitHub for authentication, so this
-  //     // function will not be called.
-  //   });
-
-  // app.get('/auth/github/callback',
-  //   passport.authenticate('github', { failureRedirect: '/login' }),
-  //   function(req, res) {
-  //     res.redirect('/dashboard');
-  //   });
 
 };
