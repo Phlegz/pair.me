@@ -22,6 +22,7 @@ const knexLogger  = require('knex-logger');
 
 // Modules
 const Routes      = require("./routes/routes");
+const githubAuth  = require('./passport')(knex,passport);
 
 
 //Only use knexLogger and morgan in development.
@@ -46,7 +47,7 @@ app.use("/styles", sass({
 }));
 app.use(express.static("public"));
 
-
+//initialze passport, passport.session for persistent login
 app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -55,8 +56,6 @@ app.use(passport.session());
 // Mount all resource routes
 let bundleGenerated = 'http://localhost:3000/build/bundle-generated.js';
 app.use("/", Routes(knex, bundleGenerated));
-require('./passport')(knex,passport);
-
 
 
 
