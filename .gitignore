@@ -3,5 +3,4 @@ node_modules/
 npm-debug.log
 .env
 settings.json
-server/public/styles
 *.log
