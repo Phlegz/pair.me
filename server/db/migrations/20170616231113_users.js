@@ -15,5 +15,3 @@ exports.up = function(knex, Promise) {
 exports.down = function(knex, Promise) {
    return knex.raw("drop table users cascade");
 };
-
-

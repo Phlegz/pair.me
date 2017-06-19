@@ -3,14 +3,38 @@
 const express = require("express");
 const router  = express.Router();
 
+const passport = require('passport');
+
 module.exports = (knex, bundleGenerated) => {
+
+  function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) { return next(); }
+      res.redirect('/')
+  }
 
   router.get('/', (req, res) => {
     res.render('index')
   })
 
-  router.get('/dashboard', (req, res) => {
+  router.get('/auth/github',
+    passport.authenticate('github', { scope: [ 'user:email' ]
+  }));
+
+  //successful authentication, redirect to dashboard
+  router.get('/auth/github/callback',
+    passport.authenticate('github', { failureRedirect: '/login' }),
+    function(req, res) {
+      res.redirect('/dashboard');
+    });
+
+  router.get('/dashboard', ensureAuthenticated, (req, res) => {
     res.render('dashboard', {bundleGenerated :bundleGenerated } )
+  })
+
+  router.get('/logout', (req,res) => {
+    req.logOut();
+    req.session.destroy();
+    res.redirect('/');
   })
 
   // router.get("/", (req, res) => {
@@ -21,10 +45,6 @@ module.exports = (knex, bundleGenerated) => {
   // });
 
 
-
-  router.get("/dashboard", (req, res) => {
-    res.render(dashboard)
-  });
 
   // router.post("/dashboard", (req, res) => {
 

@@ -7,11 +7,9 @@ const express     = require("express");
 const app         = express();
 const server      = require('http').Server(app);
 const io          = require('socket.io')(server);
+
 const session     = require('express-session');
-
-const GitHubStrategy = require('passport-github2').Strategy;
-const passport = require('passport');
-
+const passport    = require('passport');
 
 const bodyParser  = require("body-parser");
 const sass        = require("node-sass-middleware");
@@ -24,6 +22,7 @@ const knexLogger  = require('knex-logger');
 
 // Modules
 const Routes      = require("./routes/routes");
+const githubAuth  = require('./passport')(knex,passport);
 
 
 //Only use knexLogger and morgan in development.
@@ -48,71 +47,16 @@ app.use("/styles", sass({
 }));
 app.use(express.static("public"));
 
-
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
-});
-
-passport.use(new GitHubStrategy({
-    clientID: process.env.GITHUB_CLIENT_ID,
-    clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: "http://localhost:8080/auth/github/callback"
-  },
- function(accessToken, refreshToken, profile, done) {
-    process.nextTick(function () {
-      return done(null, profile);
-    });
-  }
-));
-
-
+//initialze passport, passport.session for persistent login
 app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
-// Initialize Passport!  Also use passport.session() middleware, to support
-// persistent login sessions (recommended).
 app.use(passport.initialize());
 app.use(passport.session());
 
 
-app.get('/', function(req, res){
-  res.render('index', { user: req.user });
-});
-
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login')
-}
-
-app.get('/account', ensureAuthenticated, function(req, res){
-  res.render('account', { user: req.user });
-});
-
-app.get('/auth/github',
-  passport.authenticate('github', { scope: [ 'user:email' ] }),
-  function(req, res){
-    // The request will be redirected to GitHub for authentication, so this
-    // function will not be called.
-  });
-
-// GET /auth/github/callback
-//   Use passport.authenticate() as route middleware to authenticate the
-//   request.  If authentication fails, the user will be redirected back to the
-//   login page.  Otherwise, the primary route function will be called,
-//   which, in this example, will redirect the user to the home page.
-app.get('/auth/github/callback',
-  passport.authenticate('github', { failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect('/dashboard');
-  });
-
-
 // Mount all resource routes
-
 let bundleGenerated = 'http://localhost:3000/build/bundle-generated.js';
 app.use("/", Routes(knex, bundleGenerated));
+
 
 
 app.listen(PORT, () => {
