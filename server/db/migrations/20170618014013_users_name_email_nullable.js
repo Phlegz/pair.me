@@ -1,22 +1,19 @@
 exports.up = function(knex, Promise) {
   return Promise.all([
-    knex.raw('ALTER TABLE users ALTER COLUMN email DROP NOT NULL')
-    .then(knex.raw('ALTER TABLE users ALTER COLUMN name DROP NOT NULL'))
-    .then(knex.schema.table('users', function(table){
+    knex.schema.alterTable('users', function(table){
+      table.string('name').alter();
+      table.string('email').alter();
       table.integer('github_id');
-      })
-    )
+    })
   ])
 };
 
 exports.down = function(knex, Promise) {
   return Promise.all([
-    knex.raw('ALTER TABLE users ALTER COLUMN email SET NOT NULL')
-    .then(knex.raw('ALTER TABLE users ALTER COLUMN name SET NOT NULL'))
-    .then(knex.schema.table('users', function(table){
+    knex.schema.alterTable('users', function(table){
+      table.string('name').notNullable().alter();
+      table.string('email').notNullable().alter();
       table.dropColumn('github_id');
-      })
-    )
+    })
   ])
 };
-
