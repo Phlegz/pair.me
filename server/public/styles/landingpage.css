@@ -1,0 +1,80 @@
+html, body {
+  height: 100%;
+}
+
+body {
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+  background-color: #303133;
+  text-align: center;
+  vertical-align: middle;
+}
+
+h1 {
+  animation: typing-text 4s steps(31), blink 0.5s infinite alternate;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #eee;
+  font-size: 3em;
+  border-right: 3px solid #000;
+}
+
+@keyframes typing-text {
+  from {
+    width: 0;
+  }
+  to {
+    width: 31ch;
+  }
+}
+
+@keyframes blink {
+  from {
+    border-color: transparent;
+  }
+  to {
+    border-color: #fff;
+  }
+}
+
+.section {
+  display: -webkit-inline-box;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 50%;
+  height: 100px;
+}
+
+.github {
+  position: absolute;
+  top: 58%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin-top: 7%;
+}
+
+.githublink {
+  color: #eee;
+}
+
+span.blue {
+  color: #029ff9;
+}
+span.yellow {
+  color: #efd807;
+}
+
+span.pink {
+  color: #f22e89;
+}
+
+:hover.pink {
+  color: orange;
+}
+
