@@ -14,7 +14,7 @@
     "dotenv": "^2.0.0",
     "ejs": "^2.4.1",
     "express": "^4.13.4",
-    "knex": "^0.11.7",
+    "knex": "^0.13.0",
     "node-sass-middleware": "^0.9.8",
     "pg": "^6.0.2",
     "socket.io": "^2.0.3"
