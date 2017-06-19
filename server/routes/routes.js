@@ -5,7 +5,7 @@ const router  = express.Router();
 
 const passport = require('passport');
 
-module.exports = (knex, bundleGenerated) => {
+module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
 
   function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
@@ -28,13 +28,17 @@ module.exports = (knex, bundleGenerated) => {
     });
 
   router.get('/dashboard', ensureAuthenticated, (req, res) => {
-    res.render('dashboard', {bundleGenerated :bundleGenerated } )
+    res.render('dashboard', {bundleDashboardGenerated :bundleDashboardGenerated } )
   })
 
   router.get('/logout', (req,res) => {
     req.logOut();
     req.session.destroy();
     res.redirect('/');
+  })
+
+  router.get('/challenge', ensureAuthenticated, (req, res) => {
+    res.render('challengePage', {bundleChallengeGenerated :bundleChallengeGenerated } )
   })
 
   // router.get("/", (req, res) => {
