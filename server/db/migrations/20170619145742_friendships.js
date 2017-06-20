@@ -1,7 +1,7 @@
 exports.up = function(knex, Promise) {
   return knex.schema.createTable('friendships', function(table){
       table.increments('id');
-      table.timestamp('requested_at').notNullable().defaultTo(knex.raw('now()'));
+      table.timestamp('requested_at').notNullable();
       table.timestamp('responded_at');
       table.string('status').notNullable().defaultTo("pending");
       table.timestamps(true,true);
