@@ -42,6 +42,17 @@ module.exports = (knex, bundleGenerated) => {
       })
   });
 
+  router.get('/api/history', (req, res) => {
+    let current_history = req.session.passport.user;
+    knex
+      .select('id', 'question_id', 'completed_at', 'submitted_answer')
+      .from('challenges')
+      .where({id: 5001})
+      .then((results) => {
+        res.json(results);
+      })
+  });
+
   router.get('/logout', (req,res) => {
     req.logOut();
     req.session.destroy();

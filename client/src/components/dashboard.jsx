@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Profile from './Profile.jsx';
+import History from './History.jsx';
 import axios from 'axios';
 import {
   HashRouter as Router,
@@ -11,7 +12,7 @@ const routes = [
   {
     path: '/',
     exact: true,
-    main: () => (<h2>Dashboard</h2>)
+    // main: () => (<h2>Dashboard</h2>)
   },
   {
     path: '/profile',
@@ -19,7 +20,7 @@ const routes = [
   },
   {
     path: '/history',
-    main: () => (<h2>History</h2>)
+    main: History
   }
 ];
 
@@ -32,7 +33,7 @@ class Dashboard extends React.Component {
   render() {
     return (
       <Router>
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex'}}>
           <div style={{
             padding: '10px',
             width: '20%',

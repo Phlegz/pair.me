@@ -32,17 +32,23 @@ class Profile extends Component {
     let emptyArr = [];
     // let profileComponent = prof.map(){};
 
+
     if (prof.length != 0) {
       for (let i = 0; i < prof.length; i++) {
       emptyArr.push(
       <div key={Math.random()}>
-        <p> {prof[i].github_username} </p>
-        <img src={prof[i].avatar} />
+        <p> Name: {prof[i].name} </p>
+        <p> Github Username: {prof[i].github_username} </p>
+        <p> Email: {prof[i].email} </p>
+        <div className="wrapper">
+          <img src={prof[i].avatar} />
+        </div>
       </div>
       )}
     }
 
   return (
+
     <div>
       {emptyArr}
     </div>
