@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import brace from 'brace';
 import AceEditor from 'react-ace';
+import axios from 'axios';
 
 import 'brace/mode/javascript';
 import 'brace/theme/monokai';
@@ -17,18 +18,19 @@ class Challenge extends Component {
     //finally use getValue() function to get the contents
     var editor = ace.edit('codeChallenges');
     var textValue = editor.getValue();
-    var data = {text : textValue };
 
-    axios.post('/api/text', {
-      data: data
+    axios.post('/api/challenges', {
+      data: textValue
     })
     .then(function(response) {
-      console.log(response);
+      console.log('RESPONSE',response);
     })
-
- }
+    .catch(function(error){
+      console.log(error);
+    })
+  }
   onChange(newValue) {
-    //console.log(newValue);
+    // console.log(newValue);
   } 
   render() {
     return (

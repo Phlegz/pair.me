@@ -37,14 +37,21 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
     res.redirect('/');
   })
 
-  //-----------------new stuff ------------------//
-
-  router.get('api/text', (req,res) => {  
+  router.get('/api/challenges', (req,res) => {
+     knex
+      .select("*")
+      .from("challenges")
+      .then((results) => {
+        res.json(results);
+    });  
   })
   
-  router.post('api/text', (req,res) => {
-   })
-  //--------------------------------------------//
+  router.post('/api/challenges', (req,res) => {
+    res.send('you reaced the challenges page');
+  //   knex('challenges').insert ({
+  //   submitted_answer: 
+  })
+  
   
   
   
