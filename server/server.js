@@ -54,8 +54,9 @@ app.use(passport.session());
 
 
 // Mount all resource routes
-let bundleGenerated = 'http://localhost:3000/build/bundle-generated.js';
-app.use("/", Routes(knex, bundleGenerated));
+let bundleDashboardGenerated = 'http://localhost:3000/build/dashboardIndex.bundle-generated.js';
+let bundleChallengeGenerated = 'http://localhost:3000/build/challengeIndex.bundle-generated.js';
+app.use("/", Routes(knex, bundleDashboardGenerated, bundleChallengeGenerated));
 
 
 
