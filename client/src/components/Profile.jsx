@@ -30,11 +30,12 @@ class Profile extends Component {
   render() {
     let prof = this.state.profile;
     let emptyArr = [];
+    // let profileComponent = prof.map(){};
 
     if (prof.length != 0) {
       for (let i = 0; i < prof.length; i++) {
       emptyArr.push(
-      <div>
+      <div key={Math.random()}>
         <p> {prof[i].github_username} </p>
         <img src={prof[i].avatar} />
       </div>
