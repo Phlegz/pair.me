@@ -31,6 +31,17 @@ module.exports = (knex, bundleGenerated) => {
     res.render('dashboard', {bundleGenerated :bundleGenerated } )
   })
 
+  router.get('/api/profile', (req, res) => {
+    let current_user = req.session.passport.user;
+    knex
+      .select('name', 'avatar', 'email', 'github_username')
+      .from('users')
+      .where({github_id: current_user})
+      .then((results) => {
+        res.json(results);
+      })
+  });
+
   router.get('/logout', (req,res) => {
     req.logOut();
     req.session.destroy();
