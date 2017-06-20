@@ -10,6 +10,7 @@
     "knex": "./node_modules/.bin/knex"
   },
   "dependencies": {
+    "axios": "^0.16.2",
     "body-parser": "^1.15.2",
     "dotenv": "^2.0.0",
     "ejs": "^2.4.1",

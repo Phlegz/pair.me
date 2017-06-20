@@ -37,6 +37,17 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
     res.redirect('/');
   })
 
+  //-----------------new stuff ------------------//
+
+  router.get('api/text', (req,res) => {  
+  })
+  
+  router.post('api/text', (req,res) => {
+   })
+  //--------------------------------------------//
+  
+  
+  
   router.get('/challenge', ensureAuthenticated, (req, res) => {
     res.render('challengePage', {bundleChallengeGenerated :bundleChallengeGenerated } )
   })

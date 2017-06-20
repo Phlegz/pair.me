@@ -10,13 +10,23 @@ class Challenge extends Component {
   //   super(props);
   //   this.state = { content: '' }
   // }
+  
   submitCode(event){
     event.preventDefault();
     //to get the instance of the Editor through ace-editor name
     //finally use getValue() function to get the contents
     var editor = ace.edit('codeChallenges');
-    console.log(editor.getValue());
-  }
+    var textValue = editor.getValue();
+    var data = {text : textValue };
+
+    axios.post('/api/text', {
+      data: data
+    })
+    .then(function(response) {
+      console.log(response);
+    })
+
+ }
   onChange(newValue) {
     //console.log(newValue);
   } 
