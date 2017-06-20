@@ -4,6 +4,8 @@ const express = require("express");
 const router  = express.Router();
 
 const passport = require('passport');
+const sandbox = require('sandbox');
+const sb = new sandbox();
 
 module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
 
@@ -43,13 +45,20 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
       .from("challenges")
       .then((results) => {
         res.json(results);
-    });  
+    });
   })
   
   router.post('/api/challenges', (req,res) => {
-    res.send('you reaced the challenges page');
-  //   knex('challenges').insert ({
-  //   submitted_answer: 
+    res.send("Posting answer");
+    let textValue = JSON.parse(req.body.answer);
+    // console.log("BODY",req.body.answer) ;
+    // console.log("PARSED",textValue);
+    // sandbox
+    sb.run(`${textValue}`,
+      function(output) {
+        console.log("OUTPUT",output.result)
+      }
+    );
   })
   
   

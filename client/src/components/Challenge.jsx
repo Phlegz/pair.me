@@ -16,11 +16,11 @@ class Challenge extends Component {
     event.preventDefault();
     //to get the instance of the Editor through ace-editor name
     //finally use getValue() function to get the contents
-    var editor = ace.edit('codeChallenges');
-    var textValue = editor.getValue();
+    let editor = ace.edit('codeChallenges');
+    let textValue = JSON.stringify(editor.getValue());
 
     axios.post('/api/challenges', {
-      data: textValue
+      answer: textValue
     })
     .then(function(response) {
       console.log('RESPONSE',response);
