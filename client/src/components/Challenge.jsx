@@ -6,6 +6,8 @@ import axios from 'axios';
 import 'brace/mode/javascript';
 import 'brace/theme/monokai';
 
+import ChatBox from './chatApp.jsx';
+
 const io = require('socket.io-client');
 const socket = io();
 
@@ -52,7 +54,6 @@ class Challenge extends Component {
   render() {
     return (
       <div>
-
           <AceEditor
             name="codeChallenges"
             mode="javascript"
@@ -63,8 +64,11 @@ class Challenge extends Component {
             tabSize="2"
           />
           <input type='button' value='Submit' onClick={this.submitCode} />
-
+          <ChatBox />
       </div>
+
+
+
     );
   }
 }
