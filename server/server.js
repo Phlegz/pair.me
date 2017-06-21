@@ -4,9 +4,9 @@ const PORT        = process.env.PORT || 8080;
 const ENV         = process.env.ENV || "development";
 
 const express     = require("express");
+
 const app         = express();
-const server      = require('http').Server(app);
-const io          = require('socket.io')(server);
+// const server      = require('http').Server(app);
 
 const session     = require('express-session');
 const passport    = require('passport');
@@ -39,7 +39,7 @@ if (ENV === 'development') {
 app.set("view engine", "ejs");
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json()) 
+app.use(bodyParser.json())
 app.use("/styles", sass({
   src: __dirname + "/styles",
   dest: __dirname + "/public/styles",
@@ -54,6 +54,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
+
 // Mount all resource routes
 let bundleDashboardGenerated = 'http://localhost:3000/build/dashboardIndex.bundle-generated.js';
 let bundleChallengeGenerated = 'http://localhost:3000/build/challengeIndex.bundle-generated.js';
@@ -61,17 +62,38 @@ app.use("/", Routes(knex, bundleDashboardGenerated, bundleChallengeGenerated));
 
 
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Listening on ${PORT}`);
 });
+const io = require('socket.io')(server);
 
 //====================*******Handling the websocket connection******===================
 
-io.on('connection', (client) => {
-  console.log('client connected');
-  //TODO create another module to handle the transactions
-  client.emit('news', { hello: 'world' });
-  client.on('my other event', (data) => {
-    console.log(data);
-  });
+// io.on('connection', (client) => {
+//   console.log('client connected');
+//   //TODO create another module to handle the transactions
+//   client.emit('news', { hello: 'world' });
+//   client.on('my other event', (data) => {
+//     console.log(data);
+//   });
+// });
+
+
+
+//----------------socketIO ----------------------//
+// let users = []
+io.on('connection', (socket) => {
+  console.log('connection to client established');
+
+  socket.on('clientMessage', (message)=>{
+      let clientMessage = JSON.parse(message);
+      io.emit('serverMessage', clientMessage.message.content);
+    })
+
+  socket.on('disconnect', () => {
+    console.log('server disconnected');
+  })
 });
+
+//-----------------------------------------------//
+

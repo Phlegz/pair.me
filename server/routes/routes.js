@@ -33,6 +33,17 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
     res.render('dashboard', {bundleDashboardGenerated :bundleDashboardGenerated } )
   })
 
+  router.get('/api/profile', (req, res) => {
+    let current_user = req.session.passport.user;
+    knex
+      .select('name', 'avatar', 'email', 'github_username')
+      .from('users')
+      .where({github_id: current_user})
+      .then((results) => {
+        res.json(results);
+      })
+  });
+
   router.get('/logout', (req,res) => {
     req.logOut();
     req.session.destroy();
@@ -62,12 +73,11 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
         res.json(JSON.stringify(output));
       }
     );
-
   })
-  
-  
-  
-  
+
+
+
+
   router.get('/challenge', ensureAuthenticated, (req, res) => {
     res.render('challengePage', {bundleChallengeGenerated :bundleChallengeGenerated } )
   })

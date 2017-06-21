@@ -6,6 +6,12 @@ import axios from 'axios';
 import 'brace/mode/javascript';
 import 'brace/theme/monokai';
 
+import ChatBox from './chatApp.jsx';
+
+// const io = require('socket.io-client');
+// const socket = io();
+
+
 class Challenge extends Component {
   constructor(props) {
     super(props);
@@ -62,7 +68,9 @@ class Challenge extends Component {
           { consoleArr }
           { showResult }
         </div>
+        <ChatBox />
       </div>
+
     );
   }
 }
