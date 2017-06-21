@@ -3,14 +3,54 @@ import Header from './chatHeader.jsx'
 import ChatBar from './chatBar.jsx';
 import MessageList from './MessageList.jsx'
 
+const io = require('socket.io-client');
+const socket = io();
+
+
+
 class ChatBox extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: [];
+      currentUser: {name: "req.user"},
+      messages: []
     }
+    this.socket = io.connect();
   }
+
+  onNewMessage(content) {
+    let newMessage = {
+      // type: 'postMessage',
+      // username: username,
+      content: content
+    }
+    socket.emit('clientMessage', JSON.stringify({ message: newMessage }));
+  }
+
+   componentDidMount() {
+
+    console.log('succesfully mounted');
+
+    socket.on('connect', () => {
+      console.log('client connected to server');
+    });
+
+    socket.on('disconnect', () => {
+      console.log('client disconnected');
+    });
+
+    socket.on('serverMessage', (message)=>{
+      //parsed from server
+      let newMessage = {
+      // type: 'postMessage',
+      username: 'test',
+      content: message
+    }
+      this.setState({ messages: this.state.messages.concat(newMessage) })
+
+    });
+  }
+
 
 
 
@@ -19,7 +59,7 @@ class ChatBox extends Component {
       <div className='chat-container'>
         <Header />
         <MessageList messages = { this.state.messages } />
-        <ChatBar />
+        <ChatBar onNewMessage = { this.onNewMessage } />
       </div>
       )
   }
