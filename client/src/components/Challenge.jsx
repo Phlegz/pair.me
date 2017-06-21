@@ -6,17 +6,25 @@ import axios from 'axios';
 import 'brace/mode/javascript';
 import 'brace/theme/monokai';
 
-import ChatBox from './chatApp.jsx';
-
-// const io = require('socket.io-client');
-// const socket = io();
-
+import ChatBox from './chatBox.jsx';
 
 class Challenge extends Component {
   constructor(props) {
     super(props);
-    this.state = { result: "", console: [], aceValue: "" }
+    this.state = {
+      result: "",
+      console: [],
+      aceValue: "",
+      user: null
+    }
   }
+  componentDidMount() {
+    axios.get('/api/profile')
+    .then((response)=> {
+      this.setState({user: response.data[0]})
+    })
+  }
+
   submitCode(event){
     event.preventDefault();
 
@@ -24,7 +32,7 @@ class Challenge extends Component {
     let textValue = JSON.stringify(editor.getValue());
 
     this.setState({aceValue: editor.getValue()});
-    
+
     var self = this;
     axios.post('/api/challenges', {
       answer: textValue
@@ -68,7 +76,7 @@ class Challenge extends Component {
           { consoleArr }
           { showResult }
         </div>
-        <ChatBox />
+        <ChatBox user={this.state.user} />
       </div>
 
     );
