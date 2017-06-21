@@ -13,21 +13,19 @@ class Challenge extends Component {
   }
   submitCode(event){
     event.preventDefault();
-    //to get the instance of the Editor through ace-editor name
-    //finally use getValue() function to get the contents
+
     let editor = ace.edit('codeChallenges');
     let textValue = JSON.stringify(editor.getValue());
-    this.setState({aceValue: editor.getValue()})
+
+    this.setState({aceValue: editor.getValue()});
+    
     var self = this;
     axios.post('/api/challenges', {
       answer: textValue
     })
     .then(function(response) {
-      // console.log('RESPONSE',response.data);
 
       let outputData = JSON.parse(response.data);
-      // console.log("PARSED",outputData);
-      
       self.setState({result: outputData.result});
       self.setState({console: outputData.console});
     })
@@ -49,21 +47,21 @@ class Challenge extends Component {
     }
     return (
       <div>
-          <AceEditor
-            name="codeChallenges"
-            mode="javascript"
-            theme="monokai"
-            editorProps={{$blockScrolling: Infinity}}
-            defaultValue="// Type your code here"
-            tabSize={2}
-            value={this.state.aceValue}
-          />
-          <input type='button' value='Submit' onClick={(e) => this.submitCode(e) } />
-          <div className="output">
-            Output:
-            { consoleArr }
-            { showResult }
-          </div>
+        <AceEditor
+          name="codeChallenges"
+          mode="javascript"
+          theme="monokai"
+          editorProps={{$blockScrolling: Infinity}}
+          defaultValue="// Type your code here"
+          tabSize={2}
+          value={this.state.aceValue}
+        />
+        <input type='button' value='Submit' onClick={(e) => this.submitCode(e) } />
+        <div className="output">
+          Output:
+          { consoleArr }
+          { showResult }
+        </div>
       </div>
     );
   }
