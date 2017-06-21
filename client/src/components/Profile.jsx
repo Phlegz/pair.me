@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import { PageHeader, Jumbotron, Button } from 'react-bootstrap';
+
 import {
   HashRouter as Router,
   Route,
@@ -25,6 +27,8 @@ class Profile extends Component {
     .catch (function(error) {
       console.log(error);
     })
+
+
   }
 
   render() {
@@ -32,17 +36,25 @@ class Profile extends Component {
     let emptyArr = [];
     // let profileComponent = prof.map(){};
 
-
     if (prof.length != 0) {
       for (let i = 0; i < prof.length; i++) {
       emptyArr.push(
+
       <div key={Math.random()}>
-        <p> Name: {prof[i].name} </p>
-        <p> Github Username: {prof[i].github_username} </p>
-        <p> Email: {prof[i].email} </p>
+        <PageHeader>
+          <h2>Profile</h2>
+        </PageHeader>
+
+        <Jumbotron>
         <div className="wrapper">
           <img src={prof[i].avatar} />
         </div>
+          <p> Name: {prof[i].name} </p>
+          <p> Github Username: {prof[i].github_username} </p>
+          <p> Email: {prof[i].email} </p>
+          <Button bsStyle="info">Edit Profile</Button>
+        </Jumbotron>
+
       </div>
       )}
     }

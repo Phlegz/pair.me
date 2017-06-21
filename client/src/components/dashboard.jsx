@@ -8,11 +8,13 @@ import {
   Link
 } from 'react-router-dom'
 
+import { Navbar, Nav, NavItem } from 'react-bootstrap';
+
 const routes = [
   {
     path: '/',
     exact: true,
-    // main: () => (<h2>Dashboard</h2>)
+    main: () => (<h2>Dashboard</h2>)
   },
   {
     path: '/profile',
@@ -33,8 +35,10 @@ class Dashboard extends React.Component {
   render() {
     return (
       <Router>
-        <div style={{ display: 'flex'}}>
-          <div style={{
+
+
+          <div style={{ display: 'flex' }}>
+             <div style={{
             padding: '10px',
             width: '20%',
             background: 'white',
@@ -48,19 +52,19 @@ class Dashboard extends React.Component {
 
           </div>
 
-          <div style={{ flex: 1, padding: '10px' }}>
-            {routes.map((route, index) => (
-              // Render more <Route>s with the same paths as
-              // above, but different components this time.
-              <Route
-                key={index}
-                path={route.path}
-                exact={route.exact}
-                component={route.main}
-              />
-            ))}
+            <div style={{ flex: 1, padding: '10px' }}>
+              {routes.map((route, index) => (
+                // Render more <Route>s with the same paths as
+                // above, but different components this time.
+                <Route
+                  key={index}
+                  path={route.path}
+                  exact={route.exact}
+                  component={route.main}
+                />
+              ))}
+            </div>
           </div>
-        </div>
       </Router>
   )
 }
