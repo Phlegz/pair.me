@@ -4,8 +4,10 @@ const express = require("express");
 const router  = express.Router();
 
 const passport = require('passport');
+const sandbox = require('sandbox');
+const sb = new sandbox();
 
-module.exports = (knex, bundleGenerated) => {
+module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
 
   function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
@@ -28,7 +30,7 @@ module.exports = (knex, bundleGenerated) => {
     });
 
   router.get('/dashboard', ensureAuthenticated, (req, res) => {
-    res.render('dashboard', {bundleGenerated :bundleGenerated } )
+    res.render('dashboard', {bundleDashboardGenerated :bundleDashboardGenerated } )
   })
 
   router.get('/api/profile', (req, res) => {
@@ -59,6 +61,35 @@ module.exports = (knex, bundleGenerated) => {
     req.logOut();
     req.session.destroy();
     res.redirect('/');
+  })
+
+  router.get('/api/challenges', (req,res) => {
+     knex
+      .select("*")
+      .from("challenges")
+      .then((results) => {
+        res.json(results);
+    });
+  })
+
+  router.post('/api/challenges', (req,res) => {
+
+    let textValue = JSON.parse(req.body.answer);
+    // console.log("BODY",req.body.answer);
+    // console.log("PARSED",textValue);
+    // sandbox
+    sb.run(`${textValue}`,
+      function(output) {
+        // console.log("OUTPUT",output);
+        // console.log("OUTPUT RESULT",output.result);
+        // console.log("CONSOLE LOG",output.console);
+        res.json(JSON.stringify(output));
+      }
+    );
+  })
+
+  router.get('/challenge', ensureAuthenticated, (req, res) => {
+    res.render('challengePage', {bundleChallengeGenerated :bundleChallengeGenerated } )
   })
 
   // router.get("/", (req, res) => {

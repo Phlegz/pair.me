@@ -3,10 +3,13 @@ const webpack = require('webpack');
 
 module.exports = {
   devtool: 'source-map',
-  entry: './src/index.jsx',
+  entry: {
+    dashboardIndex: './src/index.jsx',
+    challengeIndex: './src/challengeIndex.jsx'
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle-generated.js',
+    filename: '[name].bundle-generated.js',
     publicPath: '/build/'
   },
   module: {
