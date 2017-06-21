@@ -34,7 +34,7 @@ class History extends Component {
     return(
       <div>
         <PageHeader>
-          <h2>Challenges Done</h2>
+          Challenges Done
         </PageHeader>
         {
           this.state.history.map(hist => {

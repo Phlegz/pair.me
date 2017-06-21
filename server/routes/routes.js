@@ -33,6 +33,7 @@ module.exports = (knex, bundleGenerated) => {
 
   router.get('/api/profile', (req, res) => {
     let current_user = req.session.passport.user;
+    console.log(current_user);//github_id
     knex
       .select('name', 'avatar', 'email', 'github_username')
       .from('users')

@@ -42,7 +42,7 @@ class Profile extends Component {
 
       <div key={Math.random()}>
         <PageHeader>
-          <h2>Profile</h2>
+          Profile
         </PageHeader>
 
         <Jumbotron>
