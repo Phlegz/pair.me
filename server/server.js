@@ -65,7 +65,7 @@ app.use("/", Routes(knex, bundleDashboardGenerated, bundleChallengeGenerated));
 const server = app.listen(PORT, () => {
   console.log(`Listening on ${PORT}`);
 });
-const io          = require('socket.io')(server);
+const io = require('socket.io')(server);
 
 //====================*******Handling the websocket connection******===================
 
@@ -87,10 +87,21 @@ io.on('connection', (socket) => {
   // users.push(newUser);
   console.log('connection to client established');
   // socket.emit({type: 'USERS', users})
+
+  socket.on('client:message', data => {
+    console.log(`${data.message}`);
+
+    socket.broadcast.emit('server:message,data');
+  })
+
   socket.on('disconnect', () => {
     console.log('server disconnected');
     // users = users.filter(user => user !== newUser);
   })
+
+  socket.on('chat', (msg) => {
+    socket.broadcast.emit('chat',msg);
+  });
 });
 
 //-----------------------------------------------//
