@@ -13,21 +13,22 @@ const socket = io();
 
 
 class Challenge extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
+  constructor(props) {
+    super(props);
+    this.socket = io.connect();
+  }
+
   componentDidMount() {
 
     console.log('succesfully mounted');
 
     socket.on('connect', () => {
-      console.log(arguments);
       console.log('client connected to server');
     });
 
-    // socket.on('disconnect', () => {
-    //   console.log('client disconnected');
-    // });
+    socket.on('disconnect', () => {
+      console.log('client disconnected');
+    });
   }
 
 
