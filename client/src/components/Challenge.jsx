@@ -6,12 +6,29 @@ import axios from 'axios';
 import 'brace/mode/javascript';
 import 'brace/theme/monokai';
 
+const io = require('socket.io-client');
+const socket = io();
+
+
 class Challenge extends Component {
   // constructor(props) {
   //   super(props);
-  //   this.state = { content: '' }
   // }
-  
+  componentDidMount() {
+
+    console.log('succesfully mounted');
+
+    socket.on('connect', () => {
+      console.log(arguments);
+      console.log('client connected to server');
+    });
+
+    // socket.on('disconnect', () => {
+    //   console.log('client disconnected');
+    // });
+  }
+
+
   submitCode(event){
     event.preventDefault();
     //to get the instance of the Editor through ace-editor name
@@ -31,10 +48,11 @@ class Challenge extends Component {
   }
   onChange(newValue) {
     // console.log(newValue);
-  } 
+  }
   render() {
     return (
       <div>
+
           <AceEditor
             name="codeChallenges"
             mode="javascript"
@@ -45,6 +63,7 @@ class Challenge extends Component {
             tabSize="2"
           />
           <input type='button' value='Submit' onClick={this.submitCode} />
+
       </div>
     );
   }
