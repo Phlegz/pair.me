@@ -18,6 +18,7 @@ class Challenge extends Component {
       user: null
     }
   }
+
   componentDidMount() {
     axios.get('/api/profile')
     .then((response)=> {
