@@ -4,7 +4,6 @@ class ChatBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // username: '',
       content: ''
     };
     this.onMessage = this.onMessage.bind(this);
