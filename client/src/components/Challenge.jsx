@@ -9,7 +9,7 @@ import 'brace/theme/monokai';
 class Challenge extends Component {
   constructor(props) {
     super(props);
-    this.state = { result: [], console: [] }
+    this.state = { result: "", console: [], aceValue: "" }
   }
   submitCode(event){
     event.preventDefault();
@@ -17,8 +17,7 @@ class Challenge extends Component {
     //finally use getValue() function to get the contents
     let editor = ace.edit('codeChallenges');
     let textValue = JSON.stringify(editor.getValue());
-    // let code = editor.getValue();
-    // editor.setValue(code);
+    this.setState({aceValue: editor.getValue()})
     var self = this;
     axios.post('/api/challenges', {
       answer: textValue
@@ -38,11 +37,15 @@ class Challenge extends Component {
   }
   render() {
     let console = this.state.console;
-    let arr = [];
+    let consoleArr = [];
     for (let i = 0; i < console.length; i++) {
-      arr.push(
+      consoleArr.push(
         <ul>{ console[i] }</ul>
       )
+    }
+    let showResult;
+    if (this.state.result !== "null"){
+     showResult = <ul>{ this.state.result }</ul>;
     }
     return (
       <div>
@@ -50,15 +53,16 @@ class Challenge extends Component {
             name="codeChallenges"
             mode="javascript"
             theme="monokai"
-            editorProps={{$blockScrolling: true}}
-            value="// Type your code here"
-            tabSize="2"
+            editorProps={{$blockScrolling: Infinity}}
+            defaultValue="// Type your code here"
+            tabSize={2}
+            value={this.state.aceValue}
           />
           <input type='button' value='Submit' onClick={(e) => this.submitCode(e) } />
           <div className="output">
             Output:
-            { arr }
-            <ul>{ this.state.result }</ul>
+            { consoleArr }
+            { showResult }
           </div>
       </div>
     );
