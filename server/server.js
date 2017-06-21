@@ -87,7 +87,7 @@ io.on('connection', (socket) => {
 
   socket.on('clientMessage', (message)=>{
       let clientMessage = JSON.parse(message);
-      io.emit('serverMessage', clientMessage.message.content);
+      io.emit('serverMessage', clientMessage.message);
     })
 
   socket.on('disconnect', () => {
