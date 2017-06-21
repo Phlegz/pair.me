@@ -8,8 +8,8 @@ import 'brace/theme/monokai';
 
 import ChatBox from './chatApp.jsx';
 
-const io = require('socket.io-client');
-const socket = io();
+// const io = require('socket.io-client');
+// const socket = io();
 
 
 class Challenge extends Component {
