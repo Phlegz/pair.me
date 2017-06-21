@@ -47,18 +47,22 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
         res.json(results);
     });
   })
-  
+
   router.post('/api/challenges', (req,res) => {
-    res.send("Posting answer");
+
     let textValue = JSON.parse(req.body.answer);
-    // console.log("BODY",req.body.answer) ;
+    // console.log("BODY",req.body.answer);
     // console.log("PARSED",textValue);
     // sandbox
     sb.run(`${textValue}`,
       function(output) {
-        console.log("OUTPUT",output.result)
+        // console.log("OUTPUT",output);
+        // console.log("OUTPUT RESULT",output.result);
+        // console.log("CONSOLE LOG",output.console);
+        res.json(JSON.stringify(output));
       }
     );
+
   })
   
   
