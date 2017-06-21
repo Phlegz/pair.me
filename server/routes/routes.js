@@ -25,15 +25,16 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
   //successful authentication, redirect to dashboard
   router.get('/auth/github/callback',
     passport.authenticate('github', { failureRedirect: '/login' }),
-    function(req, res) {
+    (req, res) => {
       res.redirect('/dashboard');
-    });
+    }
+  );
 
   router.get('/dashboard', ensureAuthenticated, (req, res) => {
     res.render('dashboard', {bundleDashboardGenerated :bundleDashboardGenerated } )
   })
 
-  router.get('/api/profile', (req, res) => {
+  router.get('/api/profile_current', (req, res) => {
     let current_user = req.session.passport.user;
     console.log(current_user);//github_id
     knex
@@ -41,6 +42,19 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
       .from('users')
       .where({github_id: current_user})
       .then((results) => {
+        res.json(results);
+      })
+  });
+
+  router.get('/api/profiles/:username', (req, res) => {
+    knex
+      .select('name', 'avatar', 'email', 'github_username')
+      .from('users')
+      .where({github_username: req.params.username})
+      .then((results) => {
+        // TODO:  1) should only return one result when there is one
+        // TODO:  2) if no result, do something helpful
+        //              e.g. return a 404 ?
         res.json(results);
       })
   });
@@ -121,13 +135,13 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
   // router.get("/challenge/:challenge_id", (req, res) => {
   // });
 
-  // router.get("/profile/:username", (req, res) => {
+  // router.post("/profiles/:username", (req, res) => {
+  //   res.redirect("/profiles/:username")
   // });
-
-  // router.post("/profile/:username", (req, res) => {
-  //   res.redirect("/profile/:username")
-  // });
-
+  router.get('/*', ensureAuthenticated, (req, res) => {
+    res.cookie("unsafe_user_name", req.user.github_username);
+    res.render('dashboard', {bundleGenerated} );
+  })
 
   return router;
 };

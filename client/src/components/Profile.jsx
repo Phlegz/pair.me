@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+<<<<<<< HEAD
 import { PageHeader, Jumbotron, Button } from 'react-bootstrap';
 
 import {
@@ -8,29 +9,37 @@ import {
   Link
 } from 'react-router-dom'
 
+=======
+>>>>>>> Added the username at the end of the url so you can visit other ppl profile
 
 class Profile extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
-      profile: []
+      profile: null
     }
   }
 
-  componentDidMount() {
-    var self = this;
-    axios.get('/api/profile')
-    .then(function (response) {
-        self.setState({profile: self.state.profile.concat(response.data)})
-        console.log('in axios, after concat', response.data);
+  loadUserProfile(targetProfile) {
+    axios.get(`/api/profile/${targetProfile}`)
+    .then(response => {
+      if (!response.data.length) {
+        //TODO if username does not exist show the appropriaye messge to the user
+        return Promise.reject(new Error("Invalid username"))
+      }
+      this.setState({profile: response.data[0]})
     })
-    .catch (function(error) {
-      console.log(error);
+    .catch (error => {
+      if(process.env.NODE_ENV !== 'production'){
+        console.error(error);
+      }
     })
 
 
   }
 
+<<<<<<< HEAD
   render() {
     let prof = this.state.profile;
     let emptyArr = [];
@@ -57,15 +66,38 @@ class Profile extends Component {
 
       </div>
       )}
+=======
+  componentWillUpdate(nextProps, nextState) {
+    const usernameChanged = this.props.match.params.username !== nextProps.match.params.username
+    if (usernameChanged) {
+      this.loadUserProfile(nextProps.match.params.username);
+>>>>>>> Added the username at the end of the url so you can visit other ppl profile
+    }
+  }
+
+  componentDidMount() {
+    this.loadUserProfile(this.props.match.params.username)
+  }
+
+  render() {
+    let profile = this.state.profile;
+
+    if (!profile) {
+      return (
+        <div>Loading &hellip;</div>
+      )
     }
 
-  return (
-
-    <div>
-      {emptyArr}
-    </div>
-  );
-
+    return (
+      <div>
+        <p> Name: {profile.name} </p>
+        <p> Github Username: {profile.github_username} </p>
+        <p> Email: {profile.email} </p>
+        <div className="wrapper">
+          <img src={profile.avatar} />
+        </div>
+      </div>
+    );
   }
 }
 export default Profile;
