@@ -6,8 +6,6 @@ import MessageList from './MessageList.jsx'
 const io = require('socket.io-client');
 const socket = io();
 
-
-
 class ChatBox extends Component {
   constructor(props) {
     super(props);
@@ -28,6 +26,8 @@ class ChatBox extends Component {
   }
 
    componentDidMount() {
+
+    axios.get('/api/users')
 
     console.log('succesfully mounted');
 
