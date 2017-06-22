@@ -103,7 +103,7 @@ class Profile extends Component {
                   Name
                 </Col>
                 <Col sm={10}>
-                  <FormControl inputRef={ (input) => this.formName = input } type="text" defaultValue={prof.name}/>
+                  <FormControl inputRef={ (input) => this.formName = input } type="text" defaultValue={profile.name}/>
                 </Col>
               </FormGroup>
               <FormGroup controlId="github_username">
