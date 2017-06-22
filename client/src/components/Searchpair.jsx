@@ -48,6 +48,9 @@ class Searchpair extends Component {
       <PageHeader>
         Search for a Pair
       </PageHeader>
+      <p>
+        You can start a session by clicking on the "Pair Me" button.
+      </p>
       <form onSubmit={this.handleSubmit}>
         <label>
           Pick a Language:

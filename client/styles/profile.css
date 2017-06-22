@@ -12,9 +12,14 @@
   object-position: center right;
 }
 
-.profile-info {
+.profile-info, .about-me, .languages {
   margin: auto;
   width: 50%;
   padding: 10px;
   text-align: center;
+}
+
+.edit-profile {
+  float: right;
+  margin: 60px;
 }

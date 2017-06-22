@@ -92,7 +92,7 @@ class Profile extends Component {
             <p> Languages: </p>
         </div>
 
-      <div className="modal-container" style={{height: 200}}>
+      <div className="edit-profile" style={{height: 200}}>
         <Button
           bsStyle="primary"
           bsSize="large"
@@ -142,6 +142,28 @@ class Profile extends Component {
                 </Col>
                 <Col sm={10}>
                   <FormControl inputRef={ (input) => this.formEmail = input } type="email" defaultValue={profile.email} />
+                </Col>
+              </FormGroup>
+              <FormGroup controlId="aboutMe">
+                <Col componentClass={ControlLabel} sm={2}>
+                  About Me
+                </Col>
+                <Col sm={10}>
+                  <FormControl componentClass="textarea" defaultValue="Type a short description" />
+                </Col>
+              </FormGroup>
+              <FormGroup controlId="formControlsSelect">
+                <Col componentClass={ControlLabel} sm={2}>
+                  Languages
+                </Col>
+                <Col sm={10}>
+                  <FormControl componentClass="select" placeholder="select">
+                    <option value="select">select</option>
+                    <option value="Javascript">Javascript</option>
+                    <option value="Java">Java</option>
+                    <option value="Python">Python</option>
+                    <option value="PHP">PHP</option>
+                  </FormControl>
                 </Col>
               </FormGroup>
               <FormGroup>
