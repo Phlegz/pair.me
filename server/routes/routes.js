@@ -11,6 +11,7 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
 
   function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
+      console.log('ADSKLJF;LAKDJSF');
       res.redirect('/')
   }
 
@@ -39,19 +40,26 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
     knex
       .select('name', 'avatar', 'email', 'github_username')
       .from('users')
+      .limit(1)
       .where({github_id: current_user})
       .then((results) => {
-        res.json(results);
+        res.json(results[0]);
       })
   });
 
   router.put('/api/profile', (req, res) => {
     let current_user = req.session.passport.user;
+    let updatedProfile = {
+        avatar: req.body.avatar,
+        name: req.body.name,
+        email: req.body.email,
+        github_username: req.body.github_username
+      };
     knex('users')
       .where({github_id: current_user})
-      .update({
-        name: req.body.name,
-        email: req.body.email
+      .update(updatedProfile)
+      .then((result) => {
+        res.json(updatedProfile);
       })
   })
 

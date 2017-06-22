@@ -13,8 +13,10 @@ class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      profile: []
+      profile: {}
     }
+
+    this.updateProfile = this.updateProfile.bind(this);
   }
 
   getInitialState() {
@@ -25,50 +27,52 @@ class Profile extends Component {
     var self = this;
     axios.get('/api/profile')
     .then(function (response) {
-        self.setState({profile: self.state.profile.concat(response.data)})
-        console.log('in axios, after concat', response.data);
+      self.setState({profile: response.data})
+      console.log('in axios, after concat', response.data);
     })
     .catch (function(error) {
       console.log(error);
     })
-
-
-
-
   }
+
+   updateProfile(event) {
+    var self = this;
+    let putData = {
+      name: this.formName.value,
+      githubUsername: this.formGithubUsername.value,
+      email: this.formEmail.value
+    };
+    axios.put('/api/profile', putData)
+      .then(function(response) {
+        self.setState({profile: response.data})
+      });
+    this.setState({ show: false});
+  }
+
 
   render() {
     let prof = this.state.profile;
-    let emptyArr = [];
 
     let close = () => this.setState({ show: false});
 
-    if (prof.length != 0) {
-      for (let i = 0; i < prof.length; i++) {
-      emptyArr.push(
+  return (
 
-      <div key={Math.random()}>
+    <div>
+      <div>
         <PageHeader>
           Profile
         </PageHeader>
 
         <Jumbotron>
         <div className="wrapper">
-          <img src={prof[i].avatar} />
+          <img src={prof.avatar} />
         </div>
-          <p> Name: {prof[i].name} </p>
-          <p> Github Username: {prof[i].github_username} </p>
-          <p> Email: {prof[i].email} </p>
+          <p> Name: {prof.name} </p>
+          <p> Github Username: {prof.github_username} </p>
+          <p> Email: {prof.email} </p>
         </Jumbotron>
 
       </div>
-      )}
-    }
-
-  return (
-
-    <div>
-      {emptyArr}
 
       <div className="modal-container" style={{height: 200}}>
         <Button
@@ -95,7 +99,7 @@ class Profile extends Component {
                   Name
                 </Col>
                 <Col sm={10}>
-                  <FormControl type="text"/>
+                  <FormControl inputRef={ (input) => this.formName = input } type="text" defaultValue={prof.name}/>
                 </Col>
               </FormGroup>
               <FormGroup controlId="github_username">
@@ -103,7 +107,7 @@ class Profile extends Component {
                   Github Username
                 </Col>
                 <Col sm={10}>
-                  <FormControl type="text"/>
+                  <FormControl inputRef={ (input) => this.formGithubUsername = input } type="text"/>
                 </Col>
               </FormGroup>
               <FormGroup controlId="email">
@@ -111,12 +115,12 @@ class Profile extends Component {
                   Email
                 </Col>
                 <Col sm={10}>
-                  <FormControl type="text"/>
+                  <FormControl inputRef={ (input) => this.formEmail = input } type="text"/>
                 </Col>
               </FormGroup>
               <FormGroup>
                 <Col smOffset={2} sm={10}>
-                  <Button onClick={updateProfile}>
+                  <Button onClick={this.updateProfile}>
                     Update
                   </Button>
                 </Col>
