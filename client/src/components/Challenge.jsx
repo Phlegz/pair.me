@@ -20,7 +20,7 @@ class Challenge extends Component {
   }
 
   componentDidMount() {
-    axios.get('/api/profile')
+    axios.get('/api/profile_current')
     .then((response)=> {
       this.setState({user: response.data[0]})
     })
