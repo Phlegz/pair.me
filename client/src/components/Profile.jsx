@@ -1,16 +1,5 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-<<<<<<< HEAD
-import { PageHeader, Jumbotron, Button } from 'react-bootstrap';
-
-import {
-  HashRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom'
-
-=======
->>>>>>> Added the username at the end of the url so you can visit other ppl profile
 
 class Profile extends Component {
 
@@ -22,8 +11,9 @@ class Profile extends Component {
   }
 
   loadUserProfile(targetProfile) {
-    axios.get(`/api/profile/${targetProfile}`)
+    axios.get(`/api/profiles/${targetProfile}`)
     .then(response => {
+      console.log(response.data);
       if (!response.data.length) {
         //TODO if username does not exist show the appropriaye messge to the user
         return Promise.reject(new Error("Invalid username"))
@@ -39,39 +29,10 @@ class Profile extends Component {
 
   }
 
-<<<<<<< HEAD
-  render() {
-    let prof = this.state.profile;
-    let emptyArr = [];
-    // let profileComponent = prof.map(){};
-
-    if (prof.length != 0) {
-      for (let i = 0; i < prof.length; i++) {
-      emptyArr.push(
-
-      <div key={Math.random()}>
-        <PageHeader>
-          Profile
-        </PageHeader>
-
-        <Jumbotron>
-        <div className="wrapper">
-          <img src={prof[i].avatar} />
-        </div>
-          <p> Name: {prof[i].name} </p>
-          <p> Github Username: {prof[i].github_username} </p>
-          <p> Email: {prof[i].email} </p>
-          <Button bsStyle="info">Edit Profile</Button>
-        </Jumbotron>
-
-      </div>
-      )}
-=======
   componentWillUpdate(nextProps, nextState) {
     const usernameChanged = this.props.match.params.username !== nextProps.match.params.username
     if (usernameChanged) {
       this.loadUserProfile(nextProps.match.params.username);
->>>>>>> Added the username at the end of the url so you can visit other ppl profile
     }
   }
 

@@ -53,11 +53,10 @@ class Dashboard extends React.Component {
             <div className="sidebar">
               <ul style={{ listStyleType: 'none', padding: 'auto', position: 'fixed' }}>
                 <li><Link to="/">Dashboard</Link></li>
-                <li><Link to="/profile">Profile</Link></li>
+                <li><Link to={"/profiles/" + myGithubUsername}>Profile</Link></li>
                 <li><Link to="/history">History</Link></li>
               </ul>
             </div>
-
 
           <div className="routes">
             {routes.map((route, index) => (
