@@ -7,7 +7,7 @@ const passport = require('passport');
 const sandbox = require('sandbox');
 const sb = new sandbox();
 
-module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
+module.exports = (knex) => {
 
   function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
@@ -31,7 +31,7 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
   );
 
   router.get('/dashboard', ensureAuthenticated, (req, res) => {
-    res.render('dashboard', {bundleDashboardGenerated :bundleDashboardGenerated } )
+    res.render('dashboard')
   })
 
   router.get('/api/profile_current', (req, res) => {
@@ -103,7 +103,7 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
   })
 
   router.get('/challenge', ensureAuthenticated, (req, res) => {
-    res.render('challengePage', {bundleChallengeGenerated :bundleChallengeGenerated } )
+    res.render('challengePage')
   })
 
   // router.get("/", (req, res) => {
@@ -140,7 +140,7 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
   // });
   router.get('/*', ensureAuthenticated, (req, res) => {
     res.cookie("unsafe_user_name", req.user.github_username);
-    res.render('dashboard', {bundleGenerated} );
+    res.render('dashboard');
   })
 
   return router;
