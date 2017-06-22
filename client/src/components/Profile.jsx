@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { PageHeader, Jumbotron, Button } from 'react-bootstrap';
+import { PageHeader, Jumbotron, Button, Modal, FormGroup, Form, Col, ControlLabel, FormControl } from 'react-bootstrap';
 
 import {
   HashRouter as Router,
   Route,
   Link
-} from 'react-router-dom'
+} from 'react-router-dom';
 
 
 class Profile extends Component {
@@ -15,6 +15,10 @@ class Profile extends Component {
     this.state = {
       profile: []
     }
+  }
+
+  getInitialState() {
+    return { showModal: false };
   }
 
   componentDidMount() {
@@ -29,12 +33,15 @@ class Profile extends Component {
     })
 
 
+
+
   }
 
   render() {
     let prof = this.state.profile;
     let emptyArr = [];
-    // let profileComponent = prof.map(){};
+
+    let close = () => this.setState({ show: false});
 
     if (prof.length != 0) {
       for (let i = 0; i < prof.length; i++) {
@@ -52,7 +59,6 @@ class Profile extends Component {
           <p> Name: {prof[i].name} </p>
           <p> Github Username: {prof[i].github_username} </p>
           <p> Email: {prof[i].email} </p>
-          <Button bsStyle="info">Edit Profile</Button>
         </Jumbotron>
 
       </div>
@@ -63,7 +69,65 @@ class Profile extends Component {
 
     <div>
       {emptyArr}
+
+      <div className="modal-container" style={{height: 200}}>
+        <Button
+          bsStyle="primary"
+          bsSize="large"
+          onClick={() => this.setState({ show: true})}
+        >
+        Edit Profile
+        </Button>
+
+        <Modal
+          show={this.state.show}
+          onHide={close}
+          container={this}
+          aria-labelledby="contained-modal-title"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Update Profile</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form horizontal>
+              <FormGroup controlId="name">
+                <Col componentClass={ControlLabel} sm={2}>
+                  Name
+                </Col>
+                <Col sm={10}>
+                  <FormControl type="text"/>
+                </Col>
+              </FormGroup>
+              <FormGroup controlId="github_username">
+                <Col componentClass={ControlLabel} sm={2}>
+                  Github Username
+                </Col>
+                <Col sm={10}>
+                  <FormControl type="text"/>
+                </Col>
+              </FormGroup>
+              <FormGroup controlId="email">
+                <Col componentClass={ControlLabel} sm={2}>
+                  Email
+                </Col>
+                <Col sm={10}>
+                  <FormControl type="text"/>
+                </Col>
+              </FormGroup>
+              <FormGroup>
+                <Col smOffset={2} sm={10}>
+                  <Button onClick={updateProfile}>
+                    Update
+                  </Button>
+                </Col>
+              </FormGroup>
+            </Form>
+          </Modal.Body>
+        </Modal>
+      </div>
     </div>
+
+
   );
 
   }

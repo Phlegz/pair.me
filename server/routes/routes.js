@@ -35,7 +35,7 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
 
   router.get('/api/profile', (req, res) => {
     let current_user = req.session.passport.user;
-    console.log(current_user);//github_id
+    console.log('CUUUURRENT USERRRRR', current_user);//github_id
     knex
       .select('name', 'avatar', 'email', 'github_username')
       .from('users')
@@ -44,6 +44,16 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
         res.json(results);
       })
   });
+
+  router.put('/api/profile', (req, res) => {
+    let current_user = req.session.passport.user;
+    knex('users')
+      .where({github_id: current_user})
+      .update({
+        name: req.body.name,
+        email: req.body.email
+      })
+  })
 
   router.get('/api/history', (req, res) => {
     // let current_history = req.session.passport.user;
