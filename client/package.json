@@ -8,7 +8,7 @@
     "knex": "./node_modules/.bin/knex",
     "start": "node server.js",
     "webpack:build": "webpack -p --config webpack.production.config.js",
-    "webpack": "webpack"
+    "webpack:watch": "webpack --watch"
   },
   "dependencies": {
     "axios": "^0.16.2",

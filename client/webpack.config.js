@@ -4,7 +4,8 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 module.exports = {
   watchOptions: {
     aggregateTimeout: 300,
-    poll: 1000
+    poll: 1000,
+    ignored: /node_modules/
   },
   devtool: 'source-map',
   entry: {
