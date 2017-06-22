@@ -4,9 +4,10 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 module.exports = {
   watchOptions: {
     aggregateTimeout: 300,
-    poll: 1000
+    poll: 1000,
+    ignored: /node_modules/
   },
-  devtool: 'source-map',
+  devtool: 'cheap-source-map',
   entry: {
     dashboardIndex: './src/index.jsx',
     challengeIndex: './src/challengeIndex.jsx'
@@ -21,7 +22,9 @@ module.exports = {
       {
         test: /\.jsx?$/,
         loader: 'babel-loader',
-        include: path.join(__dirname, 'src')
+        exclude: /node_modules/,
+        include: path.join(__dirname, 'src'),
+        options: {presets: ['es2015', 'react']}
       },
       {
         test: /\.s?css$/,
