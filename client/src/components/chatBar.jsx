@@ -4,7 +4,6 @@ class ChatBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // username: '',
       content: ''
     };
     this.onMessage = this.onMessage.bind(this);
@@ -29,7 +28,7 @@ class ChatBar extends Component {
     return (
       <footer className="chatbar">
         <input className="chatbar-message"
-          placeholder="type message here"
+          placeholder="write a message"
           onChange={this.onMessage}
           onKeyPress={this.handleKeyPress}
           value = { this.state.content }

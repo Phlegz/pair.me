@@ -37,6 +37,8 @@ h4 {
 
 .chatbar-message {
   flex: 8;
+  padding: 0 5px 0 5px;
+  width: 350px;
 }
 
 .chatbar-username {
