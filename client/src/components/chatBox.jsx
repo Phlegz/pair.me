@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import axios from 'axios';
+
 import Header from './chatHeader.jsx'
 import ChatBar from './chatBar.jsx';
 import MessageList from './MessageList.jsx'
@@ -10,7 +12,6 @@ class ChatBox extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: {name: "req.user"},
       messages: []
     }
     this.socket = io.connect();
@@ -18,8 +19,7 @@ class ChatBox extends Component {
 
   onNewMessage(content) {
     let newMessage = {
-      // type: 'postMessage',
-      // username: username,
+      username: this.props.user.github_username,
       content: content
     }
     socket.emit('clientMessage', JSON.stringify({ message: newMessage }));
@@ -39,25 +39,25 @@ class ChatBox extends Component {
 
     socket.on('serverMessage', (message)=>{
       //parsed from server
-      let newMessage = {
-      // type: 'postMessage',
-      username: 'test',
-      content: message
-    }
-      this.setState({ messages: this.state.messages.concat(newMessage) })
-
+      this.setState({ messages: this.state.messages.concat(message) })
     });
   }
 
-
-
-
   render() {
+
+    if (!this.props.user) {
+      return (
+        <div>
+          fetching user info
+        </div>
+        )
+    }
+
     return (
       <div className='chat-container'>
         <Header />
         <MessageList messages = { this.state.messages } />
-        <ChatBar onNewMessage = { this.onNewMessage } />
+        <ChatBar onNewMessage = { this.onNewMessage.bind(this) } />
       </div>
       )
   }

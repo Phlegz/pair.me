@@ -3,7 +3,7 @@ var WebpackDevServer = require('webpack-dev-server');
 var config = require('./webpack.config');
 
 new WebpackDevServer(webpack(config), {
-    publicPath: config.output.publicPath,
+    publicPath: 'http://pairme:3000/build/',
     watchOptions: {
       aggregateTimeout: 300,
       poll: 1000,

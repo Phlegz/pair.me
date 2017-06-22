@@ -7,7 +7,7 @@ const passport = require('passport');
 const sandbox = require('sandbox');
 const sb = new sandbox();
 
-module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
+module.exports = (knex) => {
 
   function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
@@ -26,17 +26,17 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
   //successful authentication, redirect to dashboard
   router.get('/auth/github/callback',
     passport.authenticate('github', { failureRedirect: '/login' }),
-    function(req, res) {
+    (req, res) => {
       res.redirect('/dashboard');
-    });
+    }
+  );
 
   router.get('/dashboard', ensureAuthenticated, (req, res) => {
-    res.render('dashboard', {bundleDashboardGenerated :bundleDashboardGenerated } )
+    res.render('dashboard')
   })
 
-  router.get('/api/profile', (req, res) => {
+  router.get('/api/profile_current', (req, res) => {
     let current_user = req.session.passport.user;
-    console.log('CUUUURRENT USERRRRR', current_user);//github_id
     knex
       .select('name', 'avatar', 'email', 'github_username')
       .from('users')
@@ -46,6 +46,7 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
         res.json(results[0]);
       })
   });
+
 
   router.put('/api/profile', (req, res) => {
     let current_user = req.session.passport.user;
@@ -62,6 +63,20 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
         res.json(updatedProfile);
       })
   })
+
+  router.get('/api/profiles/:username', (req, res) => {
+    knex
+      .select('name', 'avatar', 'email', 'github_username')
+      .from('users')
+      .where({github_username: req.params.username})
+      .then((results) => {
+        // TODO:  1) should only return one result when there is one
+        // TODO:  2) if no result, do something helpful
+        //              e.g. return a 404 ?
+        res.json(results);
+      })
+  });
+
 
   router.get('/api/history', (req, res) => {
     // let current_history = req.session.passport.user;
@@ -107,7 +122,7 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
   })
 
   router.get('/challenge', ensureAuthenticated, (req, res) => {
-    res.render('challengePage', {bundleChallengeGenerated :bundleChallengeGenerated } )
+    res.render('challengePage')
   })
 
   // router.get("/", (req, res) => {
@@ -139,13 +154,13 @@ module.exports = (knex, bundleDashboardGenerated, bundleChallengeGenerated) => {
   // router.get("/challenge/:challenge_id", (req, res) => {
   // });
 
-  // router.get("/profile/:username", (req, res) => {
+  // router.post("/profiles/:username", (req, res) => {
+  //   res.redirect("/profiles/:username")
   // });
-
-  // router.post("/profile/:username", (req, res) => {
-  //   res.redirect("/profile/:username")
-  // });
-
+  router.get('/*', ensureAuthenticated, (req, res) => {
+    res.cookie("unsafe_user_name", req.user.github_username);
+    res.render('dashboard');
+  })
 
   return router;
 };

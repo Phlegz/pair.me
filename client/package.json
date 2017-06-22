@@ -7,7 +7,8 @@
     "lint": "eslint --ext .jsx,.js src",
     "knex": "./node_modules/.bin/knex",
     "start": "node server.js",
-    "build": "webpack -p --config webpack.production.config.js"
+    "webpack:build": "webpack -p --config webpack.production.config.js",
+    "webpack:watch": "webpack --watch"
   },
   "dependencies": {
     "axios": "^0.16.2",
@@ -29,13 +30,14 @@
     "babel-preset-react": "^6.23.0",
     "babel-preset-stage-0": "^6.22.0",
     "css-loader": "0.23.1",
-    "sass-loader": "4.0.0",
-    "style-loader": "0.13.1",
-    "sockjs-client": "^1.1.2",
     "eslint": "2.7.0",
     "eslint-plugin-react": "5.2.2",
     "node-sass": "3.8.0",
+    "sass-loader": "4.0.0",
+    "sockjs-client": "^1.1.2",
+    "style-loader": "0.13.1",
     "webpack": "^2.3.1",
+    "webpack-bundle-analyzer": "^2.8.2",
     "webpack-dev-server": "^2.4.2"
   }
 }

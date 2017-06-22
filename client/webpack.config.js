@@ -1,16 +1,20 @@
 const path = require('path');
 const webpack = require('webpack');
-
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 module.exports = {
+  watchOptions: {
+    aggregateTimeout: 300,
+    poll: 1000
+  },
   devtool: 'source-map',
   entry: {
     dashboardIndex: './src/index.jsx',
     challengeIndex: './src/challengeIndex.jsx'
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, '../server/public/scripts'),
     filename: '[name].bundle-generated.js',
-    publicPath: '/build/'
+    publicPath: '/scripts/'
   },
   module: {
     rules: [
@@ -28,5 +32,10 @@ module.exports = {
         ]
       }
     ]
-  }
+  },
+  // plugins: [new BundleAnalyzerPlugin({
+  //   analyzerHost: '0.0.0.0',
+  //   analyzerPort: 3000
+  // })]
+
 }

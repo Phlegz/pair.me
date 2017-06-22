@@ -2,20 +2,14 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import { PageHeader, Jumbotron, Button, Modal, FormGroup, Form, Col, ControlLabel, FormControl } from 'react-bootstrap';
 
-import {
-  HashRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom';
-
 
 class Profile extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
-      profile: {}
+      profile: null
     }
-
     this.updateProfile = this.updateProfile.bind(this);
   }
 
@@ -23,19 +17,25 @@ class Profile extends Component {
     return { showModal: false };
   }
 
-  componentDidMount() {
-    var self = this;
-    axios.get('/api/profile')
-    .then(function (response) {
-      self.setState({profile: response.data})
-      console.log('in axios, after concat', response.data);
+  loadUserProfile(targetProfile) {
+    axios.get(`/api/profiles/${targetProfile}`)
+    .then(response => {
+      console.log(response.data);
+      if (!response.data.length) {
+        //TODO if username does not exist show the appropriaye messge to the user
+        return Promise.reject(new Error("Invalid username"))
+      }
+      this.setState({profile: response.data[0]})
+
     })
-    .catch (function(error) {
-      console.log(error);
+    .catch (error => {
+      if(process.env.NODE_ENV !== 'production'){
+        console.error(error);
+      }
     })
   }
 
-   updateProfile(event) {
+  updateProfile(event) {
     var self = this;
     let putData = {
       name: this.formName.value,
@@ -43,36 +43,40 @@ class Profile extends Component {
       email: this.formEmail.value
     };
     axios.put('/api/profile', putData)
-      .then(function(response) {
-        self.setState({profile: response.data})
-      });
+    .then(function(response) {
+      self.setState({profile: response.data})
+    });
     this.setState({ show: false});
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    const usernameChanged = this.props.match.params.username !== nextProps.match.params.username
+    if (usernameChanged) {
+      this.loadUserProfile(nextProps.match.params.username);
+    }
+  }
+
+  componentDidMount() {
+    this.loadUserProfile(this.props.match.params.username)
+  }
 
   render() {
-    let prof = this.state.profile;
+    let profile = this.state.profile;
 
-    let close = () => this.setState({ show: false});
+    if (!profile) {
+      return (
+        <div>Loading &hellip;</div>
+      )
+    }
 
-  return (
-
-    <div>
+    return (
       <div>
-        <PageHeader>
-          Profile
-        </PageHeader>
-
-        <Jumbotron>
         <div className="wrapper">
-          <img src={prof.avatar} />
+          <img src={profile.avatar} />
         </div>
-          <p> Name: {prof.name} </p>
-          <p> Github Username: {prof.github_username} </p>
-          <p> Email: {prof.email} </p>
-        </Jumbotron>
-
-      </div>
+          <p> Name: {profile.name} </p>
+          <p> Github Username: {profile.github_username} </p>
+          <p> Email: {profile.email} </p>
 
       <div className="modal-container" style={{height: 200}}>
         <Button
@@ -129,8 +133,8 @@ class Profile extends Component {
           </Modal.Body>
         </Modal>
       </div>
-    </div>
 
+    </div>
 
   );
 

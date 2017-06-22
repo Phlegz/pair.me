@@ -56,9 +56,7 @@ app.use(passport.session());
 
 
 // Mount all resource routes
-let bundleDashboardGenerated = 'http://localhost:3000/build/dashboardIndex.bundle-generated.js';
-let bundleChallengeGenerated = 'http://localhost:3000/build/challengeIndex.bundle-generated.js';
-app.use("/", Routes(knex, bundleDashboardGenerated, bundleChallengeGenerated));
+app.use("/", Routes(knex));
 
 
 
@@ -87,7 +85,7 @@ io.on('connection', (socket) => {
 
   socket.on('clientMessage', (message)=>{
       let clientMessage = JSON.parse(message);
-      io.emit('serverMessage', clientMessage.message.content);
+      io.emit('serverMessage', clientMessage.message);
     })
 
   socket.on('disconnect', () => {
@@ -96,4 +94,3 @@ io.on('connection', (socket) => {
 });
 
 //-----------------------------------------------//
-
