@@ -44,6 +44,7 @@ class ChatBox extends Component {
   }
 
   render() {
+
     if (!this.props.user) {
       return (
         <div>

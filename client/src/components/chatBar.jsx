@@ -28,7 +28,7 @@ class ChatBar extends Component {
     return (
       <footer className="chatbar">
         <input className="chatbar-message"
-          placeholder="type message here"
+          placeholder="write a message"
           onChange={this.onMessage}
           onKeyPress={this.handleKeyPress}
           value = { this.state.content }
