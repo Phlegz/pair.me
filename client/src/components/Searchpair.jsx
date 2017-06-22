@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { PageHeader, Jumbotron, Button } from 'react-bootstrap';
+import { PageHeader, Jumbotron, Button, FormGroup, ControlLabel, FormControl, Col, ProgressBar } from 'react-bootstrap';
+import PieChart from 'react-simple-pie-chart';
 import {
   HashRouter as Router,
   Route,
@@ -52,17 +53,39 @@ class Searchpair extends Component {
         You can start a session by clicking on the "Pair Me" button.
       </p>
       <form onSubmit={this.handleSubmit}>
-        <label>
-          Pick a Language:
-          <select value={this.state.language} onChange={this.handleChange}>
-            <option value="Javascript">Javascript</option>
-            <option value="PHP">PHP</option>
-            <option value="Python">Python</option>
-            <option value="Java">Java</option>
-          </select>
-        </label>
+        <FormGroup controlId="formControlsSelect">
+          <Col componentClass={ControlLabel} sm={4}>
+            Select a language
+          </Col>
+          <br />
+          <Col sm={10}>
+            <FormControl componentClass="select" placeholder="select">
+              <option value="select">select</option>
+              <option value="Javascript">Javascript</option>
+              <option value="PHP">PHP</option>
+              <option value="Python">Python</option>
+              <option value="Java">Java</option>
+            </FormControl>
+          </Col>
+        </FormGroup>
+         <FormGroup controlId="formControlsSelect">
+          <Col componentClass={ControlLabel} sm={4}>
+            Select a difficulty level
+          </Col>
+          <br />
+          <Col sm={10}>
+            <FormControl componentClass="select" placeholder="select">
+              <option value="select">select</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </FormControl>
+          </Col>
+        </FormGroup>
         <br />
-        <label>
+        {/*<label>
           Pick a Difficulty Level:
           <select value={this.state.difficulty} onChange={this.handleChange}>
             <option value="1">1</option>
@@ -73,8 +96,38 @@ class Searchpair extends Component {
           </select>
         </label>
         <br />
-        <input type="submit" value="Find me Someone to work with!" />
+        <input type="submit" value="Find me Someone to work with!" />*/}
+        <Button type="submit">
+          Pair Me
+        </Button>
       </form>
+
+      <div className="progressBar">
+        <h2>Progress</h2>
+        <p>Your progress on completed challenges over time</p>
+        <Col sm={5}>
+          <ProgressBar now={50} />
+          <ProgressBar bsStyle="success" now={40} />
+          <ProgressBar bsStyle="info" now={20} />
+          <ProgressBar bsStyle="warning" now={60} />
+          <ProgressBar bsStyle="danger" now={80} />
+        </Col>
+        <div className="pieChart">
+          <PieChart
+            sectorStrokeWidth={2}
+            slices={[
+              {
+                color: '#d9534f',
+                value: 20,
+              },
+              {
+                color: '#f5f5f5',
+                value: 80,
+              },
+            ]}
+          />
+        </div>
+      </div>
     </div>
   );
   }

@@ -18,3 +18,8 @@
   flex: 1;
   padding: 10px;
 }
+
+.pieChart {
+  width: 25%;
+  height: 25%;
+}
