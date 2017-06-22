@@ -13,7 +13,7 @@ import { Navbar, Nav, NavItem } from 'react-bootstrap';
 
 const routes = [
   {
-    path: '/',
+    path: '/dashboard',
     exact: true,
     main: () => (<Searchpair />)
   },
@@ -51,8 +51,8 @@ class Dashboard extends React.Component {
       <Router>
           <div className="outer-sidebar">
             <div className="sidebar">
-              <ul style={{ listStyleType: 'none', padding: 'auto', position: 'fixed' }}>
-                <li><Link to="/">Dashboard</Link></li>
+              <ul className="links" style={{ listStyleType: 'none' }}>
+                <li><Link to="/dashboard">Dashboard</Link></li>
                 <li><Link to={"/profiles/" + myGithubUsername}>Profile</Link></li>
                 <li><Link to="/history">History</Link></li>
               </ul>

@@ -38,8 +38,9 @@ class Profile extends Component {
   updateProfile(event) {
     var self = this;
     let putData = {
+      avatar: this.formAvatar.value,
       name: this.formName.value,
-      githubUsername: this.formGithubUsername.value,
+      github_username: this.formGithubUsername.value,
       email: this.formEmail.value
     };
     axios.put('/api/profile', putData)
@@ -62,6 +63,7 @@ class Profile extends Component {
 
   render() {
     let profile = this.state.profile;
+    let close = () => this.setState({ show: false});
 
     if (!profile) {
       return (
@@ -71,12 +73,24 @@ class Profile extends Component {
 
     return (
       <div>
-        <div className="wrapper">
-          <img src={profile.avatar} />
+        <PageHeader>
+          Profile
+        </PageHeader>
+        <div className="profile-info">
+          <div className="wrapper">
+            <img src={profile.avatar} />
+          </div>
+            <p> Name: {profile.name} </p>
+            <p> Github Username: {profile.github_username} </p>
+            <p> Email: {profile.email} </p>
+            <p> Github Url: github.com/blahblah </p>
         </div>
-          <p> Name: {profile.name} </p>
-          <p> Github Username: {profile.github_username} </p>
-          <p> Email: {profile.email} </p>
+        <div className="about-me">
+            <p> About Me: </p>
+        </div>
+        <div className="languages">
+            <p> Languages: </p>
+        </div>
 
       <div className="modal-container" style={{height: 200}}>
         <Button
@@ -98,12 +112,20 @@ class Profile extends Component {
           </Modal.Header>
           <Modal.Body>
             <Form horizontal>
+              <FormGroup controlId="avatar">
+                <Col componentClass={ControlLabel} sm={2}>
+                  Avatar
+                </Col>
+                <Col sm={10}>
+                  <FormControl inputRef={ (input) => this.formAvatar = input } type="text" defaultValue={profile.avatar} />
+                </Col>
+              </FormGroup>
               <FormGroup controlId="name">
                 <Col componentClass={ControlLabel} sm={2}>
                   Name
                 </Col>
                 <Col sm={10}>
-                  <FormControl inputRef={ (input) => this.formName = input } type="text" defaultValue={prof.name}/>
+                  <FormControl inputRef={ (input) => this.formName = input } type="text" defaultValue={profile.name} />
                 </Col>
               </FormGroup>
               <FormGroup controlId="github_username">
@@ -111,7 +133,7 @@ class Profile extends Component {
                   Github Username
                 </Col>
                 <Col sm={10}>
-                  <FormControl inputRef={ (input) => this.formGithubUsername = input } type="text"/>
+                  <FormControl inputRef={ (input) => this.formGithubUsername = input } type="text" defaultValue={profile.github_username} />
                 </Col>
               </FormGroup>
               <FormGroup controlId="email">
@@ -119,7 +141,7 @@ class Profile extends Component {
                   Email
                 </Col>
                 <Col sm={10}>
-                  <FormControl inputRef={ (input) => this.formEmail = input } type="text"/>
+                  <FormControl inputRef={ (input) => this.formEmail = input } type="email" defaultValue={profile.email} />
                 </Col>
               </FormGroup>
               <FormGroup>

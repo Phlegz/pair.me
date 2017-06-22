@@ -1,0 +1,20 @@
+.wrapper {
+  padding: 50px;
+}
+
+.wrapper img {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  margin: 20px;
+
+  object-fit: cover;
+  object-position: center right;
+}
+
+.profile-info {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+  text-align: center;
+}
