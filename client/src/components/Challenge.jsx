@@ -40,11 +40,11 @@ class Challenge extends Component {
         question: response.data[0].question,
         example: response.data[0].example,
         placeholder: response.data[0].placeholder,
-        answer: response.data[0].answer,
+        answer: response.data[1].answer,
         unit_test: response.data[0].unit_test
         }
       },
-      this.setState({aceValue: `${response.data[0].example}\n\n${response.data[0].placeholder}\n${response.data[0].unit_test}`}))
+      this.setState({aceValue: `${response.data[1].example}\n\n${response.data[1].placeholder}\n${response.data[1].unit_test}`}))
     })
   }
   componentDidMount() {
