@@ -13,11 +13,13 @@
   "dependencies": {
     "axios": "^0.16.2",
     "moment": "^2.18.1",
+    "moment-timezone": "^0.5.13",
     "react": "^15.4.2",
     "react-ace": "^5.0.1",
     "react-bootstrap": "^0.31.0",
     "react-dom": "^15.4.2",
     "react-fontawesome": "^1.5.0",
+    "react-moment": "^0.2.4",
     "react-router-dom": "^4.1.1",
     "react-simple-pie-chart": "^0.4.1",
     "socket.io": "^2.0.3",

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import { PageHeader, Jumbotron, Button, FormGroup, ControlLabel, FormControl, Col, ProgressBar, Label } from 'react-bootstrap';
 import PieChart from 'react-simple-pie-chart';
+import Moment from 'react-moment';
 import {
   HashRouter as Router,
   Route,
@@ -57,7 +58,13 @@ class Searchpair extends Component {
 
 
   render() {
-    const aDayAgo = "2 Challenges completed";
+    const challengesCompleted = "1 challenge completed";
+    const today = Date.now();
+    const yesterday = Date.now() - 86400000;
+    const twoDaysAgo = Date.now() - (86400000*2);
+    const threeDaysAgo = Date.now() - (86400000*3);
+    const fourDaysAgo = Date.now() - (86400000*4);
+
 
   return (
     <div>
@@ -108,15 +115,15 @@ class Searchpair extends Component {
         <h2>Progress</h2>
         <p>Your progress on completed challenges over time</p>
         <Col sm={5}>
-          <Label> a day ago </Label>
+          <Label> <Moment calendar>{today}</Moment> </Label>
           <ProgressBar now={50} />
-          <Label> Two days ago </Label>
-          <ProgressBar bsStyle="success" now={40} label={`${aDayAgo}%`}/>
-          <Label> Three days ago </Label>
+          <Label> <Moment format="LL">{yesterday}</Moment> </Label>
+          <ProgressBar bsStyle="success" now={40} label={`${challengesCompleted}%`}/>
+          <Label> <Moment format="LL">{twoDaysAgo}</Moment> </Label>
           <ProgressBar bsStyle="info" now={20} />
-          <Label> Four days ago </Label>
+          <Label> <Moment format="LL">{threeDaysAgo}</Moment> </Label>
           <ProgressBar bsStyle="warning" now={60} />
-          <Label> Five days ago </Label>
+          <Label> <Moment format="LL">{fourDaysAgo}</Moment> </Label>
           <ProgressBar bsStyle="danger" now={80} />
         </Col>
         <div className="pieChart">
