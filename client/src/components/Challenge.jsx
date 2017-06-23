@@ -23,7 +23,7 @@ class Challenge extends Component {
         title: "",
         question: "",
         example: "",
-        defaultCode: "",
+        placeholder: "",
         answer: "",
         unit_test: ""
       },
@@ -39,14 +39,13 @@ class Challenge extends Component {
         title: response.data[0].title,
         question: response.data[0].question,
         example: response.data[0].example,
-        placeholder: response.data[0].defaultCode,
+        placeholder: response.data[0].placeholder,
         answer: response.data[0].answer,
         unit_test: response.data[0].unit_test
         }
       },
       this.setState({aceValue: `${response.data[0].example}\n\n${response.data[0].placeholder}\n${response.data[0].unit_test}`}))
     })
-    // this.setState({aceValue: "ABC"});
   }
   componentDidMount() {
     console.log('successfully mounted');
@@ -56,7 +55,7 @@ class Challenge extends Component {
        this.setState({user: response.data})
      });
 
-    socket.on('serverLiveCode', (code) => {
+    socket.on('serverLiveCode', (code)=> {
       this.setState({sendUpdate:true});
       this.setState({aceValue: code});
     });
@@ -79,12 +78,12 @@ class Challenge extends Component {
     axios.post('/api/challenges', {
       answer: textValue
     })
-    .then((response) => {
+    .then((response)=> {
       let outputData = JSON.parse(response.data);
       this.setState({result: outputData.result});
       this.setState({console: outputData.console});
     })
-    .catch((error) => {
+    .catch((error)=> {
       console.log(error);
     })
   }
