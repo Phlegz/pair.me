@@ -3,6 +3,9 @@ exports.up = function(knex, Promise) {
     knex.schema.createTable('questions', function(table){
       table.increments('id');
       table.text('question');
+      table.text('example');
+      table.text('placeholder');
+      table.text('test_result');
       table.text('answer');
       table.text('unit_test');
       table.string('title');
