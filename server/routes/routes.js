@@ -41,8 +41,9 @@ module.exports = (knex) => {
       .select('name', 'avatar', 'email', 'github_username')
       .from('users')
       .where({github_id: current_user})
+      .limit(1)
       .then((results) => {
-        res.json(results);
+        res.json(results[0]);
       })
   });
 
@@ -89,14 +90,14 @@ module.exports = (knex) => {
   router.post('/api/challenges', (req,res) => {
 
     let textValue = JSON.parse(req.body.answer);
-    // console.log("BODY",req.body.answer);
-    // console.log("PARSED",textValue);
+    console.log("BODY",req.body.answer);
+    console.log("PARSED",textValue);
     // sandbox
     sb.run(`${textValue}`,
       function(output) {
-        // console.log("OUTPUT",output);
-        // console.log("OUTPUT RESULT",output.result);
-        // console.log("CONSOLE LOG",output.console);
+        console.log("OUTPUT",output);
+        console.log("OUTPUT RESULT",output.result);
+        console.log("CONSOLE LOG",output.console);
         res.json(JSON.stringify(output));
       }
     );
@@ -106,6 +107,15 @@ module.exports = (knex) => {
     res.render('challengePage')
   })
 
+
+  router.get('/api/questions', (req,res) => {
+     knex
+      .select("*")
+      .from("questions")
+      .then((results) => {
+        res.json(results);
+    });
+  })
   // router.get("/", (req, res) => {
   // });
 
