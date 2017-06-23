@@ -11,7 +11,6 @@ module.exports = (knex) => {
 
   function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
-      console.log('ADSKLJF;LAKDJSF');
       res.redirect('/')
   }
 
@@ -74,6 +73,7 @@ module.exports = (knex) => {
         // TODO:  2) if no result, do something helpful
         //              e.g. return a 404 ?
         res.json(results);
+        // console.log(results, 'results from knex');
       })
   });
 
