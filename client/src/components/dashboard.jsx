@@ -9,7 +9,7 @@ import {
   Link
 } from 'react-router-dom'
 
-import { Navbar, Nav, NavItem } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, MenuItem, NavDropdown } from 'react-bootstrap';
 
 const routes = [
   {
@@ -46,9 +46,30 @@ class Dashboard extends React.Component {
 
   render() {
     const self = this;
+    const navBar = (
+         <Navbar inverse collapseOnSelect>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <a href="#">Pair Me</a>
+            </Navbar.Brand>
+            <Navbar.Toggle />
+          </Navbar.Header>
+          <Navbar.Collapse>
+          <Nav>
+
+          </Nav>
+          <Nav pullRight>
+            <NavItem eventKey={1} href="#">Link Right</NavItem>
+            <NavItem eventKey={2} href="#">Link Right</NavItem>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+      );
     return (
 
       <Router>
+        <div className="navBar">
+          {navBar}
           <div className="outer-sidebar">
             <div className="sidebar">
               <ul className="links" style={{ listStyleType: 'none' }}>
@@ -71,7 +92,7 @@ class Dashboard extends React.Component {
             ))}
           </div>
         </div>
-
+      </div>
 
       </Router>
   );

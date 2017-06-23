@@ -3,9 +3,9 @@
 }
 
 .sidebar {
-  padding: 10px;
+  padding: 20px;
   width: 20%;
-  background: white;
+  background: #eee;
   height: auto;
 }
 
@@ -22,4 +22,8 @@
 .pieChart {
   width: 25%;
   height: 25%;
+}
+
+.navbar {
+  margin-bottom: 0px;
 }

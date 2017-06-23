@@ -11,8 +11,9 @@ import {
 class Searchpair extends Component {
   constructor(props) {
     super(props);
-    this.state = {language: '',
-                  difficulty: ''};
+    this.state = {
+      difficultyLevel: null
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -28,17 +29,30 @@ class Searchpair extends Component {
     event.preventDefault();
   }
 
+  loadProgress(event) {
+
+  }
+
   componentDidMount() {
-    axios.post('/language', {
-    firstName: 'Fred',
-    lastName: 'Flintstone'
+    var self = this;
+    axios.get('/dashboard')
+    .then(function(response) {
+      self.setState({difficultyLevel: response.data});
+      console.log(response.data, 'ADSFJK;L');
     })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
+    .catch(function(error) {
       console.log(error);
     });
+    // axios.post('/language', {
+    // firstName: 'Fred',
+    // lastName: 'Flintstone'
+    // })
+    // .then(function (response) {
+    //   console.log(response);
+    // })
+    // .catch(function (error) {
+    //   console.log(error);
+    // });
   }
 
 
@@ -68,7 +82,7 @@ class Searchpair extends Component {
             </FormControl>
           </Col>
         </FormGroup>
-         <FormGroup controlId="formControlsSelect">
+        <FormGroup controlId="formControlsSelect">
           <Col componentClass={ControlLabel} sm={4}>
             Select a difficulty level
           </Col>
@@ -84,20 +98,7 @@ class Searchpair extends Component {
             </FormControl>
           </Col>
         </FormGroup>
-        <br />
-        {/*<label>
-          Pick a Difficulty Level:
-          <select value={this.state.difficulty} onChange={this.handleChange}>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-        </label>
-        <br />
-        <input type="submit" value="Find me Someone to work with!" />*/}
-        <Button type="submit">
+        <Button onClick={this.pairMe}>
           Pair Me
         </Button>
       </form>

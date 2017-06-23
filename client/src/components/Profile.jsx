@@ -23,7 +23,7 @@ class Profile extends Component {
       console.log(response.data);
       if (!response.data.length) {
         //TODO if username does not exist show the appropriaye messge to the user
-        return Promise.reject(new Error("Invalid username"))
+        return Promise.reject(new Error("Invalid username"));
       }
       this.setState({profile: response.data[0]})
 
