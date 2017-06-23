@@ -65,17 +65,6 @@ const server = app.listen(PORT, () => {
 });
 const io = require('socket.io')(server);
 
-//====================*******Handling the websocket connection******===================
-
-// io.on('connection', (client) => {
-//   console.log('client connected');
-//   //TODO create another module to handle the transactions
-//   client.emit('news', { hello: 'world' });
-//   client.on('my other event', (data) => {
-//     console.log(data);
-//   });
-// });
-
 
 
 //----------------socketIO ----------------------//
@@ -83,14 +72,22 @@ const io = require('socket.io')(server);
 io.on('connection', (socket) => {
   console.log('connection to client established');
 
+  //messages from chatbox
   socket.on('clientMessage', (message)=>{
-      let clientMessage = JSON.parse(message);
-      io.emit('serverMessage', clientMessage.message);
-    })
+    let clientMessage = JSON.parse(message);
+    io.emit('serverMessage', clientMessage.message);
+  })
+
+  //messages from ace editor
+  socket.on('liveCode', (code) => {
+    let liveCode = JSON.parse(code);
+    io.emit('serverLiveCode', liveCode.code);
+  })
 
   socket.on('disconnect', () => {
     console.log('server disconnected');
   })
+
 });
 
 //-----------------------------------------------//
