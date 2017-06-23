@@ -1,5 +1,5 @@
 exports.up = function(knex, Promise) {
-  return knex.schema.createTable('friendships', function(table){
+  return knex.schema.createTable('friendships', (table) => {
       table.increments('id');
       table.timestamp('requested_at').notNullable();
       table.timestamp('responded_at');

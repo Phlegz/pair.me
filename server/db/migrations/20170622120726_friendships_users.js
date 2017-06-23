@@ -1,6 +1,6 @@
 exports.up = function(knex, Promise) {
   return Promise.all([
-    knex.schema.createTable('friendships_users', function(table){
+    knex.schema.createTable('friendships_users', (table) => {
       table.increments('id');
       table.integer('user_id');
       table.foreign('user_id').references('users.id');

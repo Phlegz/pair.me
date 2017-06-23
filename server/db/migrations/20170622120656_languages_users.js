@@ -1,5 +1,5 @@
 exports.up = function(knex, Promise) {
-  return knex.schema.createTable('languages_users', function(table){
+  return knex.schema.createTable('languages_users', (table) => {
       table.increments('id');
       table.integer('user_id');
       table.foreign('user_id').references('users.id');
