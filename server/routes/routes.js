@@ -32,7 +32,16 @@ module.exports = (knex) => {
   );
 
   router.get('/dashboard', ensureAuthenticated, (req, res) => {
-    res.render('dashboard')
+    let current_user = req.session.passport.user;
+    knex
+      .select('difficulty')
+      .from('questions')
+      .where('difficulty', '>', 0)
+      .then((results) => {
+        return res.json(results);
+        console.log(results, 'RESULLTSS');
+      })
+    return res.render('dashboard');
   })
 
   router.get('/api/profile_current', (req, res) => {

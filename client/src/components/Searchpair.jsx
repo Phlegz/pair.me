@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { PageHeader, Jumbotron, Button, FormGroup, ControlLabel, FormControl, Col, ProgressBar } from 'react-bootstrap';
+import { PageHeader, Jumbotron, Button, FormGroup, ControlLabel, FormControl, Col, ProgressBar, Label } from 'react-bootstrap';
 import PieChart from 'react-simple-pie-chart';
 import {
   HashRouter as Router,
@@ -57,6 +57,7 @@ class Searchpair extends Component {
 
 
   render() {
+    const aDayAgo = "2 Challenges completed";
 
   return (
     <div>
@@ -107,10 +108,15 @@ class Searchpair extends Component {
         <h2>Progress</h2>
         <p>Your progress on completed challenges over time</p>
         <Col sm={5}>
+          <Label> a day ago </Label>
           <ProgressBar now={50} />
-          <ProgressBar bsStyle="success" now={40} />
+          <Label> Two days ago </Label>
+          <ProgressBar bsStyle="success" now={40} label={`${aDayAgo}%`}/>
+          <Label> Three days ago </Label>
           <ProgressBar bsStyle="info" now={20} />
+          <Label> Four days ago </Label>
           <ProgressBar bsStyle="warning" now={60} />
+          <Label> Five days ago </Label>
           <ProgressBar bsStyle="danger" now={80} />
         </Col>
         <div className="pieChart">
