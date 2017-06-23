@@ -8,6 +8,9 @@ import 'brace/theme/monokai';
 
 import ChatBox from './chatBox.jsx';
 
+const io = require('socket.io-client');
+const socket = io();
+
 class Challenge extends Component {
   constructor(props) {
     super(props);
@@ -15,24 +18,45 @@ class Challenge extends Component {
       result: "",
       console: [],
       aceValue: "",
-      user: null
+      user: null,
+      sendUpdate:true
     }
+    this.socket = io.connect();
+    this.liveCode = this.liveCode.bind(this);
   }
 
+
   componentDidMount() {
-    axios.get('/api/profile')
-    .then((response)=> {
-      this.setState({user: response.data[0]})
-    })
+    console.log('successfully mounted');
+
+     axios.get('/api/profile_current')
+     .then((response)=> {
+       this.setState({user: response.data})
+     })
+
+    socket.on('serverLiveCode', (code) => {
+      this.setState({sendUpdate:true});
+      this.setState({aceValue: code});
+    });
   }
+
+
+  liveCode() {
+    // console.log('calling function');
+    let editor = ace.edit('codeChallenges');
+    let code = editor.getValue();
+    if (this.state.sendUpdate) {
+      socket.emit('liveCode', JSON.stringify({code: code }));
+    }
+    this.setState({sendUpdate:true});
+  }
+
 
   submitCode(event){
     event.preventDefault();
 
     let editor = ace.edit('codeChallenges');
     let textValue = JSON.stringify(editor.getValue());
-
-    this.setState({aceValue: editor.getValue()});
 
     var self = this;
     axios.post('/api/challenges', {
@@ -48,6 +72,7 @@ class Challenge extends Component {
       console.log(error);
     })
   }
+
   render() {
     let console = this.state.console;
     let consoleArr = [];
@@ -69,8 +94,11 @@ class Challenge extends Component {
           editorProps={{$blockScrolling: Infinity}}
           defaultValue="// Type your code here"
           tabSize={2}
+          //invoke livecode function everytime the text box changess
+          onChange={ this.liveCode }
           value={this.state.aceValue}
         />
+
         <input type='button' value='Submit' onClick={(e) => this.submitCode(e) } />
         <div className="output">
           Output:
