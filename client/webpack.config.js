@@ -7,7 +7,7 @@ module.exports = {
     poll: 1000,
     ignored: /node_modules/
   },
-  devtool: 'source-map',
+  devtool: 'cheap-source-map',
   entry: {
     dashboardIndex: './src/index.jsx',
     challengeIndex: './src/challengeIndex.jsx'
@@ -22,7 +22,9 @@ module.exports = {
       {
         test: /\.jsx?$/,
         loader: 'babel-loader',
-        include: path.join(__dirname, 'src')
+        exclude: /node_modules/,
+        include: path.join(__dirname, 'src'),
+        options: {presets: ['es2015', 'react', 'stage-0']}
       },
       {
         test: /\.s?css$/,

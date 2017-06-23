@@ -11,7 +11,6 @@ module.exports = (knex) => {
 
   function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
-      console.log('ADSKLJF;LAKDJSF');
       res.redirect('/')
   }
 
@@ -51,6 +50,7 @@ module.exports = (knex) => {
       .from('users')
       .limit(1)
       .where({github_id: current_user})
+      .limit(1)
       .then((results) => {
         res.json(results[0]);
       })
@@ -83,6 +83,7 @@ module.exports = (knex) => {
         // TODO:  2) if no result, do something helpful
         //              e.g. return a 404 ?
         res.json(results);
+        // console.log(results, 'results from knex');
       })
   });
 
@@ -117,14 +118,14 @@ module.exports = (knex) => {
   router.post('/api/challenges', (req,res) => {
 
     let textValue = JSON.parse(req.body.answer);
-    // console.log("BODY",req.body.answer);
-    // console.log("PARSED",textValue);
+    console.log("BODY",req.body.answer);
+    console.log("PARSED",textValue);
     // sandbox
     sb.run(`${textValue}`,
       function(output) {
-        // console.log("OUTPUT",output);
-        // console.log("OUTPUT RESULT",output.result);
-        // console.log("CONSOLE LOG",output.console);
+        console.log("OUTPUT",output);
+        console.log("OUTPUT RESULT",output.result);
+        console.log("CONSOLE LOG",output.console);
         res.json(JSON.stringify(output));
       }
     );
@@ -134,6 +135,15 @@ module.exports = (knex) => {
     res.render('challengePage')
   })
 
+
+  router.get('/api/questions', (req,res) => {
+     knex
+      .select("*")
+      .from("questions")
+      .then((results) => {
+        res.json(results);
+    });
+  })
   // router.get("/", (req, res) => {
   // });
 

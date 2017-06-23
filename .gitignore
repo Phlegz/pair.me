@@ -7,3 +7,4 @@ settings.json
 package-lock.json
 *.bundle-generated.js
 *.bundle-generated.js.map
+questionsList.js
