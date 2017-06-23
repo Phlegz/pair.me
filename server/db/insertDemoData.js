@@ -1,6 +1,8 @@
 const config = require('../knexfile.js')[process.env.NODE_ENV || 'development'];
 const knex = require('knex')(config);
 
+
+
 function createFriendship(initiatorId, recipientId) {
   return knex('friendships').insert({
     requested_at: knex.raw('now()'),
@@ -77,6 +79,9 @@ knex.raw('TRUNCATE TABLE users CASCADE')
   createFriendship(userIds[1], userIds[3]),
   createFriendship(userIds[2], userIds[3])
   ]).then(() => Promise.resolve(userIds));
+})
+.then(() => {
+  knex.destroy();
 })
     // .then(userIds => {
     // // TODO challenges/sessions/etc.
