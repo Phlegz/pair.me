@@ -19,10 +19,11 @@ class Searchpair extends Component {
 
   handleChange(event) {
     this.setState({language: event.target.value});
+    this.setState({difficulty: event.target.value});
   }
 
   handleSubmit(event) {
-    alert('You picked ' + this.state.value + '!');
+    alert('You picked ' + this.state.language + ' level ' + this.state.difficulty + '!');
     event.preventDefault();
   }
 

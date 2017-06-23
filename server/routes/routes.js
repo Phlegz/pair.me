@@ -36,16 +36,33 @@ module.exports = (knex) => {
 
   router.get('/api/profile_current', (req, res) => {
     let current_user = req.session.passport.user;
-    console.log(current_user);//github_id
     knex
       .select('name', 'avatar', 'email', 'github_username')
       .from('users')
+      .limit(1)
       .where({github_id: current_user})
       .limit(1)
       .then((results) => {
         res.json(results[0]);
       })
   });
+
+
+  router.put('/api/profile', (req, res) => {
+    let current_user = req.session.passport.user;
+    let updatedProfile = {
+        avatar: req.body.avatar,
+        name: req.body.name,
+        email: req.body.email,
+        github_username: req.body.github_username
+      };
+    knex('users')
+      .where({github_id: current_user})
+      .update(updatedProfile)
+      .then((result) => {
+        res.json(updatedProfile);
+      })
+  })
 
   router.get('/api/profiles/:username', (req, res) => {
     knex
@@ -57,8 +74,10 @@ module.exports = (knex) => {
         // TODO:  2) if no result, do something helpful
         //              e.g. return a 404 ?
         res.json(results);
+        // console.log(results, 'results from knex');
       })
   });
+
 
   router.get('/api/history', (req, res) => {
     // let current_history = req.session.passport.user;
