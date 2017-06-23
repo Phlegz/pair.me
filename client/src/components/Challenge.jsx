@@ -15,14 +15,37 @@ class Challenge extends Component {
       result: "",
       console: [],
       aceValue: "",
-      user: null
+      user: null,
+      questions: {
+        title: "",
+        question: "",
+        example: "",
+        defaultCode: "",
+        answer: "",
+        unit_test: ""
+      }
     }
   }
-
-  componentDidMount() {
-    axios.get('/api/profiles/:username')
+  componentWillMount() {
+    axios.get('/api/questions')
     .then((response)=> {
-      this.setState({user: response.data[0]})
+      this.setState({questions: {
+        title: response.data[0].title,
+        question: response.data[0].question,
+        example: response.data[0].example,
+        placeholder: response.data[0].defaultCode,
+        answer: response.data[0].answer,
+        unit_test: response.data[0].unit_test
+        }
+      },
+      this.setState({aceValue: `${response.data[0].example}\n\n${response.data[0].placeholder}\n${response.data[0].unit_test}`}))
+    })
+    // this.setState({aceValue: "ABC"});
+  }
+  componentDidMount() {
+    axios.get('/api/profile_current')
+    .then((response)=> {
+      this.setState({user: response.data})
     })
   }
 
@@ -67,7 +90,6 @@ class Challenge extends Component {
           mode="javascript"
           theme="monokai"
           editorProps={{$blockScrolling: Infinity}}
-          defaultValue="// Type your code here"
           tabSize={2}
           value={this.state.aceValue}
         />
@@ -76,6 +98,9 @@ class Challenge extends Component {
           Output:
           { consoleArr }
           { showResult }
+        </div>
+        <div className="showAnswer">
+          { this.state.questions.answer }
         </div>
         <ChatBox user={this.state.user} />
       </div>
