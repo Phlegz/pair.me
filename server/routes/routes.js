@@ -51,16 +51,19 @@ module.exports = (knex) => {
                       .from('challenges')
                       .leftJoin('sessions_users', 'challenges.session_id', 'sessions_users.session_id')
                       .where('user_id', queryUser);
-    let queryDifficulty = knex
-                      .select('difficulty')
-                      .from('questions')
-                      .leftJoin('challenges', 'questions.id', 'challenges.question_id')
-                      .where('session_id', querySessions);
-    Promise.all([queryChallenges, queryDifficulty])
-      .then(([challengesData, difficultyData]) => {
-        res.json(challenges.Data, difficultyData);
-        console.log(res.json(challenges.Data, difficultyData), '2DATA');
-
+    // let queryDifficulty = knex
+    //                   .select('difficulty')
+    //                   .from('questions')
+    //                   .leftJoin('challenges', 'questions.id', 'challenges.question_id')
+    //                   .where('session_id', querySessions);
+    // Promise.all([queryChallenges, queryDifficulty])
+    //   .then(([challengesData, difficultyData]) => {
+    //     res.json(challenges.Data, difficultyData);
+    //     console.log(res.json(challenges.Data, difficultyData), '2DATA');
+      .then((results) => {
+        res.json(results);
+        console.log(res.json(results), '2DATAAAAAA');
+      }
       });
   });
 
