@@ -60,11 +60,11 @@ module.exports = (knex) => {
     //   .then(([challengesData, difficultyData]) => {
     //     res.json(challenges.Data, difficultyData);
     //     console.log(res.json(challenges.Data, difficultyData), '2DATA');
-      .then((results) => {
-        res.json(results);
-        console.log(res.json(results), '2DATAAAAAA');
-      }
-      });
+      // .then((results) => {
+      //   res.json(results);
+      //   console.log(res.json(results), '2DATAAAAAA');
+      // }
+      // });
   });
 
   router.get('/api/profile_current', (req, res) => {
