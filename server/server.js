@@ -68,9 +68,14 @@ const io = require('socket.io')(server);
 
 
 //----------------socketIO ----------------------//
-// let users = []
+// let usernames = {};
+// let rooms = ['dashboard','challenge'];
+
 io.on('connection', (socket) => {
   console.log('connection to client established');
+  Object.keys(io.sockets.sockets).forEach(function(id) {
+    console.log("connecting ID:",id)  // socketId
+  })
 
   //messages from chatbox
   socket.on('clientMessage', (message)=>{
@@ -86,7 +91,15 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log('server disconnected');
+    Object.keys(io.sockets.sockets).forEach(function(id) {
+      console.log("disconnecting ID:",id)  // socketId
+    })
   })
+
+  // socket.on('create', function(room) {
+  //   socket.join(room);
+  // });
+
 
 });
 
