@@ -131,6 +131,7 @@ class Challenge extends Component {
           { showResult }
         </div>
 
+
         <div className="showAnswer">
           <a onClick= {this.onClick.bind(this)} href='#'> Give me answeR</a>
           {this.state.showAnswer && <ChallengeAnswer answer= { this.state.questions } /> }
