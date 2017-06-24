@@ -1,12 +1,17 @@
 require('dotenv').config();
 
 const PORT        = process.env.PORT || 8080;
+const S_PORT      = process.env.S_PORT || 5000;
 const ENV         = process.env.ENV || "development";
 
 const express     = require("express");
 
 const app         = express();
 // const server      = require('http').Server(app);
+
+const https = require('https')
+const fs = require('fs')
+
 
 const session     = require('express-session');
 const passport    = require('passport');
@@ -53,15 +58,29 @@ app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: fals
 app.use(passport.initialize());
 app.use(passport.session());
 
-
+app.use(ensureSecure);
+function ensureSecure(req, res, next){
+  if(req.secure){
+    next();  // OK, continue to next middleware/handler/router/etc
+  } else {
+    // new protocol, old hostname, new port, old url
+    res.redirect('https://' + req.hostname + ':' + S_PORT + req.url);
+  }
+}
 
 // Mount all resource routes
 app.use("/", Routes(knex));
 
 
-
-const server = app.listen(PORT, () => {
-  console.log(`Listening on ${PORT}`);
+const httpsOptions = {
+  key: fs.readFileSync('keys/key.pem'),
+  cert: fs.readFileSync('keys/cert.pem')
+}
+const server = https.createServer(httpsOptions, app).listen(S_PORT, () => {
+  console.log('Secure server running at ' + S_PORT)
+})
+const redir = app.listen(PORT, () => {
+  console.log(`redirecting on ${PORT}`);
 });
 const io = require('socket.io')(server);
 
