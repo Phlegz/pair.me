@@ -8,6 +8,8 @@ import 'brace/theme/monokai';
 
 import ChatBox from './ChatBox.jsx';
 import ChallengeQuestions from './ChallengeQuestions.jsx'
+import ChallengeAnswer from './ChallengeAnswer.jsx'
+
 
 const io = require('socket.io-client');
 const socket = io();
@@ -20,6 +22,7 @@ class Challenge extends Component {
       console: [],
       aceValue: "",
       user: null,
+      showAnswer: false,
       questions: {
         title: "",
         question: "",
@@ -41,11 +44,11 @@ class Challenge extends Component {
         question: response.data[0].question,
         example: response.data[0].example,
         placeholder: response.data[0].placeholder,
-        answer: response.data[1].answer,
+        answer: response.data[0].answer,
         unit_test: response.data[0].unit_test
         }
       },
-      this.setState({aceValue: `${response.data[1].example}\n\n${response.data[1].placeholder}\n${response.data[1].unit_test}`}))
+      this.setState({aceValue: `${response.data[0].example}\n\n${response.data[0].placeholder}\n${response.data[0].unit_test}`}))
     })
   }
   componentDidMount() {
@@ -61,6 +64,12 @@ class Challenge extends Component {
       this.setState({aceValue: code});
     });
   }
+
+  onClick(e) {
+    e.preventDefault();
+    this.setState({ showAnswer: !this.state.showAnswer })
+  }
+
   liveCode() {
     // console.log('calling function');
     let editor = ace.edit('codeChallenges');
@@ -103,6 +112,7 @@ class Challenge extends Component {
     return (
       <div>
         <ChallengeQuestions questions={ this.state.questions } />
+
         <AceEditor
           name="codeChallenges"
           mode="javascript"
@@ -120,9 +130,13 @@ class Challenge extends Component {
           { consoleArr }
           { showResult }
         </div>
+
         <div className="showAnswer">
-          { this.state.questions.answer }
+          <a onClick= {this.onClick.bind(this)} href='#'> Give me answeR</a>
+          {this.state.showAnswer && <ChallengeAnswer answer= { this.state.questions } /> }
         </div>
+
+
         <ChatBox user={ this.state.user } />
       </div>
 
