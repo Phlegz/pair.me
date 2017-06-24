@@ -6,7 +6,8 @@ import axios from 'axios';
 import 'brace/mode/javascript';
 import 'brace/theme/monokai';
 
-import ChatBox from './chatBox.jsx';
+import ChatBox from './ChatBox.jsx';
+import ChallengeQuestions from './ChallengeQuestions.jsx'
 
 const io = require('socket.io-client');
 const socket = io();
@@ -101,6 +102,7 @@ class Challenge extends Component {
     }
     return (
       <div>
+        <ChallengeQuestions questions={ this.state.questions } />
         <AceEditor
           name="codeChallenges"
           mode="javascript"
@@ -121,7 +123,7 @@ class Challenge extends Component {
         <div className="showAnswer">
           { this.state.questions.answer }
         </div>
-        <ChatBox user={this.state.user} />
+        <ChatBox user={ this.state.user } />
       </div>
 
     );
