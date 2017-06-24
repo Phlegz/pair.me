@@ -117,19 +117,27 @@ module.exports = (knex) => {
 
   router.post('/api/challenges', (req,res) => {
     knex
-      .select("unit_test")
-      .from("questions")//.where("id","2")
+      .select("id","unit_test")
+      .from("questions")
       .then((results) => {
-        //get the unit_test from questions
-        let unitTests = results[1].unit_test;
-        //getting the values of ace
+        // getting the question_id of posted question in challenges
+        let frontQuestionId = req.body.questionId;
+        // getting the value from ace editor
         let textValue = JSON.parse(req.body.answer);
-      // Sandbox Run of values from ace and unit_test
-      sb.run(`${textValue}${unitTests}`,
-        function(output) {
-          res.json(JSON.stringify(output));
-        }
-      ); //sb
+        // get the unit_test from questions thru a forEach loop
+        results.forEach((result) => {
+          // comparing the same question id and getting the corresponding unit_test for that id
+          if (result.id === frontQuestionId) {
+            let unitTest = result.unit_test;
+            console.log("UNIT_TEST",unitTest)
+            // Sandbox Run of values from ace and unit_test
+            sb.run(`${textValue}${unitTest}`,
+              function(output) {
+                res.json(JSON.stringify(output));
+              } // sb_output 
+            ); // sb
+          } // if-end
+        }) // forEach-end
     }); // knex
   })
 
@@ -148,38 +156,13 @@ module.exports = (knex) => {
       })
   })
 
-  // router.get("/", (req, res) => {
-  // });
-
-  // router.post("/", (req, res) => {
-
-  // });
-
-
-
-  // router.post("/dashboard", (req, res) => {
-
-  //   res,redirect("/challenge/:challenge_id")
-  // });
-
-  // find_match
-
-  // start_challenge
 
 
 
 
 
-  // router.get("/challenges/:username", (req, res) => {
-  // });
 
-
-  // router.get("/challenge/:challenge_id", (req, res) => {
-  // });
-
-  // router.post("/profiles/:username", (req, res) => {
-  //   res.redirect("/profiles/:username")
-  // });
+  // Should be last route
   router.get('/*', ensureAuthenticated, (req, res) => {
     res.cookie("unsafe_user_name", req.user.github_username);
     res.render('dashboard');
