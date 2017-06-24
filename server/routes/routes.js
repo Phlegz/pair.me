@@ -2,6 +2,7 @@
 
 const express = require("express");
 const router  = express.Router();
+const organize_data = require("../public/scripts/organize_data");
 
 const passport = require('passport');
 const sandbox = require('sandbox');
@@ -31,17 +32,37 @@ module.exports = (knex) => {
   );
 
   router.get('/dashboard', ensureAuthenticated, (req, res) => {
-    let current_user = req.session.passport.user;
-    knex
-      .select('difficulty')
-      .from('questions')
-      .where('difficulty', '>', 0)
-      .then((results) => {
-        return res.json(results);
-        console.log(results, 'RESULLTSS');
-      })
-    return res.render('dashboard');
+
+    res.render('dashboard');
   })
+
+  router.get('/api/dashboard', (req, res) => {
+    let current_user = req.session.passport.user;
+    let queryUser = knex
+                      .select('users.id')
+                      .from('users')
+                      .where({github_id: current_user});
+    let querySessions = knex
+                      .select('sessions_users.id')
+                      .from('sessions_users')
+                      .where('user_id', queryUser);
+    let queryChallenges = knex
+                      .select('completed_at', 'challenges.id')
+                      .from('challenges')
+                      .leftJoin('sessions_users', 'challenges.session_id', 'sessions_users.session_id')
+                      .where('user_id', queryUser);
+    let queryDifficulty = knex
+                      .select('difficulty')
+                      .from('questions')
+                      .leftJoin('challenges', 'questions.id', 'challenges.question_id')
+                      .where('session_id', querySessions);
+    Promise.all([queryChallenges, queryDifficulty])
+      .then(([challengesData, difficultyData]) => {
+        res.json(challenges.Data, difficultyData);
+        console.log(res.json(challenges.Data, difficultyData), '2DATA');
+
+      });
+  });
 
   router.get('/api/profile_current', (req, res) => {
     let current_user = req.session.passport.user;

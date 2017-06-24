@@ -13,7 +13,7 @@ class Searchpair extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      difficultyLevel: null
+      challengesCompleted: null
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -36,10 +36,10 @@ class Searchpair extends Component {
 
   componentDidMount() {
     var self = this;
-    axios.get('/dashboard')
+    axios.get('/api/dashboard')
     .then(function(response) {
-      self.setState({difficultyLevel: response.data});
-      console.log(response.data, 'ADSFJK;L');
+      self.setState({challengesCompleted: response.data});
+      // console.log(response.data, 'ADSFJK;L');
     })
     .catch(function(error) {
       console.log(error);
@@ -116,15 +116,15 @@ class Searchpair extends Component {
         <p>Your progress on completed challenges over time</p>
         <Col sm={5}>
           <Label> <Moment calendar>{today}</Moment> </Label>
-          <ProgressBar now={50} />
+          <ProgressBar min={0} max={5} now={2} />
           <Label> <Moment format="LL">{yesterday}</Moment> </Label>
-          <ProgressBar bsStyle="success" now={40} label={`${challengesCompleted}%`}/>
+          <ProgressBar bsStyle="success" now={0} label={`${challengesCompleted}%`}/>
           <Label> <Moment format="LL">{twoDaysAgo}</Moment> </Label>
           <ProgressBar bsStyle="info" now={20} />
           <Label> <Moment format="LL">{threeDaysAgo}</Moment> </Label>
           <ProgressBar bsStyle="warning" now={60} />
           <Label> <Moment format="LL">{fourDaysAgo}</Moment> </Label>
-          <ProgressBar bsStyle="danger" now={80} />
+          <ProgressBar bsStyle="danger" now={100} />
         </Col>
         <div className="pieChart">
           <PieChart
@@ -132,11 +132,11 @@ class Searchpair extends Component {
             slices={[
               {
                 color: '#d9534f',
-                value: 20,
+                value: 50,
               },
               {
                 color: '#f5f5f5',
-                value: 80,
+                value: 50,
               },
             ]}
           />
