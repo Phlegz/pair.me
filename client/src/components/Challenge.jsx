@@ -6,7 +6,10 @@ import axios from 'axios';
 import 'brace/mode/javascript';
 import 'brace/theme/monokai';
 
-import ChatBox from './chatBox.jsx';
+import ChatBox from './ChatBox.jsx';
+import ChallengeQuestions from './ChallengeQuestions.jsx'
+import ChallengeAnswer from './ChallengeAnswer.jsx'
+
 
 const io = require('socket.io-client');
 const socket = io();
@@ -19,6 +22,7 @@ class Challenge extends Component {
       console: [],
       aceValue: "",
       user: null,
+      showAnswer: false,
       questions: {
         title: "",
         question: "",
@@ -62,6 +66,12 @@ class Challenge extends Component {
       this.setState({aceValue: code});
     });
   }
+
+  onClick(e) {
+    e.preventDefault();
+    this.setState({ showAnswer: !this.state.showAnswer })
+  }
+
   liveCode() {
     // console.log('calling function');
     let editor = ace.edit('codeChallenges');
@@ -119,6 +129,7 @@ class Challenge extends Component {
     }
     return (
       <div>
+        <ChallengeQuestions questions={ this.state.questions } />
         <AceEditor
           name="codeChallenges"
           mode="javascript"
@@ -136,9 +147,12 @@ class Challenge extends Component {
           { showResult }
         </div>
         <div className="showAnswer">
-          { this.state.questions.answer }
+          <a onClick= {this.onClick.bind(this)} href='#'> Give me answeR</a>
+          {this.state.showAnswer && <ChallengeAnswer answer= { this.state.questions } /> }
         </div>
-        <ChatBox user={this.state.user} />
+
+
+        <ChatBox user={ this.state.user } />
       </div>
 
     );
