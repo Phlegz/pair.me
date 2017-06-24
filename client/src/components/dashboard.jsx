@@ -8,8 +8,10 @@ import {
   Route,
   Link
 } from 'react-router-dom'
-
 import { Navbar, Nav, NavItem, MenuItem, NavDropdown } from 'react-bootstrap';
+const io = require('socket.io-client');
+const socket = io();
+
 
 const routes = [
   {
@@ -43,7 +45,29 @@ function readCookie(name) {
 const myGithubUsername = readCookie('unsafe_user_name');
 
 class Dashboard extends React.Component {
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      messages: [],
+      user: null
+    }
+   
+    this.socket = io.connect();
+  }
+  componentDidMount() {
+    axios.get('/api/profile_current')
+    .then((response)=> {
+      this.setState({user: response.data.github_username})
+      // console.log(this.state.user)
+    })
+    socket.on('connect', () => {
+      console.log('Id client connected',socket.id);
+      console.log('A client connected');
+    }); 
+    socket.on('disconnect', () => {
+      console.log('Client disconnected');
+    });
+  }
   render() {
     const self = this;
     const navBar = (
