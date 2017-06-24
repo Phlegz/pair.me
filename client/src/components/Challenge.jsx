@@ -15,7 +15,7 @@ class Challenge extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      result: "",
+      result: null,
       console: [],
       aceValue: "",
       user: null,
@@ -25,7 +25,8 @@ class Challenge extends Component {
         example: "",
         placeholder: "",
         answer: "",
-        unit_test: ""
+        unit_test: "",
+        test_result: ""
       },
       sendUpdate: true,
     }
@@ -36,20 +37,21 @@ class Challenge extends Component {
     axios.get('/api/questions')
     .then((response)=> {
       this.setState({questions: {
-        title: response.data[0].title,
-        question: response.data[0].question,
-        example: response.data[0].example,
-        placeholder: response.data[0].placeholder,
+        title: response.data[1].title,
+        question: response.data[1].question,
+        example: response.data[1].example,
+        placeholder: response.data[1].placeholder,
         answer: response.data[1].answer,
-        unit_test: response.data[0].unit_test
+        unit_test: response.data[1].unit_test,
+        test_result: response.data[1].test_result
         }
       },
-      this.setState({aceValue: `${response.data[1].example}\n\n${response.data[1].placeholder}\n${response.data[1].unit_test}`}))
+      this.setState({aceValue: `${response.data[1].example}\n\n${response.data[1].placeholder}`}))
     })
   }
   componentDidMount() {
     console.log('successfully mounted');
-
+    console.log("RESULT",this.state.result)
      axios.get('/api/profile_current')
      .then((response)=> {
        this.setState({user: response.data})
@@ -92,12 +94,28 @@ class Challenge extends Component {
     let consoleArr = [];
     for (let i = 0; i < console.length; i++) {
       consoleArr.push(
-        <ul>{ console[i] }</ul>
+        <ul>console.log => { console[i] }</ul>
       )
     }
-    let showResult;
-    if (this.state.result !== "null"){
-     showResult = <ul>{ this.state.result }</ul>;
+    let showResult = '';
+    let result = this.state.result;
+    if (result !== null && result !== 'null') {
+      let test_result = this.state.questions.test_result
+      if (result === test_result){
+        showResult = <div className="resultLog">
+                       <ul>Unit Test => {this.state.questions.unit_test}</ul>
+                       <ul>Result => { result }</ul>
+                       <ul>Expected Answer => {test_result}</ul>
+                       <h3>CORRECT!</h3>
+                     </div>  
+      } else {
+        showResult = <div className="resultLog">
+                       <ul>Unit Test=> {this.state.questions.unit_test}</ul>
+                       <ul>Result => { result }</ul>
+                       <ul>Expected Answer => {test_result}</ul>
+                       <h3>Wrong, please try again</h3>
+                     </div>  
+      }
     }
     return (
       <div>
@@ -111,11 +129,10 @@ class Challenge extends Component {
           onChange={ this.liveCode }
           value={this.state.aceValue}
         />
-
         <input type='button' value='Submit' onClick={(e) => this.submitCode(e) } />
         <div className="output">
           Output:
-          { consoleArr }
+          <div className="consoleLog">{ consoleArr }</div>
           { showResult }
         </div>
         <div className="showAnswer">
