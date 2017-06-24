@@ -140,19 +140,21 @@ module.exports = (knex) => {
   })
 
   router.post('/api/challenges', (req,res) => {
-
-    let textValue = JSON.parse(req.body.answer);
-    console.log("BODY",req.body.answer);
-    console.log("PARSED",textValue);
-    // sandbox
-    sb.run(`${textValue}`,
-      function(output) {
-        console.log("OUTPUT",output);
-        console.log("OUTPUT RESULT",output.result);
-        console.log("CONSOLE LOG",output.console);
-        res.json(JSON.stringify(output));
-      }
-    );
+    knex
+      .select("unit_test")
+      .from("questions")//.where("id","2")
+      .then((results) => {
+        //get the unit_test from questions
+        let unitTests = results[1].unit_test;
+        //getting the values of ace
+        let textValue = JSON.parse(req.body.answer);
+      // Sandbox Run of values from ace and unit_test
+      sb.run(`${textValue}${unitTests}`,
+        function(output) {
+          res.json(JSON.stringify(output));
+        }
+      ); //sb
+    }); // knex
   })
 
   router.get('/challenge', ensureAuthenticated, (req, res) => {
