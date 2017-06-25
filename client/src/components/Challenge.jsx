@@ -133,8 +133,8 @@ class Challenge extends Component {
     return (
 
       <div>
-        <ChatBox user={ this.state.user } />
         <ChallengeQuestions questions={ this.state.questions } />
+        <ChatBox user={ this.state.user } />
       <div className='editor'>
         <AceEditor
           name="codeChallenges"

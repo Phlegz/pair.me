@@ -3,32 +3,37 @@ body {
       color: black;
       font-family: 'Open Sans', sans-serif;
       font-size: 14px;
-      margin: 70px 0;
+      /*margin: 70px 0;*/
     }
 
+    .challenge-question {
+      margin-bottom: 5px;
+    }
     .chat-container {
       border: 1px solid black;
-      width: 500px;
+      width: 30%;
       height: 400px;
       position: relative;
       float:right;
-      overflow: scroll;
-      overflow-x: hidden;
     }
 
       h4 {
         display:inline;
       }
 
+    .editor {
+      display: flex;
+    }
+
     .chatbar {
-      background: #a0a0a0;
+      /*background: #a0a0a0;*/
       border-top: 1px solid black;
-      width: 500px;
+      width: 100%;
       padding: 5px;
       float: right;
       bottom: 0;
       position: absolute;
-      background-color: red;
+      /*background-color: red;*/
     }
 
 
@@ -48,13 +53,12 @@ body {
       padding: 5px;
     }
 
-    .message.system {
-      font-style: italic;
-      padding: 5px 20px;
+    .message-list {
+      overflow-y:auto;
+      height: 380px;
     }
 
     .message-content {
-      overflow: hidden;
       margin: 5px;
       padding: 0 10px;
       color: blue;
