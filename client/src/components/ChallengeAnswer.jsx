@@ -7,10 +7,10 @@ class ChallengeAnswer extends Component {
 
   render() {
     return (
-      <div>
-        <h1>Answer</h1>
+      <span>
+        Answer
         {this.props.answer.answer}
-      </div>
+      </span>
     )
   }
 }
