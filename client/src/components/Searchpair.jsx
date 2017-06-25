@@ -13,7 +13,8 @@ class Searchpair extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: null
+      data: null,
+      average: 0,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -31,49 +32,48 @@ class Searchpair extends Component {
   }
 
   loadProgress(event) {
-
   }
 
-  componentDidMount() {
-    var self = this;
+  componentWillMount() {
+    // var self = this;
     axios.get('/api/statistics')
-    .then(function(response) {
-      self.setState({data: response.data.rows});
-        console.log(response.data.rows.length, 'LENGTH');
+    .then((response)=> {
+      this.setState({data: response.data.rows});
+        // console.log(response.data.rows.length, 'LENGTH');
+        // console.log(this.state.data, 'this is an object - 6 length');
+      const data = this.state.data;
+      console.log(data, 'current state of data');
+      const difficultyList = [];
+
+      if(data != null) {
+        data.forEach((difficulty) => {
+          difficultyList.push(data[0].difficulty);
+        })
+      };
+      const sum = difficultyList.reduce(function(acc, val) {
+        return acc + val;
+      }, 0);
+      const avgDifficulty = sum / difficultyList.length;
+      console.log(avgDifficulty, 'AVG');
+      this.setState({ average: avgDifficulty });
+      console.log(this.state.average, 'average state')
     })
-    .catch(function(error) {
+    .catch((error)=> {
       console.log(error);
     });
+
+
   }
 
 
   render() {
-    const data = this.state.data;
-    const difficultyList = [];
+
     const challengesCompleted = "1 challenge completed";
     const today = Date.now();
     const yesterday = Date.now() - 86400000;
     const twoDaysAgo = Date.now() - (86400000*2);
     const threeDaysAgo = Date.now() - (86400000*3);
     const fourDaysAgo = Date.now() - (86400000*4);
-    console.log(this.state.data, 'DATAAAA');
-
-    if(data != null) {
-      data.forEach((difficulty) => {
-        difficultyList.push(data[0].difficulty);
-      })
-    };
-
-    const sum = difficultyList.reduce(function(acc, val) {
-      return acc + val;
-    }, 0);
-
-    const avgDifficulty = sum / difficultyList.length;
-    const greyAreaPie = 5 - avgDifficulty;
-    console.log(greyAreaPie, 'PIEEE');
-    console.log(avgDifficulty, 'average');
-    console.log(sum, 'SUM');
-    console.log(difficultyList, 'LISTDIFFICULTY');
 
   return (
     <div>
@@ -143,13 +143,13 @@ class Searchpair extends Component {
                 color: '#d9534f',
                 min: 1,
                 max: 5,
-                value: 3
+                value: this.state.average
               },
               {
                 color: '#f5f5f5',
                 min: 1,
                 max: 5,
-                value: 2
+                value: 5 - this.state.average
               },
             ]}
           />
