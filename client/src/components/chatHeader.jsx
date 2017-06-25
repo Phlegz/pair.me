@@ -4,7 +4,7 @@ class Header extends Component {
   render() {
     return (
       <span>
-        <h4 className='title'>ChatBox</h4>
+        <h4 className='chat-header'>ChatBox</h4>
       </span>
     )
   }
