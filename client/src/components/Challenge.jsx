@@ -117,42 +117,48 @@ class Challenge extends Component {
                        <ul>Result => { result }</ul>
                        <ul>Expected Answer => {test_result}</ul>
                        <h3>CORRECT!</h3>
-                     </div>  
+                     </div>
       } else {
         showResult = <div className="resultLog">
                        <ul>Unit Test=> {this.state.questions.unit_test}</ul>
                        <ul>Result => { result }</ul>
                        <ul>Expected Answer => {test_result}</ul>
                        <h3>Wrong, please try again</h3>
-                     </div>  
+                     </div>
       }
     }
     return (
+
       <div>
+        <ChatBox user={ this.state.user } />
         <ChallengeQuestions questions={ this.state.questions } />
+      <div className='editor'>
         <AceEditor
           name="codeChallenges"
           mode="javascript"
           theme="monokai"
           editorProps={{$blockScrolling: Infinity}}
           tabSize={2}
+          width={1310}
+          height={800}
+          // height:
           //invoke livecode function everytime the text box changess
           onChange={ this.liveCode }
           value={this.state.aceValue}
         />
+      </div>
         <input type='button' value='Submit' onClick={(e) => this.submitCode(e) } />
         <div className="output">
           Output:
           <div className="consoleLog">{ consoleArr }</div>
           { showResult }
         </div>
+
         <div className="showAnswer">
-          <a onClick= {this.onClick.bind(this)} href='#'> Give me answeR</a>
+          <button onClick= {this.onClick.bind(this)}> Give me answeR</button>
           {this.state.showAnswer && <ChallengeAnswer answer= { this.state.questions } /> }
         </div>
 
-
-        <ChatBox user={ this.state.user } />
       </div>
 
     );
