@@ -3,19 +3,21 @@ import axios from 'axios';
 import { PageHeader, Jumbotron, Button, Modal, FormGroup, ControlLabel, FormControl, Col, ProgressBar, Label } from 'react-bootstrap';
 import PieChart from 'react-simple-pie-chart';
 import Moment from 'react-moment';
-// import {
-//   HashRouter as Router,
-//   Route,
-//   Link
-// } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from 'react-router-dom'
 
 class Searchpair extends Component {
   constructor(props) {
     super(props);
     this.state = {
       challengesCompleted: null,
-      pairMeModal: false
-    };
+      pairMeModal: false,
+      pair: {id:"",github_username:"",avatar:""}
+    }
+
 
     // this.handleChange = this.handleChange.bind(this);
     // this.handleSubmit = this.handleSubmit.bind(this);
@@ -42,7 +44,6 @@ class Searchpair extends Component {
 
   pairMe(event) {
     event.preventDefault();
-    // var self = this;
     this.setState({ pairMeModal: true})
     let postData = {
       language: this.language.value,
@@ -50,10 +51,12 @@ class Searchpair extends Component {
     };
     axios.post('/api/dashboard', postData)
     .then((response) => {
-      // this.setState({pairMeModal: response.data});
-      console.log(response.data);
+      // console.log(response.data);
+      this.setState({pair: response.data});
+      console.log("sdasdasdasdasd");
+      console.log("pair state:", this.state.pair);
     })
-    .catch(function(error) {
+    .catch(error => {
       console.log(error);
     });
   }
@@ -72,16 +75,6 @@ class Searchpair extends Component {
     .catch(function(error) {
       console.log(error);
     });
-    // axios.post('/language', {
-    // firstName: 'Fred',
-    // lastName: 'Flintstone'
-    // })
-    // .then(function (response) {
-    //   console.log(response);
-    // })
-    // .catch(function (error) {
-    //   console.log(error);
-    // });
   }
 
 
@@ -147,10 +140,13 @@ class Searchpair extends Component {
         aria-labelledby="contained-modal-title"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Update Profile</Modal.Title>
+          <Modal.Title>You have been matched with {this.state.pair.github_username}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          You have been matched with Don Burks form LHL
+          <div className="wrapper">
+            <img src={this.state.pair.avatar} />
+          </div>
+          <p><Link to={"https://github.com" + this.state.github_username}>Github</Link></p>
         </Modal.Body>
       </Modal>
 
