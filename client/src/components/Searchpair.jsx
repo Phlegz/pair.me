@@ -38,35 +38,42 @@ class Searchpair extends Component {
     var self = this;
     axios.get('/api/statistics')
     .then(function(response) {
-      console.log(response)
-      console.log(response.data.rows, 'ADSFJK;L');
       self.setState({data: response.data.rows});
-        console.log(response.data.length, 'LENGTH');
+        console.log(response.data.rows.length, 'LENGTH');
     })
     .catch(function(error) {
       console.log(error);
     });
-    // axios.post('/language', {
-    // firstName: 'Fred',
-    // lastName: 'Flintstone'
-    // })
-    // .then(function (response) {
-    //   console.log(response);
-    // })
-    // .catch(function (error) {
-    //   console.log(error);
-    // });
   }
 
 
   render() {
+    const data = this.state.data;
+    const difficultyList = [];
     const challengesCompleted = "1 challenge completed";
     const today = Date.now();
     const yesterday = Date.now() - 86400000;
     const twoDaysAgo = Date.now() - (86400000*2);
     const threeDaysAgo = Date.now() - (86400000*3);
     const fourDaysAgo = Date.now() - (86400000*4);
+    console.log(this.state.data, 'DATAAAA');
 
+    if(data != null) {
+      data.forEach((difficulty) => {
+        difficultyList.push(data[0].difficulty);
+      })
+    };
+
+    const sum = difficultyList.reduce(function(acc, val) {
+      return acc + val;
+    }, 0);
+
+    const avgDifficulty = sum / difficultyList.length;
+    const greyAreaPie = 5 - avgDifficulty;
+    console.log(greyAreaPie, 'PIEEE');
+    console.log(avgDifficulty, 'average');
+    console.log(sum, 'SUM');
+    console.log(difficultyList, 'LISTDIFFICULTY');
 
   return (
     <div>
@@ -86,7 +93,7 @@ class Searchpair extends Component {
             <FormControl componentClass="select" placeholder="select">
               <option value="select">select</option>
               <option value="Javascript">Javascript</option>
-              <option value="PHP">PHP</option>
+              <option value="Ruby">Ruby</option>
               <option value="Python">Python</option>
               <option value="Java">Java</option>
             </FormControl>
@@ -118,7 +125,7 @@ class Searchpair extends Component {
         <p>Your progress on completed challenges over time</p>
         <Col sm={5}>
           <Label> <Moment calendar>{today}</Moment> </Label>
-          <ProgressBar min={0} max={5} now={2} />
+          <ProgressBar min={0} max={5} now={10} />
           <Label> <Moment format="LL">{yesterday}</Moment> </Label>
           <ProgressBar bsStyle="success" now={0} label={`${challengesCompleted}%`}/>
           <Label> <Moment format="LL">{twoDaysAgo}</Moment> </Label>
@@ -134,11 +141,15 @@ class Searchpair extends Component {
             slices={[
               {
                 color: '#d9534f',
-                value: 50,
+                min: 1,
+                max: 5,
+                value: 3
               },
               {
                 color: '#f5f5f5',
-                value: 50,
+                min: 1,
+                max: 5,
+                value: 2
               },
             ]}
           />
