@@ -13,7 +13,7 @@ class Searchpair extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      challengesCompleted: null
+      data: null
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -36,10 +36,12 @@ class Searchpair extends Component {
 
   componentDidMount() {
     var self = this;
-    axios.get('/api/dashboard')
+    axios.get('/api/statistics')
     .then(function(response) {
-      self.setState({challengesCompleted: response.data});
-      // console.log(response.data, 'ADSFJK;L');
+      console.log(response)
+      console.log(response.data.rows, 'ADSFJK;L');
+      self.setState({data: response.data.rows});
+        console.log(response.data.length, 'LENGTH');
     })
     .catch(function(error) {
       console.log(error);

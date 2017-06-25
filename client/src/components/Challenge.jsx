@@ -101,7 +101,6 @@ class Challenge extends Component {
     }
     return (
       <div>
-<iframe src="https://appear.in/woofmeow" width="800" height="640" frameBorder="0"></iframe>
         <AceEditor
           name="codeChallenges"
           mode="javascript"

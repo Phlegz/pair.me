@@ -10,6 +10,25 @@ const sb = new sandbox();
 
 module.exports = (knex) => {
 
+  function completedDifficulties(githubId) {
+    console.log('here')
+  return knex.raw(`
+    SELECT
+      challenges.completed_at,
+      questions.difficulty
+    FROM
+      questions
+      JOIN challenges ON challenges.question_id = questions.id
+      JOIN sessions ON sessions.id = challenges.session_id
+      JOIN sessions_users ON sessions_users.session_id = sessions.id
+      JOIN users ON users.id = sessions_users.user_id
+    WHERE
+      users.github_username = ?
+    ORDER BY
+      challenges.completed_at
+  `, [githubId]);
+}
+
   function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
       res.redirect('/')
@@ -36,35 +55,13 @@ module.exports = (knex) => {
     res.render('dashboard');
   })
 
-  router.get('/api/dashboard', (req, res) => {
+  router.get('/api/statistics', (req, res) => {
     let current_user = req.session.passport.user;
-    let queryUser = knex
-                      .select('users.id')
-                      .from('users')
-                      .where({github_id: current_user});
-    let querySessions = knex
-                      .select('sessions_users.id')
-                      .from('sessions_users')
-                      .where('user_id', queryUser);
-    let queryChallenges = knex
-                      .select('completed_at', 'challenges.id')
-                      .from('challenges')
-                      .leftJoin('sessions_users', 'challenges.session_id', 'sessions_users.session_id')
-                      .where('user_id', queryUser);
-    // let queryDifficulty = knex
-    //                   .select('difficulty')
-    //                   .from('questions')
-    //                   .leftJoin('challenges', 'questions.id', 'challenges.question_id')
-    //                   .where('session_id', querySessions);
-    // Promise.all([queryChallenges, queryDifficulty])
-    //   .then(([challengesData, difficultyData]) => {
-    //     res.json(challenges.Data, difficultyData);
-    //     console.log(res.json(challenges.Data, difficultyData), '2DATA');
-      .then((results) => {
-        res.json(results);
-        console.log(res.json(results), '2DATAAAAAA');
-      }
-      });
+    completedDifficulties("Farnaz")
+     .then((result) => {
+      console.log(result.length, 'RESULTS');
+      res.json(result);
+      })
   });
 
   router.get('/api/profile_current', (req, res) => {
@@ -206,4 +203,6 @@ module.exports = (knex) => {
   })
 
   return router;
+
+
 };
