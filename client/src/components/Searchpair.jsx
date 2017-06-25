@@ -15,19 +15,21 @@ class Searchpair extends Component {
     this.state = {
       challengesCompleted: null,
       pairMeModal: false,
-      pair: {id:"",github_username:"",avatar:""}
+      pair: {id:"",github_username:"",avatar:""},
+      waitModal: false
     }
 
 
     // this.handleChange = this.handleChange.bind(this);
     // this.handleSubmit = this.handleSubmit.bind(this);
     this.pairMe = this.pairMe.bind(this);
+    this.sendRequest = this.sendRequest.bind(this);
   }
 
-  handleChange(event) {
-    this.setState({language: event.target.value});
-    this.setState({difficulty: event.target.value});
-  }
+  // handleChange(event) {
+  //   this.setState({language: event.target.value});
+  //   this.setState({difficulty: event.target.value});
+  // }
 
   // handleSubmit(event) {
   //   alert('You picked ' + this.state.language + ' level ' + this.state.difficulty + '!');
@@ -61,8 +63,23 @@ class Searchpair extends Component {
     });
   }
 
-  loadProgress(event) {
-
+  sendRequest(event) {
+    event.preventDefault();
+    this.setState({pairMeModal: false})
+    this.setState({ waitModal: true})
+    let postData = {
+      current_user
+    };
+    axios.post('/api/dashboard', postData)
+    .then((response) => {
+      // console.log(response.data);
+      this.setState({pair: response.data});
+      console.log("sdasdasdasdasd");
+      console.log("pair state:", this.state.pair);
+    })
+    .catch(error => {
+      console.log(error);
+    });
   }
 
   componentDidMount() {
@@ -79,7 +96,8 @@ class Searchpair extends Component {
 
 
   render() {
-    let close = () => this.setState({ pairMeModal: false});
+    let closePairModal = () => this.setState({ pairMeModal: false});
+    let closeWaitModal = () => this.setState({ waitModal: false});
     const challengesCompleted = "1 challenge completed";
     const today = Date.now();
     const yesterday = Date.now() - 86400000;
@@ -133,23 +151,6 @@ class Searchpair extends Component {
 
       </form>
 
-      <Modal
-        show={this.state.pairMeModal}
-        onHide={close}
-        container={this}
-        aria-labelledby="contained-modal-title"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>You have been matched with {this.state.pair.github_username}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="wrapper">
-            <img src={this.state.pair.avatar} />
-          </div>
-          <p><Link to={"https://github.com" + this.state.github_username}>Github</Link></p>
-        </Modal.Body>
-      </Modal>
-
       <div className="progressBar">
         <h2>Progress</h2>
         <p>Your progress on completed challenges over time</p>
@@ -181,6 +182,64 @@ class Searchpair extends Component {
           />
         </div>
       </div>
+
+
+      <Modal
+        show={this.state.pairMeModal}
+        onHide={closePairModal}
+        container={this}
+        aria-labelledby="contained-modal-title"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>You have been matched with {this.state.pair.github_username}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="wrapper">
+            <img src={this.state.pair.avatar} />
+          </div>
+          <p>Visit {this.state.pair.github_username}&#39;s <a href={"https://github.com/" + this.state.pair.github_username}> Github </a> Account</p>
+          <Button
+            bsStyle="primary"
+            bsSize="large"
+            onClick={(e) => this.pairMe(e)}
+          >
+          Search Again
+          </Button>
+          <Button
+            bsStyle="success"
+            bsSize="large"
+            onClick={(e) => this.sendRequest(e)}
+          >
+          Send Request
+          </Button>
+        </Modal.Body>
+      </Modal>
+
+      <Modal
+        show={this.state.waitModal}
+        onHide={closeWaitModal}
+        container={this}
+        aria-labelledby="contained-modal-title"
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Body>
+          <Modal.Header>
+            <Modal.Title>Waiting for {this.state.pair.github_username}&#39;s Response</Modal.Title>
+          </Modal.Header>
+          <div className="wrapper">
+            <img src={this.state.pair.avatar} />
+          </div>
+          <Button
+            bsStyle="danger"
+            bsSize="large"
+            onClick={closeWaitModal}
+          >
+          Cancel Request
+          </Button>
+        </Modal.Body>
+      </Modal>
+
     </div>
   );
   }
