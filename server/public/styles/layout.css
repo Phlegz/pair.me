@@ -11,39 +11,5 @@ body {
   color: black;
   font-family: 'Open Sans', sans-serif;
   font-size: 14px;
+  margin: 70px 0;
 }
-
-
-.challenge-question {
-  width: 70%;
-  border: 1px solid black;
-  display: inline-block;
-}
-
-.editor {
-  display:-webkit-box;
-}
-
-.chat-container {
-  border: 1px solid black;
-  width: 30%;
-  height: 400px;
-  position: relative;
-  float: right;
-  position: top;
-}
-
-.title h4 {
-  display: inline;
-}
-
-.chatbar {
-  background: #a0a0a0;
-  border-top: 1px solid black;
-  width: 100%;
-  padding: 5px;
-  float: right;
-  bottom: 0;
-  position: absolute;
-}
-
