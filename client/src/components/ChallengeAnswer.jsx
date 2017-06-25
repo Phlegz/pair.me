@@ -7,7 +7,7 @@ class ChallengeAnswer extends Component {
 
   render() {
     return (
-      <span>
+      <span className="challenge-answer">
         Answer
         {this.props.answer.answer}
       </span>

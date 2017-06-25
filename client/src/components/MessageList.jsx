@@ -14,7 +14,7 @@ class MessageList extends Component {
         )
     });
     return (
-      <div id='Message-List'>{message}</div>
+      <div className='message-list'>{message}</div>
     )
   }
 }
