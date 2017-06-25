@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import AceEditor from 'react-ace';
+
 
 class ChallengeAnswer extends Component {
   constructor(props) {
@@ -9,10 +11,22 @@ class ChallengeAnswer extends Component {
     return (
       <span className="challenge-answer">
         Answer
-        {this.props.answer.answer}
+        <AceEditor
+          name="answerKey"
+          mode="javascript"
+          theme="monokai"
+          readOnly={true}
+          width={530}
+          height={175}
+          value={this.props.answer.answer}
+        />
       </span>
     )
   }
 }
 
 export default ChallengeAnswer;
+
+
+
+
