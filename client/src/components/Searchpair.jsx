@@ -1,23 +1,25 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { PageHeader, Jumbotron, Button, FormGroup, ControlLabel, FormControl, Col, ProgressBar, Label } from 'react-bootstrap';
+import { PageHeader, Jumbotron, Button, Modal, FormGroup, ControlLabel, FormControl, Col, ProgressBar, Label } from 'react-bootstrap';
 import PieChart from 'react-simple-pie-chart';
 import Moment from 'react-moment';
-import {
-  HashRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom';
+// import {
+//   HashRouter as Router,
+//   Route,
+//   Link
+// } from 'react-router-dom';
 
 class Searchpair extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      challengesCompleted: null
+      challengesCompleted: null,
+      pairMeModal: false
     };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    // this.handleChange = this.handleChange.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
+    this.pairMe = this.pairMe.bind(this);
   }
 
   handleChange(event) {
@@ -25,9 +27,35 @@ class Searchpair extends Component {
     this.setState({difficulty: event.target.value});
   }
 
-  handleSubmit(event) {
-    alert('You picked ' + this.state.language + ' level ' + this.state.difficulty + '!');
+  // handleSubmit(event) {
+  //   alert('You picked ' + this.state.language + ' level ' + this.state.difficulty + '!');
+  //   event.preventDefault();
+  //   var self = this;
+  //   axios.post('/dashboard')
+  //   .then(function(response) {
+  //     // console.log(response.data, 'ADSFJK;L');
+  //   })
+  //   .catch(function(error) {
+  //     console.log(error);
+  //   });
+  // }
+
+  pairMe(event) {
     event.preventDefault();
+    // var self = this;
+    this.setState({ pairMeModal: true})
+    let postData = {
+      language: this.language.value,
+      difficulty: this.difficulty.value,
+    };
+    axios.post('/api/dashboard', postData)
+    .then((response) => {
+      // this.setState({pairMeModal: response.data});
+      console.log(response.data);
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
   }
 
   loadProgress(event) {
@@ -58,6 +86,7 @@ class Searchpair extends Component {
 
 
   render() {
+    let close = () => this.setState({ pairMeModal: false});
     const challengesCompleted = "1 challenge completed";
     const today = Date.now();
     const yesterday = Date.now() - 86400000;
@@ -74,14 +103,15 @@ class Searchpair extends Component {
       <p>
         You can start a session by clicking on the "Pair Me" button.
       </p>
-      <form onSubmit={this.handleSubmit}>
+      <form //onSubmit={this.handleSubmit}
+      >
         <FormGroup controlId="formControlsSelect">
           <Col componentClass={ControlLabel} sm={4}>
             Select a language
           </Col>
           <br />
           <Col sm={10}>
-            <FormControl componentClass="select" placeholder="select">
+            <FormControl componentClass="select" placeholder="select" inputRef={ (input) => this.language = input}>
               <option value="select">select</option>
               <option value="Javascript">Javascript</option>
               <option value="PHP">PHP</option>
@@ -96,7 +126,7 @@ class Searchpair extends Component {
           </Col>
           <br />
           <Col sm={10}>
-            <FormControl componentClass="select" placeholder="select">
+            <FormControl componentClass="select" placeholder="select" inputRef={ (input) => this.difficulty = input}>
               <option value="select">select</option>
               <option value="1">1</option>
               <option value="2">2</option>
@@ -106,10 +136,23 @@ class Searchpair extends Component {
             </FormControl>
           </Col>
         </FormGroup>
-        <Button onClick={this.pairMe}>
-          Pair Me
-        </Button>
+        <input type='button' value='pair me' onClick={(e) => this.pairMe(e)}/>
+
       </form>
+
+      <Modal
+        show={this.state.pairMeModal}
+        onHide={close}
+        container={this}
+        aria-labelledby="contained-modal-title"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Update Profile</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          You have been matched with Don Burks form LHL
+        </Modal.Body>
+      </Modal>
 
       <div className="progressBar">
         <h2>Progress</h2>
