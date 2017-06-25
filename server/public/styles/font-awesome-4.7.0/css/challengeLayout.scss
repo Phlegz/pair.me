@@ -1,0 +1,71 @@
+body {
+  background-color: #EEE;
+
+  h1 {
+    color: #244751;
+  }
+}
+
+body {
+      background: white;
+      color: black;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+      margin: 70px 0;
+    }
+
+    .chat-container {
+      border: 1px solid black;
+      width: 400px;
+      height: 400px;
+      position: relative;
+      // float:right;
+    }
+
+      h4 {
+        display:inline;
+      }
+
+    .chatbar {
+      background: #a0a0a0;
+      border-top: 1px solid black;
+      width: 400px;
+      padding: 5px;
+      float: right;
+      bottom: 0;
+      position: absolute;
+    }
+
+
+    .chatbar-message {
+      flex: 8;
+      padding: 0 5px 0 5px;
+      width: 350px;
+    }
+
+    .chatbar-username {
+      flex: 2;
+    }
+
+    .message {
+      display: flex;
+      padding: 5px;
+    }
+
+    .message.system {
+      font-style: italic;
+      padding: 5px 20px;
+    }
+
+    .message-content {
+      overflow: hidden;
+      margin: 5px;
+      padding: 0 10px;
+    }
+
+    .message-content {
+      flex: 8;
+    }
+
+
+
