@@ -26,11 +26,33 @@ module.exports = (knex) => {
   router.get('/auth/github/callback',
     passport.authenticate('github', { failureRedirect: '/login' }),
     (req, res) => {
-      res.redirect('/dashboard');
+      knex('users').where('github_id', req.session.passport.user).update({online: true})
+      .then(() => {
+        res.redirect('/dashboard');
+      })
     }
   );
 
   router.get('/dashboard', ensureAuthenticated, (req, res) => {
+
+    res.render('dashboard');
+  })
+
+  router.post('/api/dashboard', ensureAuthenticated, (req, res) => {
+    let pairResult = {
+        difficulty: req.body.difficulty,
+        language: req.body.language,
+      };
+    let currentUser = req.session.passport.user
+    knex.raw('select * from users where online=true and github_id != ?',[currentUser])
+    .then((results) => {
+      let shuffled = results.rows.sort(() => Math.random() * 2 - 1);
+      res.json(shuffled[0]);
+    })
+
+  })
+
+  router.get('/api/dashboard', (req, res) => {
     let current_user = req.session.passport.user;
     knex
       .select('difficulty')
@@ -101,9 +123,12 @@ module.exports = (knex) => {
   });
 
   router.get('/logout', (req,res) => {
-    req.logOut();
-    req.session.destroy();
-    res.redirect('/');
+    //TODO change the user status in the database
+    knex('users').where('github_id', req.session.passport.user).update({online: false})
+    .then(() => {
+      req.logOut();
+      req.session.destroy();
+      res.redirect('/');})
   })
 
   router.get('/api/challenges', (req,res) => {
@@ -134,7 +159,7 @@ module.exports = (knex) => {
             sb.run(`${textValue}${unitTest}`,
               function(output) {
                 res.json(JSON.stringify(output));
-              } // sb_output 
+              } // sb_output
             ); // sb
           } // if-end
         }) // forEach-end
