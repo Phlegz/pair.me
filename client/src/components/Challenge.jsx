@@ -9,7 +9,7 @@ import 'brace/theme/monokai';
 import ChatBox from './ChatBox.jsx';
 import ChallengeQuestions from './ChallengeQuestions.jsx'
 import ChallengeAnswer from './ChallengeAnswer.jsx'
-import ChallengeOutput from './ChallengeOutput.jsx'
+
 
 
 const io = require('socket.io-client');
