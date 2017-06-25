@@ -9,6 +9,7 @@ import 'brace/theme/monokai';
 import ChatBox from './ChatBox.jsx';
 import ChallengeQuestions from './ChallengeQuestions.jsx'
 import ChallengeAnswer from './ChallengeAnswer.jsx'
+import ChallengeOutput from './ChallengeOutput.jsx'
 
 
 const io = require('socket.io-client');
@@ -68,11 +69,14 @@ class Challenge extends Component {
     });
   }
 
+
+  //click to display answer
   onClick(e) {
     e.preventDefault();
     this.setState({ showAnswer: !this.state.showAnswer })
   }
 
+  //function to track changes and send to server for broadcast
   liveCode() {
     // console.log('calling function');
     let editor = ace.edit('codeChallenges');
@@ -143,7 +147,7 @@ class Challenge extends Component {
           editorProps={{$blockScrolling: Infinity}}
           tabSize={2}
           width={1310}
-          height={800}
+          height={600}
           // height:
           //invoke livecode function everytime the text box changess
           onChange={ this.liveCode }
@@ -151,6 +155,7 @@ class Challenge extends Component {
         />
       </div>
         <input type='button' value='Submit' onClick={(e) => this.submitCode(e) } />
+
         <div className="output">
           Output:
           <div className="consoleLog">{ consoleArr }</div>
