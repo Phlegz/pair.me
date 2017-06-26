@@ -181,34 +181,55 @@ module.exports = (knex) => {
       })
   })
 
+  // router.get('/api/notifications', (req,res) => {
+  //   let currentUser = req.session.passport.user
+  //   let currentUserId= knex.select('id').from('users').where('github_id',currentUser);
+  //   knex
+  //     .select('*')
+  //     .from('notifications')
+  //     .where({user_id: currentUserId,
+  //       status: 'pending'
+  //     })
+  //     .then((results) => {
+  //       res.json(results);
+  //     })
+  // })
+
   router.post('/api/notifications', (req, res) => {
     let currentUser = req.session.passport.user
     let currentUserId= knex.select('id').from('users').where('github_id',currentUser);
 
-    return knex('notifications').returning('id').insert([
-      {
-      user_id: currentUserId,
-      initiator: true,
-      },
-      {
-      user_id: req.body.acceptingUserId,
-      initiator: false,
-      }
-    ]).then(()=> {
-      res.status(200).send('Notification request sent')
-    })
+    return knex('notifications').returning('id').insert({})
+      .then((id)=>{
+        return knex('notifications_users').insert([
+        {
+        notification_id: id[0],
+        user_id: currentUserId,
+        initiator: true,
+        },
+        {
+        notification_id: id[0],
+        user_id: req.body.acceptingUserId,
+        initiator: false,
+        }
+        ]).then(()=> {
+          res.status(200).send('Notification request sent')
+        })
+      })
   })
-
+ 
   router.post('/api/notifications/cancel', (req, res) => {
     let currentUser = req.session.passport.user
-    let currentUserId= knex.select('id').from('users').where('github_id',currentUser);
-
-    knex('notifications').where({user_id: currentUserId, status: 'pending'}).update({status: 'rejected'})
-    .then(knex('notifications').where({user_id: req.body.acceptingUserId, status: 'pending'}).update({status: 'rejected'})
+    let currentUserId = knex.select('id').from('users').where('github_id',currentUser);
+    let pendingNotificationId = knex.select('id').from('notifications').where('status','pending');
+    let notificationId = knex.select('notification_id').from('notifications_users').whereIn('user_id',[currentUser,req.body.acceptingUserId]).andWhere('notification_id',pendingNotificationId);
+    
+    // BUG: TODO make sure no-one is stuck on status pending (e.g. close the browser on sending request)
+    
+    knex('notifications').where('id', notificationId).update({status: 'rejected'})
       .then(()=> {
         res.status(200).send('Notification request cancelled')
       }) 
-    )
   })
 
 

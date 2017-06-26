@@ -67,7 +67,7 @@ class Searchpair extends Component {
   sendRequest(event) {
     event.preventDefault();
     this.setState({pairMeModal: false})
-    this.setState({ waitModal: true})
+    this.setState({waitModal: true})
 
     axios.post('/api/notifications', {
       acceptingUserId: this.state.pair.id
@@ -95,18 +95,30 @@ class Searchpair extends Component {
     });
   }
 
+  // timer() {
+  //   axios.get('/api/notifications')
+  //     .then((response) => {
+  //       console.log(response.data)
+  //     })
+  // }
+
   componentDidMount() {
-    var self = this;
     axios.get('/api/dashboard')
-    .then(function(response) {
-      self.setState({challengesCompleted: response.data});
-      // console.log(response.data, 'ADSFJK;L');
+    .then((response) => {
+      this.setState({challengesCompleted: response.data});
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
     });
+    
+    // CONTINUE after merge
+    // let intervalId = setInterval(this.timer, 2000);
   }
 
+  // componentWillUnmount() {
+  //  // use intervalId from the state to clear the interval
+  //  clearInterval(this.state.intervalId);
+  // }
 
   render() {
     let closePairModal = () => this.setState({ pairMeModal: false});
