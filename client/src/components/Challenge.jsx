@@ -25,6 +25,7 @@ class Challenge extends Component {
       user: null,
       showAnswer: false,
       questions: {
+        id: "",
         title: "",
         question: "",
         example: "",
@@ -42,21 +43,21 @@ class Challenge extends Component {
     axios.get('/api/questions')
     .then((response)=> {
       this.setState({questions: {
-        title: response.data[1].title,
-        question: response.data[1].question,
-        example: response.data[1].example,
-        placeholder: response.data[1].placeholder,
-        answer: response.data[1].answer,
-        unit_test: response.data[1].unit_test,
-        test_result: response.data[1].test_result
+        id: response.data[0].id,
+        title: response.data[0].title,
+        question: response.data[0].question,
+        example: response.data[0].example,
+        placeholder: response.data[0].placeholder,
+        answer: response.data[0].answer,
+        unit_test: response.data[0].unit_test,
+        test_result: response.data[0].test_result
         }
       },
-      this.setState({aceValue: `${response.data[1].example}\n\n${response.data[1].placeholder}`}))
+      this.setState({aceValue: `${response.data[0].example}\n\n${response.data[0].placeholder}`}))
     })
   }
   componentDidMount() {
     console.log('successfully mounted');
-    console.log("RESULT",this.state.result)
      axios.get('/api/profile_current')
      .then((response)=> {
        this.setState({user: response.data})
@@ -90,9 +91,11 @@ class Challenge extends Component {
 
     let editor = ace.edit('codeChallenges');
     let textValue = JSON.stringify(editor.getValue());
-
+    let questionId = this.state.questions.id
+    
     axios.post('/api/challenges', {
-      answer: textValue
+      answer: textValue,
+      questionId: questionId
     })
     .then((response)=> {
       let outputData = JSON.parse(response.data);
