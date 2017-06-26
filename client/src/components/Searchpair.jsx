@@ -72,8 +72,8 @@ class Searchpair extends Component {
     axios.post('/api/notifications', {
       acceptingUserId: this.state.pair.id
     })
-    .then(() => {
-    
+    .then((response) => {
+    console.log(response.data);
     })
     .catch(error => {
       console.log(error);
@@ -87,8 +87,8 @@ class Searchpair extends Component {
     axios.post('/api/notifications/cancel', {
       acceptingUserId: this.state.pair.id
     })
-    .then(() => {
-    
+    .then((response) => {
+    console.log(response.data);
     })
     .catch(error => {
       console.log(error);

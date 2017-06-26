@@ -195,7 +195,7 @@ module.exports = (knex) => {
       initiator: false,
       }
     ]).then(()=> {
-
+      res.status(200).send('Notification request sent')
     })
   })
 
@@ -206,7 +206,7 @@ module.exports = (knex) => {
     knex('notifications').where({user_id: currentUserId, status: 'pending'}).update({status: 'rejected'})
     .then(knex('notifications').where({user_id: req.body.acceptingUserId, status: 'pending'}).update({status: 'rejected'})
       .then(()=> {
-
+        res.status(200).send('Notification request cancelled')
       }) 
     )
   })
