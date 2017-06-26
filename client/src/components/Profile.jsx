@@ -71,6 +71,9 @@ class Profile extends Component {
       )
     }
 
+    //TO DO: Update routes and profile page to also update About me
+    //TO DO: input should only be emails
+    //TO DO: Fix github url
     return (
       <div>
         <PageHeader>

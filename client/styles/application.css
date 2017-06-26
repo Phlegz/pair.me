@@ -36,3 +36,27 @@
 .popover {
   background-color: #272822
 }
+
+.logo {
+  float: left;
+  margin-left: 6px;
+  margin-top: 12px;
+  width: 25px;
+}
+
+a.brand.navbar-brand {
+  width: 5em;
+  padding: 14px;
+}
+
+.navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
+  margin-left: 12px;
+}
+
+.profilePic {
+  float: left;
+  margin-left: -20px;
+  margin-top: -9px;
+  width: 37px;
+  border-radius: 20px;
+}

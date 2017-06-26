@@ -19,24 +19,20 @@ class History extends Component {
     super(props);
     this.state = {
       history: [],
-      open: false
+      open: true
     };
 
     axios.get('/api/history')
-    .then(/*function*/ (response) => {
-      this.setState({history: this.state.history.concat(response.data.rows)})
-      console.log('in axios, after concat', response.data.rows);
-    })
-    .catch (function(error) {
-      console.log(error);
-    })
+      .then((response) => {
+        this.setState({history: this.state.history.concat(response.data.rows)})
+      })
+      // console.log('in axios, after concat', response.data.rows);
+      .catch ((error) => {
+        console.log(error);
+      })
+
 
     this.getOverlay = this.getOverlay.bind(this);
-  }
-
-  onClick(e) {
-    e.preventDefault();
-    this.setState({ open: !this.state.open})
   }
 
   getOverlay(historyItem) {
@@ -60,15 +56,13 @@ class History extends Component {
 
 
   render() {
-    console.log('history', this.state.history);
+    // console.log('history', this.state.history);
     const allHistory = this.state.history.map((hist, index) => {
       return (
       <div key={index}>
         <div>
-          <Button onClick={ this.onClick.bind(this)}
+          <Button onClick={ ()=> this.setState({ open: !this.state.open })}>
             {hist.question}
-          }
-          }
           </Button>
           <Panel collapsible expanded={this.state.open}>
             <AceEditor
