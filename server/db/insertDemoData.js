@@ -10,6 +10,7 @@ function createUsers() {
       email: 'bernicetannnn@gmail.com',
       github_username: 'btannn',
       avatar: 'https://avatars3.githubusercontent.com/u/22797177?v=3&s=400',
+      github_id:1234,
     },
     {
       name: '',
@@ -18,22 +19,25 @@ function createUsers() {
       email: 'farnazzz@gmail.com',
       github_username: 'Farnaz',
       avatar: 'https://avatars1.githubusercontent.com/u/12521141?v=3&u=8ab33b35e13dd4856266887a2de3a89a8492090b&s=400',
+      github_id:2345,
     },
     {
       name: 'Ervin',
-      online: true,
+      online: false,
       about: 'Give me some time and I solve your problem :D',
       email: 'ervin@gmail.commm',
       github_username: 'ervin',
       avatar: 'https://avatars1.githubusercontent.com/u/26450157?v=3&s=400',
+      github_id: 3445,
     },
     {
-      name: 'Derrel',
+      name: 'Derrell',
       online: true,
       about: 'I love webRTC lol',
       email: 'dw@gmail.comm',
       github_username: 'derrel',
       avatar: 'https://avatars0.githubusercontent.com/u/24903790?v=3&s=400',
+      github_id: 6789,
     }
   ]);
 }

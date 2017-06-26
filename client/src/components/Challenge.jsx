@@ -6,7 +6,10 @@ import axios from 'axios';
 import 'brace/mode/javascript';
 import 'brace/theme/monokai';
 
-import ChatBox from './chatBox.jsx';
+import ChatBox from './ChatBox.jsx';
+import ChallengeQuestions from './ChallengeQuestions.jsx'
+import ChallengeAnswer from './ChallengeAnswer.jsx'
+
 
 const io = require('socket.io-client');
 const socket = io();
@@ -15,17 +18,20 @@ class Challenge extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      result: "",
+      result: null,
       console: [],
       aceValue: "",
       user: null,
+      showAnswer: false,
       questions: {
+        id: "",
         title: "",
         question: "",
         example: "",
         placeholder: "",
         answer: "",
-        unit_test: ""
+        unit_test: "",
+        test_result: ""
       },
       sendUpdate: true,
     }
@@ -36,20 +42,21 @@ class Challenge extends Component {
     axios.get('/api/questions')
     .then((response)=> {
       this.setState({questions: {
+        id: response.data[0].id,
         title: response.data[0].title,
         question: response.data[0].question,
         example: response.data[0].example,
         placeholder: response.data[0].placeholder,
-        answer: response.data[1].answer,
-        unit_test: response.data[0].unit_test
+        answer: response.data[0].answer,
+        unit_test: response.data[0].unit_test,
+        test_result: response.data[0].test_result
         }
       },
-      this.setState({aceValue: `${response.data[1].example}\n\n${response.data[1].placeholder}\n${response.data[1].unit_test}`}))
+      this.setState({aceValue: `${response.data[0].example}\n\n${response.data[0].placeholder}`}))
     })
   }
   componentDidMount() {
     console.log('successfully mounted');
-
      axios.get('/api/profile_current')
      .then((response)=> {
        this.setState({user: response.data})
@@ -60,6 +67,12 @@ class Challenge extends Component {
       this.setState({aceValue: code});
     });
   }
+
+  onClick(e) {
+    e.preventDefault();
+    this.setState({ showAnswer: !this.state.showAnswer })
+  }
+
   liveCode() {
     // console.log('calling function');
     let editor = ace.edit('codeChallenges');
@@ -74,9 +87,11 @@ class Challenge extends Component {
 
     let editor = ace.edit('codeChallenges');
     let textValue = JSON.stringify(editor.getValue());
-
+    let questionId = this.state.questions.id
+    
     axios.post('/api/challenges', {
-      answer: textValue
+      answer: textValue,
+      questionId: questionId
     })
     .then((response)=> {
       let outputData = JSON.parse(response.data);
@@ -92,15 +107,32 @@ class Challenge extends Component {
     let consoleArr = [];
     for (let i = 0; i < console.length; i++) {
       consoleArr.push(
-        <ul>{ console[i] }</ul>
+        <ul>console.log => { console[i] }</ul>
       )
     }
-    let showResult;
-    if (this.state.result !== "null"){
-     showResult = <ul>{ this.state.result }</ul>;
+    let showResult = '';
+    let result = this.state.result;
+    if (result !== null && result !== 'null') {
+      let test_result = this.state.questions.test_result
+      if (result === test_result){
+        showResult = <div className="resultLog">
+                       <ul>Unit Test => {this.state.questions.unit_test}</ul>
+                       <ul>Result => { result }</ul>
+                       <ul>Expected Answer => {test_result}</ul>
+                       <h3>CORRECT!</h3>
+                     </div>  
+      } else {
+        showResult = <div className="resultLog">
+                       <ul>Unit Test=> {this.state.questions.unit_test}</ul>
+                       <ul>Result => { result }</ul>
+                       <ul>Expected Answer => {test_result}</ul>
+                       <h3>Wrong, please try again</h3>
+                     </div>  
+      }
     }
     return (
       <div>
+        <ChallengeQuestions questions={ this.state.questions } />
         <AceEditor
           name="codeChallenges"
           mode="javascript"
@@ -111,17 +143,19 @@ class Challenge extends Component {
           onChange={ this.liveCode }
           value={this.state.aceValue}
         />
-
         <input type='button' value='Submit' onClick={(e) => this.submitCode(e) } />
         <div className="output">
           Output:
-          { consoleArr }
+          <div className="consoleLog">{ consoleArr }</div>
           { showResult }
         </div>
         <div className="showAnswer">
-          { this.state.questions.answer }
+          <a onClick= {this.onClick.bind(this)} href='#'> Give me answeR</a>
+          {this.state.showAnswer && <ChallengeAnswer answer= { this.state.questions } /> }
         </div>
-        <ChatBox user={this.state.user} />
+
+
+        <ChatBox user={ this.state.user } />
       </div>
 
     );

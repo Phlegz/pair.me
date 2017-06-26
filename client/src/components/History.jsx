@@ -7,12 +7,6 @@ import AceEditor from 'react-ace';
 import brace from 'brace';
 import 'brace/mode/javascript';
 import 'brace/theme/monokai';
-import {
-  HashRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom'
-
 
 class History extends Component {
   constructor(props) {
@@ -65,10 +59,8 @@ class History extends Component {
       return (
       <div key={index}>
         <div>
-          <Button onClick={ this.onClick.bind(this)}
+          <Button onClick={ this.onClick.bind(this)}>
             {hist.question}
-          }
-          }
           </Button>
           <Panel collapsible expanded={this.state.open}>
             <AceEditor
