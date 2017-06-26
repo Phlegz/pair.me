@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import { PageHeader, Footer, Popover, ButtonToolbar, OverlayTrigger, popoverBottom, Button, Panel } from 'react-bootstrap';
 import { Table } from 'react-bootstrap';
+import moment from 'moment';
+import AceEditor from 'react-ace';
 import {
   HashRouter as Router,
   Route,
@@ -19,8 +21,8 @@ class History extends Component {
 
     axios.get('/api/history')
     .then(/*function*/ (response) => {
-      this.setState({history: this.state.history.concat(response.data)})
-      console.log('in axios, after concat', response.data);
+      this.setState({history: this.state.history.concat(response.data.rows)})
+      console.log('in axios, after concat', response.data.rows);
     })
     .catch (function(error) {
       console.log(error);
@@ -32,9 +34,9 @@ class History extends Component {
   getOverlay(historyItem) {
     console.log(JSON.stringify(historyItem));
     const popoverBottom = (
-      <Popover id="popover-positioned-bottom" title="Popover bottom">
-        <strong>{historyItem.submitted_answer}</strong> {historyItem.completed_at}<br/>
-        <strong>Holy guacamole!</strong> Check this info.
+      <Popover id="popover-positioned-bottom" title="Submitted Answer">
+        <strong>{historyItem.submitted_answer}</strong><br />
+        {moment(historyItem.completed_at).calendar()}
       </Popover>
     );
     return popoverBottom;
@@ -43,17 +45,17 @@ class History extends Component {
 
   render() {
     console.log('history', this.state.history);
-    const allHistory = this.state.history.map(hist => {
+    const allHistory = this.state.history.map((hist, index) => {
       return (
-      <div key={hist.id}>
+      <div key={index}>
         <div>
-          <Button onClick={ ()=> this.setState({ open: !this.state.open })}>
+          {/*<Button onClick={ ()=> this.setState({ open: !this.state.open })}>
             {hist.question}
           </Button>
           <Panel collapsible expanded={this.state.open}>
             Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
             Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-          </Panel>
+          </Panel>*/}
           <div>
             <OverlayTrigger trigger="click" placement="bottom" overlay={this.getOverlay(hist)}>
               <Button>{hist.question}</Button>

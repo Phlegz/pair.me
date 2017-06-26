@@ -29,6 +29,23 @@ module.exports = (knex) => {
   `, [githubId]);
 }
 
+function history(githubId) {
+  return knex.raw(`
+    SELECT
+      challenges.submitted_answer,
+      challenges.completed_at,
+      questions.question
+    FROM
+      questions
+      JOIN challenges ON challenges.question_id = questions.id
+      JOIN sessions ON sessions.id = challenges.session_id
+      JOIN sessions_users ON sessions_users.session_id = sessions.id
+      JOIN users ON users.id = sessions_users.user_id
+    WHERE
+      users.github_username = ?
+    `, [githubId]);
+}
+
   function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
       res.redirect('/')
@@ -111,13 +128,9 @@ module.exports = (knex) => {
 
   router.get('/api/history', (req, res) => {
     // let current_history = req.session.passport.user;
-    knex('questions')
-      .join('challenges' , {'questions.id': 'challenges.question_id'})
-      .select('challenges.id', 'question', 'submitted_answer', 'completed_at')
-      .from('questions')
-      .where({'challenges.id': 5001})
-      .then((results) => {
-        res.json(results);
+    history("Farnaz")
+      .then((result) => {
+      res.json(result);
       })
   });
 

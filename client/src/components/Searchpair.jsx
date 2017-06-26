@@ -3,6 +3,7 @@ import axios from 'axios';
 import { PageHeader, Jumbotron, Button, FormGroup, ControlLabel, FormControl, Col, ProgressBar, Label } from 'react-bootstrap';
 import PieChart from 'react-simple-pie-chart';
 import Moment from 'react-moment';
+import moment from 'moment';
 import {
   HashRouter as Router,
   Route,
@@ -15,6 +16,7 @@ class Searchpair extends Component {
     this.state = {
       data: null,
       average: 0,
+      completedAt: null
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -35,12 +37,9 @@ class Searchpair extends Component {
   }
 
   componentWillMount() {
-    // var self = this;
     axios.get('/api/statistics')
     .then((response)=> {
       this.setState({data: response.data.rows});
-        // console.log(response.data.rows.length, 'LENGTH');
-        // console.log(this.state.data, 'this is an object - 6 length');
       const data = this.state.data;
       console.log(data, 'current state of data');
       const difficultyList = [];
@@ -50,23 +49,23 @@ class Searchpair extends Component {
           difficultyList.push(data[0].difficulty);
         })
       };
+
       const sum = difficultyList.reduce(function(acc, val) {
         return acc + val;
       }, 0);
+
       const avgDifficulty = sum / difficultyList.length;
-      console.log(avgDifficulty, 'AVG');
       this.setState({ average: avgDifficulty });
-      console.log(this.state.average, 'average state')
     })
     .catch((error)=> {
       console.log(error);
     });
-
-
   }
 
-
   render() {
+
+
+    const data = this.state.data;
 
     const challengesCompleted = "1 challenge completed";
     const today = Date.now();
@@ -74,6 +73,48 @@ class Searchpair extends Component {
     const twoDaysAgo = Date.now() - (86400000*2);
     const threeDaysAgo = Date.now() - (86400000*3);
     const fourDaysAgo = Date.now() - (86400000*4);
+    const dates = [];
+
+    // const today1 = moment(today)._i;
+
+    // const numberOfChallenges = 0;
+
+    if (data != null) {
+      data.forEach((completed_at) => {
+        dates.push(data[0].completed_at);
+        return dates
+      });
+    }
+    console.log('this is the dates array', dates)
+    console.log("DATE NOW",Date.now())
+    dates.forEach((ele, index) => {
+      console.log('ele', moment(ele).format('L'));
+      console.log(ele.slice(0,-14));
+
+
+
+      console.log('yesterday',  moment(yesterday))
+
+
+      // console.log('yesterdate', yesterdate)
+      // console.log('yesterday', moment(yesterday).format('L'));
+
+
+    })
+
+    // for(var i = 0; i < dates.length; i++) {
+    //   if(moment(dates[i]).format('ll') === moment(yesterday).format('ll')) {
+    //     console.log(dates[i], 'dates[i]')
+
+    //     return true;
+    //   }
+    // }
+
+    // let test = moment(dates[0]).format('ll');
+    // console.log(test, 'date-DB');
+    // console.log(moment(twoDaysAgo).format('ll'), '2DayaAgo');
+    // console.log(dates, 'dates');
+
 
   return (
     <div>
@@ -125,7 +166,7 @@ class Searchpair extends Component {
         <p>Your progress on completed challenges over time</p>
         <Col sm={5}>
           <Label> <Moment calendar>{today}</Moment> </Label>
-          <ProgressBar min={0} max={5} now={10} />
+          <ProgressBar min={0} max={5} now={1} />
           <Label> <Moment format="LL">{yesterday}</Moment> </Label>
           <ProgressBar bsStyle="success" now={0} label={`${challengesCompleted}%`}/>
           <Label> <Moment format="LL">{twoDaysAgo}</Moment> </Label>
