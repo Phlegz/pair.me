@@ -4,6 +4,9 @@ import { PageHeader, Footer, Popover, ButtonToolbar, OverlayTrigger, popoverBott
 import { Table } from 'react-bootstrap';
 import moment from 'moment';
 import AceEditor from 'react-ace';
+import brace from 'brace';
+import 'brace/mode/javascript';
+import 'brace/theme/monokai';
 import {
   HashRouter as Router,
   Route,
@@ -16,7 +19,7 @@ class History extends Component {
     super(props);
     this.state = {
       history: [],
-      open: true
+      open: false
     };
 
     axios.get('/api/history')
@@ -31,12 +34,25 @@ class History extends Component {
     this.getOverlay = this.getOverlay.bind(this);
   }
 
+  onClick(e) {
+    e.preventDefault();
+    this.setState({ open: !this.state.open})
+  }
+
   getOverlay(historyItem) {
     console.log(JSON.stringify(historyItem));
     const popoverBottom = (
       <Popover id="popover-positioned-bottom" title="Submitted Answer">
-        <strong>{historyItem.submitted_answer}</strong><br />
-        {moment(historyItem.completed_at).calendar()}
+        <AceEditor
+          name="historyAnswer"
+          mode="javascript"
+          theme="monokai"
+          readOnly={true}
+          width={400}
+          height={200}
+          value={historyItem.submitted_answer}
+          showGutter={false}
+        />
       </Popover>
     );
     return popoverBottom;
@@ -49,13 +65,24 @@ class History extends Component {
       return (
       <div key={index}>
         <div>
-          {/*<Button onClick={ ()=> this.setState({ open: !this.state.open })}>
+          <Button onClick={ this.onClick.bind(this)}
             {hist.question}
+          }
+          }
           </Button>
           <Panel collapsible expanded={this.state.open}>
-            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
-            Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-          </Panel>*/}
+            <AceEditor
+              name="historyAnswer"
+              mode="javascript"
+              theme="monokai"
+              readOnly={true}
+              width={400}
+              height={200}
+              value={hist.submitted_answer}
+              showGutter={false}
+            />
+            {hist.submitted_answer}
+          </Panel>
           <div>
             <OverlayTrigger trigger="click" placement="bottom" overlay={this.getOverlay(hist)}>
               <Button>{hist.question}</Button>

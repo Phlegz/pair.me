@@ -27,3 +27,12 @@
 .navbar {
   margin-bottom: 0px;
 }
+
+#popover-positioned-bottom {
+  min-width: 400px;
+  max-width: 500px
+}
+
+.popover {
+  background-color: #272822
+}
