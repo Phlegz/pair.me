@@ -67,15 +67,12 @@ class Searchpair extends Component {
     event.preventDefault();
     this.setState({pairMeModal: false})
     this.setState({ waitModal: true})
-    let postData = {
-      current_user
-    };
-    axios.post('/api/dashboard', postData)
+
+    axios.post('/api/notifications', {
+      acceptingUserId: this.state.pair.id
+    })
     .then((response) => {
-      // console.log(response.data);
-      this.setState({pair: response.data});
-      console.log("sdasdasdasdasd");
-      console.log("pair state:", this.state.pair);
+      console("INSERTnotif",response.data);
     })
     .catch(error => {
       console.log(error);

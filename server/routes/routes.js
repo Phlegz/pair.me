@@ -181,7 +181,24 @@ module.exports = (knex) => {
       })
   })
 
+  router.post('/api/notifications', (req, res) => {
+    let currentUser = req.session.passport.user
+    let currentUserId= knex.select('id').from('users').where('github_id',currentUser);
 
+    return knex('notifications').returning('id').insert([
+      {
+      user_id: currentUserId,
+      initiator: true,
+      },
+      {
+      user_id: req.body.acceptingUserId,
+      initiator: false,
+      }
+    ]).then((resonse)=> {
+      console.log("INSERTnotif",response);
+      res.json(response);
+    })
+  })
 
 
 
