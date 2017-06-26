@@ -13,27 +13,19 @@ class History extends Component {
     super(props);
     this.state = {
       history: [],
-      open: false
     };
-
     axios.get('/api/history')
-    .then(/*function*/ (response) => {
+    .then((response) => {
       this.setState({history: this.state.history.concat(response.data.rows)})
       console.log('in axios, after concat', response.data.rows);
     })
     .catch (function(error) {
       console.log(error);
     })
-
     this.getOverlay = this.getOverlay.bind(this);
   }
 
-  // onClick(e) {
-  //   e.preventDefault();
-  //   this.setState({ open: !this.state.open})
-  // }
-
-  setOpenTab(hist){
+  setOpenTab(hist) {
     if(this.state.openTab === hist){
       this.setState({openTab: undefined});
     } else {
@@ -62,12 +54,15 @@ class History extends Component {
 
 
   render() {
-    console.log('history', this.state.history);
+    // console.log('history', this.state.history);
     const allHistory = this.state.history.map((hist, index) => {
       const toggle = () => { this.setOpenTab(hist); }
+
       return (
       <div key={index}><div>
+          {/*call toggle handler and change state whenever button is pressed */}
           <Button onClick={ toggle }>{hist.question}</Button>
+          {/*undefined state when opened*/}
           <Panel collapsible expanded={this.state.openTab === hist}>
             <AceEditor
               name="historyAnswer"
