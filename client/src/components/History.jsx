@@ -13,8 +13,13 @@ class History extends Component {
     super(props);
     this.state = {
       history: [],
+<<<<<<< HEAD
+=======
+      open: true
+>>>>>>> Completed functionalities and styling of navbar
     };
     axios.get('/api/history')
+<<<<<<< HEAD
     .then((response) => {
       this.setState({history: this.state.history.concat(response.data.rows)})
       console.log('in axios, after concat', response.data.rows);
@@ -31,6 +36,18 @@ class History extends Component {
     } else {
       this.setState({openTab: hist});
     }
+=======
+      .then((response) => {
+        this.setState({history: this.state.history.concat(response.data.rows)})
+      })
+      // console.log('in axios, after concat', response.data.rows);
+      .catch ((error) => {
+        console.log(error);
+      })
+
+
+    this.getOverlay = this.getOverlay.bind(this);
+>>>>>>> Completed functionalities and styling of navbar
   }
 
   getOverlay(historyItem) {
@@ -59,11 +76,20 @@ class History extends Component {
       const toggle = () => { this.setOpenTab(hist); }
 
       return (
+<<<<<<< HEAD
       <div key={index}><div>
           {/*call toggle handler and change state whenever button is pressed */}
           <Button onClick={ toggle }>{hist.question}</Button>
           {/*undefined state when opened*/}
           <Panel collapsible expanded={this.state.openTab === hist}>
+=======
+      <div key={index}>
+        <div>
+          <Button onClick={ ()=> this.setState({ open: !this.state.open })}>
+            {hist.question}
+          </Button>
+          <Panel collapsible expanded={this.state.open}>
+>>>>>>> Completed functionalities and styling of navbar
             <AceEditor
               name="historyAnswer"
               mode="javascript"

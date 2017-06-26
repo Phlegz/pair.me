@@ -9,7 +9,7 @@ import {
   Link
 } from 'react-router-dom'
 
-import { Navbar, Nav, NavItem, MenuItem, NavDropdown } from 'react-bootstrap';
+import { Image, Navbar, Nav, NavItem, MenuItem, NavDropdown } from 'react-bootstrap';
 
 const routes = [
   {
@@ -44,13 +44,35 @@ const myGithubUsername = readCookie('unsafe_user_name');
 
 class Dashboard extends React.Component {
 
+  constructor(props){
+    super(props);
+    this.state ={
+      profile: null
+    }
+  }
+
+
+  componentDidMount() {
+    console.log('sucess mount')
+
+    axios.get('/api/profile_current')
+    .then((response) => {
+      console.log('blabla', response.data.avatar);
+
+      this.setState({ profile: response.data.avatar})
+    })
+  }
+
   render() {
     const self = this;
+    let profile = this.state.profile;
     const navBar = (
          <Navbar inverse collapseOnSelect>
           <Navbar.Header>
+            <Image className="logo" src={require('../../styles/img/computer.png')}/>
+
             <Navbar.Brand>
-              <a href="#">Pair Me</a>
+              <a className="brand" href="#">Pair Me</a>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
@@ -59,8 +81,9 @@ class Dashboard extends React.Component {
 
           </Nav>
           <Nav pullRight>
-            <NavItem eventKey={1} href="#">Link Right</NavItem>
-            <NavItem eventKey={2} href="#">Link Right</NavItem>
+            <NavItem><img className="profilePic" src={profile} /></NavItem>
+            <NavItem>Hello, </NavItem>
+            <NavItem>{myGithubUsername}</NavItem>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

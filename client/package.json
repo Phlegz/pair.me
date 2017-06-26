@@ -23,7 +23,8 @@
     "react-router-dom": "^4.1.1",
     "react-simple-pie-chart": "^0.4.1",
     "socket.io": "^2.0.3",
-    "socket.io-client": "^2.0.3"
+    "socket.io-client": "^2.0.3",
+    "url-loader": "^0.5.9"
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",
