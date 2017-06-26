@@ -13,5 +13,5 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-   return knex.raw("drop table sessions_users cascade");
+   return knex.raw("drop table notifications cascade");
 };
