@@ -4,10 +4,8 @@ exports.up = function(knex, Promise) {
       table.increments('id');
       table.integer('user_id');
       table.foreign('user_id').references('users.id');
-      // table.integer('session_id');
-      // table.foreign('session_id').references('sessions.id');
       table.boolean('initiator');
-      table.boolean('status'); //accepted,rejected,ignored
+      table.string('status').defaultTo('pending'); //accepted,rejected,ignored
       table.timestamps(true,true);
     })
 };
