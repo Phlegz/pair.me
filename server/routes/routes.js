@@ -115,7 +115,7 @@ function history(githubId) {
   router.get('/api/profile_current', (req, res) => {
     let current_user = req.session.passport.user;
     knex
-      .select('name', 'avatar', 'email', 'github_username')
+      .select('name', 'avatar', 'email', 'github_username','id')
       .from('users')
       .limit(1)
       .where({github_id: current_user})
@@ -224,19 +224,20 @@ function history(githubId) {
       })
   })
 
-  // router.get('/api/notifications', (req,res) => {
-  //   let currentUser = req.session.passport.user
-  //   let currentUserId= knex.select('id').from('users').where('github_id',currentUser);
-  //   knex
-  //     .select('*')
-  //     .from('notifications')
-  //     .where({user_id: currentUserId,
-  //       status: 'pending'
-  //     })
-  //     .then((results) => {
-  //       res.json(results);
-  //     })
-  // })
+  router.get('/api/notifications', (req,res) => {
+    let currentUser = req.session.passport.user
+    let currentUserId= knex.select('id').from('users').where('github_id',currentUser);
+    knex
+      .select('notifications.id',
+        'status',
+        'user_id',
+        'initiator')
+      .from('notifications').leftJoin('notifications_users','notifications.id','notifications_users.notification_id')
+      .where({status: 'pending', initiator: false})
+      .then((results) => {
+        res.json(results);
+      })
+  })
 
   router.post('/api/notifications', (req, res) => {
     let currentUser = req.session.passport.user

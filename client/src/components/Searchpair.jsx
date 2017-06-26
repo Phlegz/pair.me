@@ -20,7 +20,9 @@ class Searchpair extends Component {
       challengesCompleted: null,
       pairMeModal: false,
       pair: {id:"",github_username:"",avatar:""},
-      waitModal: false
+      waitModal: false,
+      intervalId: null,
+      currentUser: {github_username: "", id: ""}
     }
 
     // this.handleChange = this.handleChange.bind(this);
@@ -28,8 +30,9 @@ class Searchpair extends Component {
     this.pairMe = this.pairMe.bind(this);
     this.sendRequest = this.sendRequest.bind(this);
     this.cancelRequest = this.cancelRequest.bind(this);
-  }
-
+    this.timer = this.timer.bind(this);
+  
+}
   // handleChange(event) {
   //   this.setState({language: event.target.value});
   //   this.setState({difficulty: event.target.value});
@@ -59,8 +62,8 @@ class Searchpair extends Component {
     .then((response) => {
       // console.log(response.data);
       this.setState({pair: response.data});
-      console.log("sdasdasdasdasd");
-      console.log("pair state:", this.state.pair);
+      // console.log("sdasdasdasdasd");
+      // console.log("pair state:", this.state.pair);
     })
     .catch(error => {
       console.log(error);
@@ -98,19 +101,35 @@ class Searchpair extends Component {
     });
   }
 
-  // timer() {
-  //   axios.get('/api/notifications')
-  //     .then((response) => {
-  //       console.log(response.data)
-  //     })
-  // }
+  timer() {
+    axios.get('/api/notifications')
+      .then((response) => {
+        console.log(response.data);
+        let requestArr = response.data;
+        console.log("LENGTH",requestArr.length);
+        if(requestArr.length > 0) {
+          requestArr.forEach((request) => {
+            console.log("response",request);
+            console.log("There is a request.");
+            if(request.user_id === this.state.currentUser.id) {
+              console.log("Request received");
+            }
+          })
+        }
+      })
+  }
 
   componentWillMount() {
+    axios.get('/api/profile_current')
+    .then((response) => {
+      this.setState({currentUser: response.data})
+    })
+  
     axios.get('/api/statistics')
     .then((response)=> {
       this.setState({data: response.data.rows});
       const data = this.state.data;
-      console.log(data, 'current state of data');
+      // console.log(data, 'current state of data');
       const difficultyList = [];
 
       if(data != null) {
@@ -140,14 +159,14 @@ class Searchpair extends Component {
       console.log(error);
     });
     
-    // CONTINUE after merge
-    // let intervalId = setInterval(this.timer, 2000);
+    let intervalId = setInterval(this.timer, 5000);
+    this.setState({intervalId: intervalId});
   }
 
-  // componentWillUnmount() {
-  //  // use intervalId from the state to clear the interval
-  //  clearInterval(this.state.intervalId);
-  // }
+  componentWillUnmount() {
+   // use intervalId from the state to clear the interval
+   clearInterval(this.state.intervalId);
+  }
 
   render() {
     const data = this.state.data;
@@ -171,15 +190,15 @@ class Searchpair extends Component {
         return dates
       });
     }
-    console.log('this is the dates array', dates)
-    console.log("DATE NOW",Date.now())
+    // console.log('this is the dates array', dates)
+    // console.log("DATE NOW",Date.now())
     dates.forEach((ele, index) => {
-      console.log('ele', moment(ele).format('L'));
-      console.log(ele.slice(0,-14));
+      // console.log('ele', moment(ele).format('L'));
+      // console.log(ele.slice(0,-14));
 
 
 
-      console.log('yesterday',  moment(yesterday))
+      // console.log('yesterday',  moment(yesterday))
 
 
       // console.log('yesterdate', yesterdate)
@@ -200,6 +219,10 @@ class Searchpair extends Component {
     // console.log(test, 'date-DB');
     // console.log(moment(twoDaysAgo).format('ll'), '2DayaAgo');
     // console.log(dates, 'dates');
+
+
+    
+
 
 
   return (
