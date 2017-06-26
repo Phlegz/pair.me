@@ -21,8 +21,10 @@ class Searchpair extends Component {
       pairMeModal: false,
       pair: {id:"",github_username:"",avatar:""},
       waitModal: false,
+      recipientModal: false,
       intervalId: null,
-      currentUser: {github_username: "", id: ""}
+      currentUser: {github_username: "", id: ""},
+      senderUser: {user_id: ""}
     }
 
     // this.handleChange = this.handleChange.bind(this);
@@ -30,6 +32,8 @@ class Searchpair extends Component {
     this.pairMe = this.pairMe.bind(this);
     this.sendRequest = this.sendRequest.bind(this);
     this.cancelRequest = this.cancelRequest.bind(this);
+    // this.acceptRequest = this.acceptRequest.bind(this);
+    this.rejectRequest = this.rejectRequest.bind(this);
     this.timer = this.timer.bind(this);
   
 }
@@ -99,6 +103,40 @@ class Searchpair extends Component {
     .catch(error => {
       console.log(error);
     });
+    //DOES NOT WORK YET
+    this.setState({ recipientModal: false})
+  }
+
+  // acceptRequest(event) {
+  //   event.preventDefault();
+  //   this.setState({ waitModal: false})
+
+  //   axios.post('/api/notifications/accept', {
+  //     acceptingUserId: this.state.pair.id
+  //   })
+  //   .then((response) => {
+  //   console.log(response.data);
+  //   })
+  //   .catch(error => {
+  //     console.log(error);
+  //   });
+  //   this.setState({ recipientModal: false})
+  // }
+
+  rejectRequest(event) {
+    event.preventDefault();
+    this.setState({ waitModal: false})
+    this.setState({ recipientModal: false})
+
+    axios.post('/api/notifications/reject', {
+      acceptingUserId: this.state.pair.id
+    })
+    .then((response) => {
+    console.log(response.data);
+    })
+    .catch(error => {
+      console.log(error);
+    });
   }
 
   timer() {
@@ -109,12 +147,23 @@ class Searchpair extends Component {
         console.log("LENGTH",requestArr.length);
         if(requestArr.length > 0) {
           requestArr.forEach((request) => {
-            console.log("response",request);
-            console.log("There is a request.");
-            if(request.user_id === this.state.currentUser.id) {
-              console.log("Request received");
+
+            if(request.initiator === true) {
+              this.setState({senderUser: request.user_id})
+            };
+
+            console.log("There is a request.",request);
+            if((request.initiator === false) && (request.user_id === this.state.currentUser.id)) {
+              console.log("Request received.");
+              this.setState({recipientModal: true})
+             
+             
+
             }
           })
+        }
+        if(requestArr.length = 0){
+          this.setState({recipientModal: false})
         }
       })
   }
@@ -159,7 +208,7 @@ class Searchpair extends Component {
       console.log(error);
     });
     
-    let intervalId = setInterval(this.timer, 5000);
+    let intervalId = setInterval(this.timer, 2000);
     this.setState({intervalId: intervalId});
   }
 
@@ -172,6 +221,7 @@ class Searchpair extends Component {
     const data = this.state.data;
     let closePairModal = () => this.setState({ pairMeModal: false});
     let closeWaitModal = () => this.setState({ waitModal: false});
+    let closeRecipientModal = () => this.setState({ recipientModal: false});
     const challengesCompleted = "1 challenge completed";
     const today = Date.now();
     const yesterday = Date.now() - 86400000;
@@ -362,6 +412,39 @@ class Searchpair extends Component {
           </Button>
         </Modal.Body>
       </Modal>
+
+      <Modal
+        show={this.state.recipientModal}
+        onHide={closeRecipientModal}
+        container={this}
+        aria-labelledby="contained-modal-title"
+        backdrop="static"
+        keyboard={false}
+      >
+      <Modal.Header>
+        <Modal.Title>{this.state.senderUser} sent you a request.</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div className="wrapper">
+          <img src={this.state.pair.avatar} />
+        </div>
+        <p>Visit {this.state.pair.github_username}&#39;s <a href={"https://github.com/" + this.state.pair.github_username}> Github </a> Account</p>
+        <Button
+          bsStyle="success"
+          bsSize="large"
+          href="/challenge"
+        >
+        Accept
+        </Button>
+        <Button
+          bsStyle="danger"
+          bsSize="large"
+          onClick={(e) => this.rejectRequest(e)}
+        >
+        Reject
+        </Button>
+      </Modal.Body>
+    </Modal>
 
     </div>
   );
