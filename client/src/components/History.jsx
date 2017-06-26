@@ -28,9 +28,17 @@ class History extends Component {
     this.getOverlay = this.getOverlay.bind(this);
   }
 
-  onClick(e) {
-    e.preventDefault();
-    this.setState({ open: !this.state.open})
+  // onClick(e) {
+  //   e.preventDefault();
+  //   this.setState({ open: !this.state.open})
+  // }
+
+  setOpenTab(hist){
+    if(this.state.openTab === hist){
+      this.setState({openTab: undefined});
+    } else {
+      this.setState({openTab: hist});
+    }
   }
 
   getOverlay(historyItem) {
@@ -56,13 +64,11 @@ class History extends Component {
   render() {
     console.log('history', this.state.history);
     const allHistory = this.state.history.map((hist, index) => {
+      const toggle = () => { this.setOpenTab(hist); }
       return (
-      <div key={index}>
-        <div>
-          <Button onClick={ this.onClick.bind(this)}>
-            {hist.question}
-          </Button>
-          <Panel collapsible expanded={this.state.open}>
+      <div key={index}><div>
+          <Button onClick={ toggle }>{hist.question}</Button>
+          <Panel collapsible expanded={this.state.openTab === hist}>
             <AceEditor
               name="historyAnswer"
               mode="javascript"
