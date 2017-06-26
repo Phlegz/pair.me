@@ -24,6 +24,7 @@ class Searchpair extends Component {
     // this.handleSubmit = this.handleSubmit.bind(this);
     this.pairMe = this.pairMe.bind(this);
     this.sendRequest = this.sendRequest.bind(this);
+    this.cancelRequest = this.cancelRequest.bind(this);
   }
 
   // handleChange(event) {
@@ -71,8 +72,23 @@ class Searchpair extends Component {
     axios.post('/api/notifications', {
       acceptingUserId: this.state.pair.id
     })
-    .then((response) => {
-      console("INSERTnotif",response.data);
+    .then(() => {
+    
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  }
+
+  cancelRequest(event) {
+    event.preventDefault();
+    this.setState({ waitModal: false})
+
+    axios.post('/api/notifications/cancel', {
+      acceptingUserId: this.state.pair.id
+    })
+    .then(() => {
+    
     })
     .catch(error => {
       console.log(error);
@@ -230,7 +246,7 @@ class Searchpair extends Component {
           <Button
             bsStyle="danger"
             bsSize="large"
-            onClick={closeWaitModal}
+            onClick={(e) => this.cancelRequest(e)}
           >
           Cancel Request
           </Button>

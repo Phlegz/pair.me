@@ -194,12 +194,22 @@ module.exports = (knex) => {
       user_id: req.body.acceptingUserId,
       initiator: false,
       }
-    ]).then((resonse)=> {
-      console.log("INSERTnotif",response);
-      res.json(response);
+    ]).then(()=> {
+
     })
   })
 
+  router.post('/api/notifications/cancel', (req, res) => {
+    let currentUser = req.session.passport.user
+    let currentUserId= knex.select('id').from('users').where('github_id',currentUser);
+
+    knex('notifications').where({user_id: currentUserId, status: 'pending'}).update({status: 'rejected'})
+    .then(knex('notifications').where({user_id: req.body.acceptingUserId, status: 'pending'}).update({status: 'rejected'})
+      .then(()=> {
+
+      }) 
+    )
+  })
 
 
 
