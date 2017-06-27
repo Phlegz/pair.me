@@ -50,7 +50,8 @@ class Dashboard extends React.Component {
       profile: null,
       friends: {
         github_username: "",
-        avatar: ''
+        avatar: '',
+        online: ''
       }
     }
   }
@@ -78,11 +79,19 @@ class Dashboard extends React.Component {
     let profile = this.state.profile;
     let friends = this.state.friends;
     let friendsArr = [];
+
+
+
     for (let i = 0; i < friends.length; i++) {
       friendsArr.push(
-      <div>
+      <div className="oneFriend">
+          {
+            friends[i].online == true
+            ? <i className="fa fa-circle" aria-hidden="true"></i>
+            : <i className="fa fa-circle offline" aria-hidden="true"></i>
+          }
         <Image circle className="friendsPic" src={friends[i].avatar} />
-        <p>{friends[i].github_username} </p>
+        <p className="friendsName">{friends[i].github_username} </p>
       </div>
       )
     }
@@ -111,7 +120,7 @@ class Dashboard extends React.Component {
 
       <Router>
         <div className="navBar">
-          {navBar}
+          { navBar }
           <div className="outer-sidebar">
             <div className="sidebar">
               <ul className="links" style={{ listStyleType: 'none' }}>
@@ -120,6 +129,7 @@ class Dashboard extends React.Component {
                 <li className="sideLinks"><Link to="/history"><i className="fa fa-history" aria-hidden="true"></i>History</Link></li>
               </ul>
               <div className="friends">
+                <h3>Friends</h3>
                 { friendsArr }
               </div>
             </div>

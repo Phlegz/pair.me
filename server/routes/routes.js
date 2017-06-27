@@ -52,7 +52,8 @@ module.exports = (knex) => {
       SELECT
         other.id,
         other.avatar,
-        other.github_username
+        other.github_username,
+        other.online
       FROM
         friendships_users as fsu_other
         JOIN friendships on friendships.id = fsu_other.friendship_id
