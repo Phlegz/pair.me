@@ -17,11 +17,14 @@ class ChatBox extends Component {
     this.socket = io.connect();
   }
 
+  //function to send messages to server
   onNewMessage(content) {
     let newMessage = {
       username: this.props.user.github_username,
-      content: content
+      content: content,
+      // userId: true,
     }
+    //send to server
     socket.emit('clientMessage', JSON.stringify({ message: newMessage }));
   }
 
@@ -44,7 +47,7 @@ class ChatBox extends Component {
   }
 
   render() {
-
+    //TOOO add better error Handling
     if (!this.props.user) {
       return (
         <div>
@@ -56,8 +59,8 @@ class ChatBox extends Component {
     return (
       <div className='chat-container'>
         <Header />
-        <MessageList messages = { this.state.messages } />
-        <ChatBar onNewMessage = { this.onNewMessage.bind(this) } />
+        <MessageList user={ this.props.user } messages={ this.state.messages } />
+        <ChatBar onNewMessage={ this.onNewMessage.bind(this) } />
       </div>
       )
   }
