@@ -9,7 +9,7 @@ import {
   Link
 } from 'react-router-dom'
 
-import { Image, Navbar, Nav, NavItem, MenuItem, NavDropdown } from 'react-bootstrap';
+import { Image, Navbar, Nav, NavItem, MenuItem, NavDropdown, Button } from 'react-bootstrap';
 
 const routes = [
   {
@@ -24,7 +24,7 @@ const routes = [
   {
     path: '/history',
     main: History
-  }
+  },
 ];
 
 
@@ -68,21 +68,28 @@ class Dashboard extends React.Component {
     axios.get('/api/friends')
     .then((response) => {
       console.log('response from FRIENDS', response)
-      this.setState({friends: response.data[0]})
+      this.setState({friends: response.data})
       console.log("MYFRIENDS",this.state.friends);
     })
   }
 
-
-
   render() {
     const self = this;
     let profile = this.state.profile;
+    let friends = this.state.friends;
+    let friendsArr = [];
+    for (let i = 0; i < friends.length; i++) {
+      friendsArr.push(
+      <div>
+        <Image circle className="friendsPic" src={friends[i].avatar} />
+        <p>{friends[i].github_username} </p>
+      </div>
+      )
+    }
     const navBar = (
          <Navbar inverse collapseOnSelect>
           <Navbar.Header>
             <Image className="logo" src={require('../../styles/img/computer.png')}/>
-
             <Navbar.Brand>
               <a className="brand" href="#">Pair Me</a>
             </Navbar.Brand>
@@ -94,8 +101,8 @@ class Dashboard extends React.Component {
           </Nav>
           <Nav pullRight>
             <NavItem><img className="profilePic" src={profile} /></NavItem>
-            <NavItem>Hello, </NavItem>
-            <NavItem>{myGithubUsername}</NavItem>
+            <NavItem>Hello, {myGithubUsername}</NavItem>
+            <Button className="logout" href="/logout">Log out</Button>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -113,8 +120,7 @@ class Dashboard extends React.Component {
                 <li className="sideLinks"><Link to="/history"><i className="fa fa-history" aria-hidden="true"></i>History</Link></li>
               </ul>
               <div className="friends">
-                <p>{this.state.friends.github_username} </p>
-                <Image circle className="friendsPic" src={this.state.friends.avatar} />
+                { friendsArr }
               </div>
             </div>
 
