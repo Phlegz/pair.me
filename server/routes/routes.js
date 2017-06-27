@@ -2,7 +2,6 @@
 
 const express = require("express");
 const router  = express.Router();
-const organize_data = require("../public/scripts/organize_data");
 
 const passport = require('passport');
 const sandbox = require('sandbox');
@@ -63,7 +62,10 @@ function history(githubId) {
   router.get('/auth/github/callback',
     passport.authenticate('github', { failureRedirect: '/login' }),
     (req, res) => {
-      res.redirect('/dashboard');
+      knex('users').where('github_id', req.session.passport.user).update({online: true})
+      .then(() => {
+        res.redirect('/dashboard');
+      })
     }
   );
 
@@ -71,6 +73,7 @@ function history(githubId) {
 
     res.render('dashboard');
   })
+
 
   router.get('/api/statistics', (req, res) => {
     let current_user = req.session.passport.user;
@@ -80,6 +83,34 @@ function history(githubId) {
       res.json(result);
       })
   });
+
+  router.post('/api/dashboard', ensureAuthenticated, (req, res) => {
+    let pairResult = {
+        difficulty: req.body.difficulty,
+        language: req.body.language,
+      };
+    let currentUser = req.session.passport.user
+    knex.raw('select * from users where online=true and github_id != ?',[currentUser])
+    .then((results) => {
+      let shuffled = results.rows.sort(() => Math.random() * 2 - 1);
+      res.json(shuffled[0]);
+    })
+
+  })
+
+//   router.get('/api/dashboard', (req, res) => {
+//     let current_user = req.session.passport.user;
+//     knex
+//       .select('difficulty')
+//       .from('questions')
+//       .where('difficulty', '>', 0)
+//       .then((results) => {
+//         return res.json(results);
+//         console.log(results, 'RESULLTSS');
+//       })
+//     return res.render('dashboard');
+//   })
+//
 
   router.get('/api/profile_current', (req, res) => {
     let current_user = req.session.passport.user;
@@ -135,9 +166,12 @@ function history(githubId) {
   });
 
   router.get('/logout', (req,res) => {
-    req.logOut();
-    req.session.destroy();
-    res.redirect('/');
+    //TODO change the user status in the database
+    knex('users').where('github_id', req.session.passport.user).update({online: false})
+    .then(() => {
+      req.logOut();
+      req.session.destroy();
+      res.redirect('/');})
   })
 
   router.get('/api/challenges', (req,res) => {
@@ -150,19 +184,29 @@ function history(githubId) {
   })
 
   router.post('/api/challenges', (req,res) => {
-
-    let textValue = JSON.parse(req.body.answer);
-    console.log("BODY",req.body.answer);
-    console.log("PARSED",textValue);
-    // sandbox
-    sb.run(`${textValue}`,
-      function(output) {
-        console.log("OUTPUT",output);
-        console.log("OUTPUT RESULT",output.result);
-        console.log("CONSOLE LOG",output.console);
-        res.json(JSON.stringify(output));
-      }
-    );
+    knex
+      .select("id","unit_test")
+      .from("questions")
+      .then((results) => {
+        // getting the question_id of posted question in challenges
+        let frontQuestionId = req.body.questionId;
+        // getting the value from ace editor
+        let textValue = JSON.parse(req.body.answer);
+        // get the unit_test from questions thru a forEach loop
+        results.forEach((result) => {
+          // comparing the same question id and getting the corresponding unit_test for that id
+          if (result.id === frontQuestionId) {
+            let unitTest = result.unit_test;
+            console.log("UNIT_TEST",unitTest)
+            // Sandbox Run of values from ace and unit_test
+            sb.run(`${textValue}${unitTest}`,
+              function(output) {
+                res.json(JSON.stringify(output));
+              } // sb_output
+            ); // sb
+          } // if-end
+        }) // forEach-end
+    }); // knex
   })
 
   router.get('/challenge', ensureAuthenticated, (req, res) => {
@@ -171,45 +215,70 @@ function history(githubId) {
 
 
   router.get('/api/questions', (req,res) => {
-     knex
-      .select("*")
-      .from("questions")
+    knex
+      .select('*')
+      .from('questions')
       .then((results) => {
-        res.json(results);
-    });
+        let shuffled = results.sort(() => Math.random() * 2 - 1);
+        res.json(shuffled);
+      })
   })
-  // router.get("/", (req, res) => {
-  // });
 
-  // router.post("/", (req, res) => {
+  // router.get('/api/notifications', (req,res) => {
+  //   let currentUser = req.session.passport.user
+  //   let currentUserId= knex.select('id').from('users').where('github_id',currentUser);
+  //   knex
+  //     .select('*')
+  //     .from('notifications')
+  //     .where({user_id: currentUserId,
+  //       status: 'pending'
+  //     })
+  //     .then((results) => {
+  //       res.json(results);
+  //     })
+  // })
 
-  // });
+  router.post('/api/notifications', (req, res) => {
+    let currentUser = req.session.passport.user
+    let currentUserId= knex.select('id').from('users').where('github_id',currentUser);
+
+    return knex('notifications').returning('id').insert({})
+      .then((id)=>{
+        return knex('notifications_users').insert([
+        {
+        notification_id: id[0],
+        user_id: currentUserId,
+        initiator: true,
+        },
+        {
+        notification_id: id[0],
+        user_id: req.body.acceptingUserId,
+        initiator: false,
+        }
+        ]).then(()=> {
+          res.status(200).send('Notification request sent')
+        })
+      })
+  })
+ 
+  router.post('/api/notifications/cancel', (req, res) => {
+    let currentUser = req.session.passport.user
+    let currentUserId = knex.select('id').from('users').where('github_id',currentUser);
+    let pendingNotificationId = knex.select('id').from('notifications').where('status','pending');
+    let notificationId = knex.select('notification_id').from('notifications_users').whereIn('user_id',[currentUser,req.body.acceptingUserId]).andWhere('notification_id',pendingNotificationId);
+    
+    // BUG: TODO make sure no-one is stuck on status pending (e.g. close the browser on sending request)
+    
+    knex('notifications').where('id', notificationId).update({status: 'rejected'})
+      .then(()=> {
+        res.status(200).send('Notification request cancelled')
+      }) 
+  })
 
 
 
-  // router.post("/dashboard", (req, res) => {
 
-  //   res,redirect("/challenge/:challenge_id")
-  // });
-
-  // find_match
-
-  // start_challenge
-
-
-
-
-
-  // router.get("/challenges/:username", (req, res) => {
-  // });
-
-
-  // router.get("/challenge/:challenge_id", (req, res) => {
-  // });
-
-  // router.post("/profiles/:username", (req, res) => {
-  //   res.redirect("/profiles/:username")
-  // });
+  // Should be last route
   router.get('/*', ensureAuthenticated, (req, res) => {
     res.cookie("unsafe_user_name", req.user.github_username);
     res.render('dashboard');

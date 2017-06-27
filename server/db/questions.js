@@ -30,7 +30,7 @@ knex.raw('TRUNCATE TABLE questions CASCADE')
        placeholder: "function alphabet_order(str) {\r\n  \/* Put your code here *\/\r\n\r\n}",
        answer: "function alphabet_order(str) {\r\n  return str.split(\'\').sort().join(\'\');\r\n}",
        unit_test: "alphabet_order('webmaster');",
-       test_result: "abeemrstw",
+       test_result: "'abeemrstw'",
        language_id: languagesIds[0],
        title: "Returns a passed string with letters in alphabetical order",
        difficulty: 3
