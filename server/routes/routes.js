@@ -50,18 +50,19 @@ module.exports = (knex) => {
   function friendshipList(githubId) {
     return knex.raw(`
       SELECT
-         fsu_other.user_id,
-         users.avatar,
-         users.name
+        other.id,
+        other.avatar,
+        other.github_username
       FROM
         friendships_users as fsu_other
         JOIN friendships on friendships.id = fsu_other.friendship_id
         JOIN friendships_users as fsu_me on fsu_me.friendship_id = friendships.id
-        JOIN users on users.id = fsu_me.user_id
+        JOIN users as me on me.id = fsu_me.user_id
+        JOIN users as other on other.id = fsu_other.user_id
       WHERE
         fsu_other.user_id <> fsu_me.user_id
         and friendships.status = 'accepted'
-        and github_id = ?
+        and me.github_id = ?
       `, [githubId]);
   }
 >>>>>>> Added routes to extract data from database to list friends for each user
@@ -123,7 +124,7 @@ module.exports = (knex) => {
     let current_user = req.session.passport.user;
     friendshipList(current_user)
     .then((result) => {
-      res.json(result.rows[0]);
+      res.json(result.rows);
     })
   });
 

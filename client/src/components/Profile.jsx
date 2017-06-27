@@ -89,9 +89,11 @@ class Profile extends Component {
         </div>
 
         <div className="info">
+          <Jumbotron>
           <p> <i className="fa fa-github" aria-hidden="true"></i>: {profile.github_username} </p>
           <p> <i className="fa fa-github-alt" aria-hidden="true"></i>: github.com/{profile.github_username} </p>
           <p> <i className="fa fa-envelope" aria-hidden="true"></i>: {profile.email} </p>
+          </Jumbotron>
         </div>
 
         <div className="about-me">
