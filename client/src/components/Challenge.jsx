@@ -108,7 +108,7 @@ class Challenge extends Component {
     .catch((error)=> {
       console.log(error);
     })
-  }
+
   render() {
     let console = this.state.console;
     let consoleArr = [];
