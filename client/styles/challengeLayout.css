@@ -10,33 +10,54 @@ body {
       margin-bottom: 5px;
     }
     .chat-container {
+      /*display:;*/
       border: 1px solid black;
       width: 30%;
       height: 400px;
       position: relative;
       float:right;
+      margin-bottom: 10px;
     }
 
       h4 {
         display:inline;
       }
 
-    .output {
+    .output-header {
+      display: flex;
+      width: 100%;
+      background: #eee;
+      height: 30px;
+      padding: 5px;
+    }
 
+      h4 {
+        margin: 0;
+      }
+
+    .output {
       border: 1px solid black;
       width: 30%;
       height: 400px;
       position: relative;
       float: right;
-      margin-top: -200px;
+      margin-top: -190px;
     }
 
     #editor {
       display: flex;
     }
 
-    .chatbar {
-      background: #BDDFEB;
+    .chat-header  {
+      display: flex;
+      width: 100%;
+      background: #eee;
+      height: 30px;
+      padding: 5px;
+    }
+
+    footer.chatbar {
+      background: #EEE;
       border-top: 1px solid black;
       width: 100%;
       padding: 5px;
@@ -95,6 +116,6 @@ body {
       border-radius: 5px;
     }
 
-/*     .message .chatbar-username {
-      display: none;
-    }*/
+     .message .chatbar-username {
+      /*display: none;*/
+    }

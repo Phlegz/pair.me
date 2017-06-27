@@ -108,7 +108,7 @@ class Challenge extends Component {
     .catch((error)=> {
       console.log(error);
     })
-
+  }
   render() {
     let console = this.state.console;
     let consoleArr = [];
@@ -158,10 +158,12 @@ class Challenge extends Component {
       </div>
         <input type='button' value='Submit' onClick={(e) => this.submitCode(e) } />
 
-        <div className="output">
-          Output:
-          <div className="consoleLog">{ consoleArr }</div>
-          { showResult }
+      <div className="output">
+         <div className='output-header'>
+            <h4>Output:</h4>
+            <div className="consoleLog">{ consoleArr }</div>
+            { showResult }
+          </div>
         </div>
 
         <div className="showAnswer">

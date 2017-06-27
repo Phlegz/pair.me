@@ -58,7 +58,7 @@ class ChatBox extends Component {
 
     return (
       <div className='chat-container'>
-        <Header />
+        <Header messages={this.state.messages} />
         <MessageList user={ this.props.user } messages={ this.state.messages } />
         <ChatBar onNewMessage={ this.onNewMessage.bind(this) } />
       </div>
