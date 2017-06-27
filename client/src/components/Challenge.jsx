@@ -216,12 +216,32 @@ class Challenge extends Component {
             tabSize={2}
             width={1750}
             height={600}
+            fontSize={19}
             //invoke livecode function everytime the text box changess
             onChange={ this.liveCode }
             value={this.state.aceValue}
           />
         </div>
-          <input type='button' value='Submit' onClick={(e) => this.submitCode(e) } />
+
+          <div className="showAnswer">
+            <Button
+             className="submitButton"
+             bsStyle="success"
+             bsSize="small"
+             onClick={(e) => this.submitCode(e) }
+            >
+            Submit Answer
+            </Button>
+            <Button
+             className="answerkeyButton"
+             bsStyle="danger"
+             bsSize="small"
+             onClick= {this.onClick.bind(this)}
+             >
+             Show me the Answer
+             </Button>
+            {this.state.showAnswer && <ChallengeAnswer answer= { this.state.questions } /> }
+          </div>
 
         <div className="output">
            <div className='output-header'>
@@ -231,10 +251,7 @@ class Challenge extends Component {
             </div>
           </div>
 
-          <div className="showAnswer">
-            <button onClick= {this.onClick.bind(this)}> Give me answer</button>
-            {this.state.showAnswer && <ChallengeAnswer answer= { this.state.questions } /> }
-          </div>
+
         </div>
       </div>
 
