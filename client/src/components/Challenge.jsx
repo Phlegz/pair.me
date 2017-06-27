@@ -11,6 +11,7 @@ import ChallengeQuestions from './ChallengeQuestions.jsx'
 import ChallengeAnswer from './ChallengeAnswer.jsx'
 
 
+
 const io = require('socket.io-client');
 const socket = io();
 
@@ -38,6 +39,7 @@ class Challenge extends Component {
     this.socket = io.connect();
     this.liveCode = this.liveCode.bind(this);
   }
+
   componentWillMount() {
     axios.get('/api/questions')
     .then((response)=> {
@@ -56,6 +58,8 @@ class Challenge extends Component {
     })
   }
   componentDidMount() {
+
+
     console.log('successfully mounted');
      axios.get('/api/profile_current')
      .then((response)=> {
@@ -68,11 +72,14 @@ class Challenge extends Component {
     });
   }
 
+
+  //click to display answer
   onClick(e) {
     e.preventDefault();
     this.setState({ showAnswer: !this.state.showAnswer })
   }
 
+  //function to track changes and send to server for broadcast
   liveCode() {
     // console.log('calling function');
     let editor = ace.edit('codeChallenges');
@@ -88,7 +95,7 @@ class Challenge extends Component {
     let editor = ace.edit('codeChallenges');
     let textValue = JSON.stringify(editor.getValue());
     let questionId = this.state.questions.id
-    
+
     axios.post('/api/challenges', {
       answer: textValue,
       questionId: questionId
@@ -120,42 +127,50 @@ class Challenge extends Component {
                        <ul>Result => { result }</ul>
                        <ul>Expected Answer => {test_result}</ul>
                        <h3>CORRECT!</h3>
-                     </div>  
+                     </div>
       } else {
         showResult = <div className="resultLog">
                        <ul>Unit Test=> {this.state.questions.unit_test}</ul>
                        <ul>Result => { result }</ul>
                        <ul>Expected Answer => {test_result}</ul>
                        <h3>Wrong, please try again</h3>
-                     </div>  
+                     </div>
       }
     }
     return (
+
       <div>
         <ChallengeQuestions questions={ this.state.questions } />
+        <ChatBox user={ this.state.user } />
+      <div id='editor'>
         <AceEditor
           name="codeChallenges"
           mode="javascript"
           theme="monokai"
           editorProps={{$blockScrolling: Infinity}}
           tabSize={2}
+          width={1750}
+          height={600}
           //invoke livecode function everytime the text box changess
           onChange={ this.liveCode }
           value={this.state.aceValue}
         />
+      </div>
         <input type='button' value='Submit' onClick={(e) => this.submitCode(e) } />
-        <div className="output">
-          Output:
-          <div className="consoleLog">{ consoleArr }</div>
-          { showResult }
+
+      <div className="output">
+         <div className='output-header'>
+            <h4>Output:</h4>
+            <div className="consoleLog">{ consoleArr }</div>
+            { showResult }
+          </div>
         </div>
+
         <div className="showAnswer">
-          <a onClick= {this.onClick.bind(this)} href='#'> Give me answeR</a>
+          <button onClick= {this.onClick.bind(this)}> Give me answeR</button>
           {this.state.showAnswer && <ChallengeAnswer answer= { this.state.questions } /> }
         </div>
 
-
-        <ChatBox user={ this.state.user } />
       </div>
 
     );

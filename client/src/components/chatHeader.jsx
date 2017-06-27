@@ -3,9 +3,11 @@ import React, { Component } from 'react';
 class Header extends Component {
   render() {
     return (
-      <span>
-        <h4 className='title'>ChatBox</h4>
-      </span>
+      <div className='chat-header'>
+        <span className='chat-title'>
+          <h4>Chatting with SOMEONE </h4>
+        </span>
+      </div>
     )
   }
 }
