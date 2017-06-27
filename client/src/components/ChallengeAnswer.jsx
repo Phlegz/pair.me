@@ -15,8 +15,8 @@ class ChallengeAnswer extends Component {
           mode="javascript"
           theme="monokai"
           readOnly={true}
-          width={1308}
-          height={170}
+          width={1630}
+          height={200}
           value={this.props.answer.answer}
         />
       </span>
