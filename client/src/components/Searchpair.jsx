@@ -260,13 +260,8 @@ class Searchpair extends Component {
       console.log(error);
     });
 
-<<<<<<< HEAD
     let intervalId = setInterval(this.timer, 3000);
     this.setState({intervalId: intervalId});
-=======
-    // CONTINUE after merge
-    // let intervalId = setInterval(this.timer, 2000);
->>>>>>> Added logout button
   }
 
   componentWillUnmount() {
@@ -304,13 +299,6 @@ class Searchpair extends Component {
       // console.log(ele.slice(0,-14));
 
 
-<<<<<<< HEAD
-
-      // console.log('yesterday',  moment(yesterday))
-
-
-=======
->>>>>>> Added logout button
       // console.log('yesterdate', yesterdate)
       // console.log('yesterday', moment(yesterday).format('L'));
 

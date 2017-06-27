@@ -44,29 +44,6 @@ module.exports = (knex) => {
         users.github_username = ?
       `, [githubId]);
   }
-<<<<<<< HEAD
-=======
-
-  function friendshipList(githubId) {
-    return knex.raw(`
-      SELECT
-        other.id,
-        other.avatar,
-        other.github_username,
-        other.online
-      FROM
-        friendships_users as fsu_other
-        JOIN friendships on friendships.id = fsu_other.friendship_id
-        JOIN friendships_users as fsu_me on fsu_me.friendship_id = friendships.id
-        JOIN users as me on me.id = fsu_me.user_id
-        JOIN users as other on other.id = fsu_other.user_id
-      WHERE
-        fsu_other.user_id <> fsu_me.user_id
-        and friendships.status = 'accepted'
-        and me.github_id = ?
-      `, [githubId]);
-  }
->>>>>>> Added routes to extract data from database to list friends for each user
 
   function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
@@ -121,22 +98,24 @@ module.exports = (knex) => {
 
   })
 
-  router.get('/api/friends', (req,res) => {
-    let current_user = req.session.passport.user;
-    friendshipList(current_user)
-    .then((result) => {
-      res.json(result.rows);
-    })
-  });
+//   router.get('/api/dashboard', (req, res) => {
+//     let current_user = req.session.passport.user;
+//     knex
+//       .select('difficulty')
+//       .from('questions')
+//       .where('difficulty', '>', 0)
+//       .then((results) => {
+//         return res.json(results);
+//         console.log(results, 'RESULLTSS');
+//       })
+//     return res.render('dashboard');
+//   })
+//
 
   router.get('/api/profile_current', (req, res) => {
     let current_user = req.session.passport.user;
     knex
-<<<<<<< HEAD
-      .select('name', 'avatar', 'email', 'github_username','id')
-=======
       .select('name', 'avatar', 'email', 'github_username', 'about', 'twitter_handle')
->>>>>>> Fixed profile page to include about me
       .from('users')
       .limit(1)
       .where({github_id: current_user})
@@ -145,6 +124,7 @@ module.exports = (knex) => {
         res.json(results[0]);
       })
   });
+
 
   router.put('/api/profile', (req, res) => {
     let current_user = req.session.passport.user;
@@ -290,7 +270,6 @@ module.exports = (knex) => {
   })
 
   router.post('/api/notifications/cancel', (req, res) => {
-<<<<<<< HEAD
     //TODO: if you send a request to someone, and the request is pending or accepted their name sould not show up in the searc for other ppl
     const currentUser = req.session.passport.user
     // // BUG: TODO make sure no-one is stuck on status pending (e.g. close the browser on sending request)
@@ -405,19 +384,6 @@ module.exports = (knex) => {
     }).then(() => {
       res.status(200).send();  // TODO: reconsider if this is stupid
     })
-=======
-    let currentUser = req.session.passport.user
-    let currentUserId = knex.select('id').from('users').where('github_id',currentUser);
-    let pendingNotificationId = knex.select('id').from('notifications').where('status','pending');
-    let notificationId = knex.select('notification_id').from('notifications_users').whereIn('user_id',[currentUser,req.body.acceptingUserId]).andWhere('notification_id',pendingNotificationId);
-
-    // BUG: TODO make sure no-one is stuck on status pending (e.g. close the browser on sending request)
-
-    knex('notifications').where('id', notificationId).update({status: 'rejected'})
-      .then(()=> {
-        res.status(200).send('Notification request cancelled')
-      })
->>>>>>> Fixed profile page to include about me
   })
 
 
