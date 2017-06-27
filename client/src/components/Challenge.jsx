@@ -39,6 +39,7 @@ class Challenge extends Component {
     this.socket = io.connect();
     this.liveCode = this.liveCode.bind(this);
   }
+
   componentWillMount() {
     axios.get('/api/questions')
     .then((response)=> {
@@ -57,6 +58,8 @@ class Challenge extends Component {
     })
   }
   componentDidMount() {
+
+
     console.log('successfully mounted');
      axios.get('/api/profile_current')
      .then((response)=> {
@@ -92,7 +95,7 @@ class Challenge extends Component {
     let editor = ace.edit('codeChallenges');
     let textValue = JSON.stringify(editor.getValue());
     let questionId = this.state.questions.id
-    
+
     axios.post('/api/challenges', {
       answer: textValue,
       questionId: questionId
@@ -139,16 +142,15 @@ class Challenge extends Component {
       <div>
         <ChallengeQuestions questions={ this.state.questions } />
         <ChatBox user={ this.state.user } />
-      <div className='editor'>
+      <div id='editor'>
         <AceEditor
           name="codeChallenges"
           mode="javascript"
           theme="monokai"
           editorProps={{$blockScrolling: Infinity}}
           tabSize={2}
-          width={1310}
+          width={1750}
           height={600}
-          // height:
           //invoke livecode function everytime the text box changess
           onChange={ this.liveCode }
           value={this.state.aceValue}
