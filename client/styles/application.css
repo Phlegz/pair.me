@@ -73,3 +73,8 @@ li.sideLinks {
 .friendsPic {
   width: 25%;
 }
+
+.logout {
+  margin: 11px;
+  padding: 3px;
+}

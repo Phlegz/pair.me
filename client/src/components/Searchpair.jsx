@@ -139,7 +139,7 @@ class Searchpair extends Component {
     .catch((error) => {
       console.log(error);
     });
-    
+
     // CONTINUE after merge
     // let intervalId = setInterval(this.timer, 2000);
   }
@@ -176,10 +176,6 @@ class Searchpair extends Component {
     dates.forEach((ele, index) => {
       console.log('ele', moment(ele).format('L'));
       console.log(ele.slice(0,-14));
-
-
-
-      console.log('yesterday',  moment(yesterday))
 
 
       // console.log('yesterdate', yesterdate)
