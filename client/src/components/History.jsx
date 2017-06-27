@@ -16,7 +16,6 @@ class History extends Component {
     axios.get('/api/history')
     .then((response) => {
       this.setState({history: this.state.history.concat(response.data.rows)})
-      console.log('in axios, after concat', response.data.rows);
     })
     .catch (function(error) {
       console.log(error);

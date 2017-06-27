@@ -20,7 +20,8 @@ class Searchpair extends Component {
       challengesCompleted: null,
       pairMeModal: false,
       pair: {id:"",github_username:"",avatar:""},
-      waitModal: false
+      waitModal: false,
+      onlineFriends: this.props.onlineFriends
     }
 
     // this.handleChange = this.handleChange.bind(this);
@@ -30,10 +31,10 @@ class Searchpair extends Component {
     this.cancelRequest = this.cancelRequest.bind(this);
   }
 
-  // handleChange(event) {
-  //   this.setState({language: event.target.value});
-  //   this.setState({difficulty: event.target.value});
-  // }
+  handleChange(event) {
+    this.setState({language: event.target.value});
+    this.setState({difficulty: event.target.value});
+  }
 
   // handleSubmit(event) {
   //   alert('You picked ' + this.state.language + ' level ' + this.state.difficulty + '!');
@@ -53,13 +54,11 @@ class Searchpair extends Component {
     this.setState({ pairMeModal: true})
     let postData = {
       language: this.language.value,
-      difficulty: this.difficulty.value,
+      difficulty: this.difficulty.value
     };
     axios.post('/api/dashboard', postData)
     .then((response) => {
-      // console.log(response.data);
       this.setState({pair: response.data});
-      console.log("sdasdasdasdasd");
       console.log("pair state:", this.state.pair);
     })
     .catch(error => {
@@ -140,7 +139,6 @@ class Searchpair extends Component {
       console.log(error);
     });
 
-    // CONTINUE after merge
     // let intervalId = setInterval(this.timer, 2000);
   }
 
@@ -150,6 +148,7 @@ class Searchpair extends Component {
   // }
 
   render() {
+    const onlineFriends = this.state.onlineFriends;
     const data = this.state.data;
     let closePairModal = () => this.setState({ pairMeModal: false});
     let closeWaitModal = () => this.setState({ waitModal: false});
@@ -161,42 +160,18 @@ class Searchpair extends Component {
     const fourDaysAgo = Date.now() - (86400000*4);
     const dates = [];
 
-    // const today1 = moment(today)._i;
-
-    // const numberOfChallenges = 0;
-
     if (data != null) {
       data.forEach((completed_at) => {
         dates.push(data[0].completed_at);
         return dates
       });
     }
-    console.log('this is the dates array', dates)
-    console.log("DATE NOW",Date.now())
-    dates.forEach((ele, index) => {
-      console.log('ele', moment(ele).format('L'));
-      console.log(ele.slice(0,-14));
 
-
-      // console.log('yesterdate', yesterdate)
-      // console.log('yesterday', moment(yesterday).format('L'));
-
-
-    })
-
-    // for(var i = 0; i < dates.length; i++) {
-    //   if(moment(dates[i]).format('ll') === moment(yesterday).format('ll')) {
-    //     console.log(dates[i], 'dates[i]')
-
-    //     return true;
-    //   }
-    // }
-
-    // let test = moment(dates[0]).format('ll');
-    // console.log(test, 'date-DB');
-    // console.log(moment(twoDaysAgo).format('ll'), '2DayaAgo');
-    // console.log(dates, 'dates');
-
+    const pairOnlineFriend = (
+      onlineFriends.map(function(friend) {
+        return <option value={friend}>{friend}</option>
+      })
+    );
 
   return (
     <div>
@@ -236,6 +211,17 @@ class Searchpair extends Component {
               <option value="3">3</option>
               <option value="4">4</option>
               <option value="5">5</option>
+            </FormControl>
+          </Col>
+        </FormGroup>
+        <FormGroup controlId="formControlsSelect">
+          <Col componentClass={ControlLabel} sm={4}>
+            Select a friend
+          </Col>
+          <br />
+          <Col sm={10}>
+            <FormControl componentClass="select" placeholder="select" inputRef={ (input) => this.friend = input}>
+              {pairOnlineFriend}
             </FormControl>
           </Col>
         </FormGroup>
