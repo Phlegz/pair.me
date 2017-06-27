@@ -10,14 +10,13 @@ class ChallengeAnswer extends Component {
   render() {
     return (
       <span className="challenge-answer">
-        Answer
         <AceEditor
           name="answerKey"
           mode="javascript"
           theme="monokai"
           readOnly={true}
-          width={530}
-          height={175}
+          width={1308}
+          height={170}
           value={this.props.answer.answer}
         />
       </span>
