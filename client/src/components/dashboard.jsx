@@ -47,7 +47,11 @@ class Dashboard extends React.Component {
   constructor(props){
     super(props);
     this.state ={
-      profile: null
+      profile: null,
+      friends: {
+        github_username: "",
+        avatar: ''
+      }
     }
   }
 
@@ -58,10 +62,18 @@ class Dashboard extends React.Component {
     axios.get('/api/profile_current')
     .then((response) => {
       console.log('blabla', response.data.avatar);
-
       this.setState({ profile: response.data.avatar})
     })
+
+    axios.get('/api/friends')
+    .then((response) => {
+      console.log('response from FRIENDS', response)
+      this.setState({friends: response.data[0]})
+      console.log("MYFRIENDS",this.state.friends);
+    })
   }
+
+
 
   render() {
     const self = this;
@@ -100,6 +112,10 @@ class Dashboard extends React.Component {
                 <li className="sideLinks"><Link to={"/profiles/" + myGithubUsername}><i className="fa fa-user" aria-hidden="true"></i> Profile</Link></li>
                 <li className="sideLinks"><Link to="/history"><i className="fa fa-history" aria-hidden="true"></i>History</Link></li>
               </ul>
+              <div className="friends">
+                <p>{this.state.friends.github_username} </p>
+                <Image circle className="friendsPic" src={this.state.friends.avatar} />
+              </div>
             </div>
 
           <div className="routes">
