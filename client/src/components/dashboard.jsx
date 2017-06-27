@@ -56,7 +56,6 @@ class Dashboard extends React.Component {
     }
   }
 
-
   componentDidMount() {
     console.log('sucess mount')
 
