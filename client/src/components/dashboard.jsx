@@ -9,7 +9,7 @@ import {
   Link
 } from 'react-router-dom'
 
-import { Navbar, Nav, NavItem, MenuItem, NavDropdown } from 'react-bootstrap';
+import { Image, Navbar, Nav, NavItem, MenuItem, NavDropdown, Button } from 'react-bootstrap';
 
 const routes = [
   {
@@ -24,7 +24,7 @@ const routes = [
   {
     path: '/history',
     main: History
-  }
+  },
 ];
 
 
@@ -44,13 +44,63 @@ const myGithubUsername = readCookie('unsafe_user_name');
 
 class Dashboard extends React.Component {
 
+  constructor(props){
+    super(props);
+    this.state ={
+      profile: null,
+      friends: {
+        github_username: "",
+        avatar: '',
+        online: ''
+      }
+    }
+  }
+
+
+  componentDidMount() {
+    console.log('sucess mount')
+
+    axios.get('/api/profile_current')
+    .then((response) => {
+      console.log('blabla', response.data.avatar);
+      this.setState({ profile: response.data.avatar})
+    })
+
+    axios.get('/api/friends')
+    .then((response) => {
+      console.log('response from FRIENDS', response)
+      this.setState({friends: response.data})
+      console.log("MYFRIENDS",this.state.friends);
+    })
+  }
+
   render() {
     const self = this;
+    let profile = this.state.profile;
+    let friends = this.state.friends;
+    let friendsArr = [];
+
+
+
+    for (let i = 0; i < friends.length; i++) {
+      friendsArr.push(
+      <div className="oneFriend">
+          {
+            friends[i].online == true
+            ? <i className="fa fa-circle" aria-hidden="true"></i>
+            : <i className="fa fa-circle offline" aria-hidden="true"></i>
+          }
+        <Image circle className="friendsPic" src={friends[i].avatar} />
+        <p className="friendsName">{friends[i].github_username} </p>
+      </div>
+      )
+    }
     const navBar = (
          <Navbar inverse collapseOnSelect>
           <Navbar.Header>
+            <Image className="logo" src={require('../../styles/img/computer.png')}/>
             <Navbar.Brand>
-              <a href="#">Pair Me</a>
+              <a className="brand" href="#">Pair Me</a>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
@@ -59,8 +109,9 @@ class Dashboard extends React.Component {
 
           </Nav>
           <Nav pullRight>
-            <NavItem eventKey={1} href="#">Link Right</NavItem>
-            <NavItem eventKey={2} href="#">Link Right</NavItem>
+            <NavItem><img className="profilePic" src={profile} /></NavItem>
+            <NavItem>Hello, {myGithubUsername}</NavItem>
+            <Button className="logout" href="/logout">Log out</Button>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -69,14 +120,18 @@ class Dashboard extends React.Component {
 
       <Router>
         <div className="navBar">
-          {navBar}
+          { navBar }
           <div className="outer-sidebar">
             <div className="sidebar">
               <ul className="links" style={{ listStyleType: 'none' }}>
-                <li><Link to="/dashboard">Dashboard</Link></li>
-                <li><Link to={"/profiles/" + myGithubUsername}>Profile</Link></li>
-                <li><Link to="/history">History</Link></li>
+                <li className="sideLinks"><Link to="/dashboard"><i className="fa fa-home" aria-hidden="true"></i>Dashboard</Link></li>
+                <li className="sideLinks"><Link to={"/profiles/" + myGithubUsername}><i className="fa fa-user" aria-hidden="true"></i> Profile</Link></li>
+                <li className="sideLinks"><Link to="/history"><i className="fa fa-history" aria-hidden="true"></i>History</Link></li>
               </ul>
+              <div className="friends">
+                <h3>Friends</h3>
+                { friendsArr }
+              </div>
             </div>
 
           <div className="routes">

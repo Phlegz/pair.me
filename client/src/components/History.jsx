@@ -3,12 +3,10 @@ import axios from 'axios';
 import { PageHeader, Footer, Popover, ButtonToolbar, OverlayTrigger, popoverBottom, Button, Panel } from 'react-bootstrap';
 import { Table } from 'react-bootstrap';
 import moment from 'moment';
-
 import AceEditor from 'react-ace';
 import brace from 'brace';
 import 'brace/mode/javascript';
 import 'brace/theme/monokai';
-
 class History extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +23,6 @@ class History extends Component {
     })
     this.getOverlay = this.getOverlay.bind(this);
   }
-
   setOpenTab(hist) {
     if(this.state.openTab === hist){
       this.setState({openTab: undefined});
@@ -33,7 +30,6 @@ class History extends Component {
       this.setState({openTab: hist});
     }
   }
-
   getOverlay(historyItem) {
     console.log(JSON.stringify(historyItem));
     const popoverBottom = (
@@ -52,13 +48,10 @@ class History extends Component {
     );
     return popoverBottom;
   }
-
-
   render() {
     // console.log('history', this.state.history);
     const allHistory = this.state.history.map((hist, index) => {
       const toggle = () => { this.setOpenTab(hist); }
-
       return (
       <div key={index}><div>
           {/*call toggle handler and change state whenever button is pressed */}
@@ -96,5 +89,4 @@ class History extends Component {
     );
   }
 }
-
 export default History;

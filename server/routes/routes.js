@@ -11,39 +11,59 @@ module.exports = (knex) => {
 
   function completedDifficulties(githubId) {
     console.log('here')
-  return knex.raw(`
-    SELECT
-      challenges.completed_at,
-      questions.difficulty
-    FROM
-      questions
-      JOIN challenges ON challenges.question_id = questions.id
-      JOIN sessions ON sessions.id = challenges.session_id
-      JOIN sessions_users ON sessions_users.session_id = sessions.id
-      JOIN users ON users.id = sessions_users.user_id
-    WHERE
-      users.github_username = ?
-    ORDER BY
-      challenges.completed_at
-  `, [githubId]);
-}
-
-function history(githubId) {
-  return knex.raw(`
-    SELECT
-      challenges.submitted_answer,
-      challenges.completed_at,
-      questions.question
-    FROM
-      questions
-      JOIN challenges ON challenges.question_id = questions.id
-      JOIN sessions ON sessions.id = challenges.session_id
-      JOIN sessions_users ON sessions_users.session_id = sessions.id
-      JOIN users ON users.id = sessions_users.user_id
-    WHERE
-      users.github_username = ?
+    return knex.raw(`
+      SELECT
+        challenges.completed_at,
+        questions.difficulty
+      FROM
+        questions
+        JOIN challenges ON challenges.question_id = questions.id
+        JOIN sessions ON sessions.id = challenges.session_id
+        JOIN sessions_users ON sessions_users.session_id = sessions.id
+        JOIN users ON users.id = sessions_users.user_id
+      WHERE
+        users.github_username = ?
+      ORDER BY
+        challenges.completed_at
     `, [githubId]);
-}
+  }
+
+  function history(githubId) {
+    return knex.raw(`
+      SELECT
+        challenges.submitted_answer,
+        challenges.completed_at,
+        questions.question
+      FROM
+        questions
+        JOIN challenges ON challenges.question_id = questions.id
+        JOIN sessions ON sessions.id = challenges.session_id
+        JOIN sessions_users ON sessions_users.session_id = sessions.id
+        JOIN users ON users.id = sessions_users.user_id
+      WHERE
+        users.github_username = ?
+      `, [githubId]);
+  }
+
+  function friendshipList(githubId) {
+    return knex.raw(`
+      SELECT
+        other.id,
+        other.avatar,
+        other.github_username,
+        other.online
+      FROM
+        friendships_users as fsu_other
+        JOIN friendships on friendships.id = fsu_other.friendship_id
+        JOIN friendships_users as fsu_me on fsu_me.friendship_id = friendships.id
+        JOIN users as me on me.id = fsu_me.user_id
+        JOIN users as other on other.id = fsu_other.user_id
+      WHERE
+        fsu_other.user_id <> fsu_me.user_id
+        and friendships.status = 'accepted'
+        and me.github_id = ?
+      `, [githubId]);
+  }
 
   function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
@@ -98,24 +118,18 @@ function history(githubId) {
 
   })
 
-//   router.get('/api/dashboard', (req, res) => {
-//     let current_user = req.session.passport.user;
-//     knex
-//       .select('difficulty')
-//       .from('questions')
-//       .where('difficulty', '>', 0)
-//       .then((results) => {
-//         return res.json(results);
-//         console.log(results, 'RESULLTSS');
-//       })
-//     return res.render('dashboard');
-//   })
-//
+  router.get('/api/friends', (req,res) => {
+    let current_user = req.session.passport.user;
+    friendshipList(current_user)
+    .then((result) => {
+      res.json(result.rows);
+    })
+  });
 
   router.get('/api/profile_current', (req, res) => {
     let current_user = req.session.passport.user;
     knex
-      .select('name', 'avatar', 'email', 'github_username')
+      .select('name', 'avatar', 'email', 'github_username', 'about', 'twitter_handle')
       .from('users')
       .limit(1)
       .where({github_id: current_user})
@@ -125,14 +139,14 @@ function history(githubId) {
       })
   });
 
-
   router.put('/api/profile', (req, res) => {
     let current_user = req.session.passport.user;
     let updatedProfile = {
         avatar: req.body.avatar,
         name: req.body.name,
         email: req.body.email,
-        github_username: req.body.github_username
+        github_username: req.body.github_username,
+        about: req.body.about
       };
     knex('users')
       .where({github_id: current_user})
@@ -260,19 +274,19 @@ function history(githubId) {
         })
       })
   })
- 
+
   router.post('/api/notifications/cancel', (req, res) => {
     let currentUser = req.session.passport.user
     let currentUserId = knex.select('id').from('users').where('github_id',currentUser);
     let pendingNotificationId = knex.select('id').from('notifications').where('status','pending');
     let notificationId = knex.select('notification_id').from('notifications_users').whereIn('user_id',[currentUser,req.body.acceptingUserId]).andWhere('notification_id',pendingNotificationId);
-    
+
     // BUG: TODO make sure no-one is stuck on status pending (e.g. close the browser on sending request)
-    
+
     knex('notifications').where('id', notificationId).update({status: 'rejected'})
       .then(()=> {
         res.status(200).send('Notification request cancelled')
-      }) 
+      })
   })
 
 
