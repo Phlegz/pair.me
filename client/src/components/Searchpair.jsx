@@ -24,18 +24,19 @@ class Searchpair extends Component {
       recipientModal: false,
       intervalId: null,
       currentUser: {github_username: "", id: ""},
-      senderUser: {user_id: ""}
+      senderUser: ""
     }
 
     // this.handleChange = this.handleChange.bind(this);
     // this.handleSubmit = this.handleSubmit.bind(this);
     this.pairMe = this.pairMe.bind(this);
+    this.timer = this.timer.bind(this);
     this.sendRequest = this.sendRequest.bind(this);
     this.cancelRequest = this.cancelRequest.bind(this);
     // this.acceptRequest = this.acceptRequest.bind(this);
     this.rejectRequest = this.rejectRequest.bind(this);
-    this.timer = this.timer.bind(this);
-  
+
+
 }
   // handleChange(event) {
   //   this.setState({language: event.target.value});
@@ -94,7 +95,7 @@ class Searchpair extends Component {
     event.preventDefault();
     this.setState({ waitModal: false})
 
-    axios.post('/api/notifications/cancel', {
+    axios.post('/api/notifications/abolish', {
       acceptingUserId: this.state.pair.id
     })
     .then((response) => {
@@ -127,9 +128,9 @@ class Searchpair extends Component {
     event.preventDefault();
     this.setState({ waitModal: false})
     this.setState({ recipientModal: false})
-
-    axios.post('/api/notifications/reject', {
-      acceptingUserId: this.state.pair.id
+    console.log("senderUser should be me:", this.state.senderUser)
+    axios.post('/api/notifications/abolish', {
+      // senderUserId: this.state.senderUser
     })
     .then((response) => {
     console.log(response.data);
@@ -148,18 +149,28 @@ class Searchpair extends Component {
         if(requestArr.length > 0) {
           requestArr.forEach((request) => {
 
-            if(request.initiator === true) {
-              this.setState({senderUser: request.user_id})
-            };
+            if (request.user_id === this.state.currentUser.id) {
+              if (request.status === 'pending') {
 
-            console.log("There is a request.",request);
-            if((request.initiator === false) && (request.user_id === this.state.currentUser.id)) {
-              console.log("Request received.");
-              this.setState({recipientModal: true})
-             
-             
+                console.log("there's a request pending for me");
+                if (request.initiator) {   // I initiated this!
+                  this.setState({senderUser: request.user_id})
+                } else {                  // I'm the recipient!
+                  this.setState({recipientModal: true})
+                }
 
+                // console.log("There is a request.",request);
+                // if((request.initiator === false) && (request.user_id === this.state.currentUser.id)) {
+                //   console.log("Request received.");
+                //   this.setState({recipientModal: true})
+                //
+                // }
+              } else if (request.status === 'rejected') {
+                // TODO: something sane
+                this.setState({recipientModal: false})
+              }
             }
+
           })
         }
         if(requestArr.length = 0){
@@ -173,7 +184,7 @@ class Searchpair extends Component {
     .then((response) => {
       this.setState({currentUser: response.data})
     })
-  
+
     axios.get('/api/statistics')
     .then((response)=> {
       this.setState({data: response.data.rows});
@@ -207,7 +218,7 @@ class Searchpair extends Component {
     .catch((error) => {
       console.log(error);
     });
-    
+
     let intervalId = setInterval(this.timer, 2000);
     this.setState({intervalId: intervalId});
   }
@@ -271,7 +282,7 @@ class Searchpair extends Component {
     // console.log(dates, 'dates');
 
 
-    
+
 
 
 
@@ -421,9 +432,9 @@ class Searchpair extends Component {
         backdrop="static"
         keyboard={false}
       >
-      <Modal.Header>
+      {/* <Modal.Header>
         <Modal.Title>{this.state.senderUser} sent you a request.</Modal.Title>
-      </Modal.Header>
+      </Modal.Header> */}
       <Modal.Body>
         <div className="wrapper">
           <img src={this.state.pair.avatar} />
