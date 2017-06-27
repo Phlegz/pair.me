@@ -11,39 +11,57 @@ module.exports = (knex) => {
 
   function completedDifficulties(githubId) {
     console.log('here')
-  return knex.raw(`
-    SELECT
-      challenges.completed_at,
-      questions.difficulty
-    FROM
-      questions
-      JOIN challenges ON challenges.question_id = questions.id
-      JOIN sessions ON sessions.id = challenges.session_id
-      JOIN sessions_users ON sessions_users.session_id = sessions.id
-      JOIN users ON users.id = sessions_users.user_id
-    WHERE
-      users.github_username = ?
-    ORDER BY
-      challenges.completed_at
-  `, [githubId]);
-}
-
-function history(githubId) {
-  return knex.raw(`
-    SELECT
-      challenges.submitted_answer,
-      challenges.completed_at,
-      questions.question
-    FROM
-      questions
-      JOIN challenges ON challenges.question_id = questions.id
-      JOIN sessions ON sessions.id = challenges.session_id
-      JOIN sessions_users ON sessions_users.session_id = sessions.id
-      JOIN users ON users.id = sessions_users.user_id
-    WHERE
-      users.github_username = ?
+    return knex.raw(`
+      SELECT
+        challenges.completed_at,
+        questions.difficulty
+      FROM
+        questions
+        JOIN challenges ON challenges.question_id = questions.id
+        JOIN sessions ON sessions.id = challenges.session_id
+        JOIN sessions_users ON sessions_users.session_id = sessions.id
+        JOIN users ON users.id = sessions_users.user_id
+      WHERE
+        users.github_username = ?
+      ORDER BY
+        challenges.completed_at
     `, [githubId]);
-}
+  }
+
+  function history(githubId) {
+    return knex.raw(`
+      SELECT
+        challenges.submitted_answer,
+        challenges.completed_at,
+        questions.question
+      FROM
+        questions
+        JOIN challenges ON challenges.question_id = questions.id
+        JOIN sessions ON sessions.id = challenges.session_id
+        JOIN sessions_users ON sessions_users.session_id = sessions.id
+        JOIN users ON users.id = sessions_users.user_id
+      WHERE
+        users.github_username = ?
+      `, [githubId]);
+  }
+
+  function friendshipList(githubId) {
+    return knex.raw(`
+      SELECT
+         fsu_other.user_id,
+         users.avatar,
+         users.name
+      FROM
+        friendships_users as fsu_other
+        JOIN friendships on friendships.id = fsu_other.friendship_id
+        JOIN friendships_users as fsu_me on fsu_me.friendship_id = friendships.id
+        JOIN users on users.id = fsu_me.user_id
+      WHERE
+        fsu_other.user_id <> fsu_me.user_id
+        and friendships.status = 'accepted'
+        and github_id = ?
+      `, [githubId]);
+  }
 
   function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
@@ -98,19 +116,13 @@ function history(githubId) {
 
   })
 
-//   router.get('/api/dashboard', (req, res) => {
-//     let current_user = req.session.passport.user;
-//     knex
-//       .select('difficulty')
-//       .from('questions')
-//       .where('difficulty', '>', 0)
-//       .then((results) => {
-//         return res.json(results);
-//         console.log(results, 'RESULLTSS');
-//       })
-//     return res.render('dashboard');
-//   })
-//
+  router.get('/api/friends', (req,res) => {
+    let current_user = req.session.passport.user;
+    friendshipList(current_user)
+    .then((result) => {
+      res.json(result.rows[0]);
+    })
+  });
 
   router.get('/api/profile_current', (req, res) => {
     let current_user = req.session.passport.user;
@@ -124,7 +136,6 @@ function history(githubId) {
         res.json(results[0]);
       })
   });
-
 
   router.put('/api/profile', (req, res) => {
     let current_user = req.session.passport.user;
