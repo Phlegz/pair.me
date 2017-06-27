@@ -5,7 +5,7 @@ class Header extends Component {
     return (
       <div className='chat-header'>
         <span className='chat-title'>
-          <h4>Chatting with SOMEONE </h4>
+          <h4>Chatbox</h4>
         </span>
       </div>
     )
