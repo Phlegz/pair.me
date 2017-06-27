@@ -10,10 +10,26 @@ import ChatBox from './ChatBox.jsx';
 import ChallengeQuestions from './ChallengeQuestions.jsx'
 import ChallengeAnswer from './ChallengeAnswer.jsx'
 
+import { Image, Navbar, Nav, NavItem, MenuItem, NavDropdown, Button } from 'react-bootstrap';
+
 
 
 const io = require('socket.io-client');
 const socket = io();
+
+function readCookie(name) {
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0;i < ca.length;i++) {
+    var c = ca[i];
+    while (c.charAt(0)==' ') c = c.substring(1,c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+  }
+  return null;
+}
+
+const myGithubUsername = readCookie('unsafe_user_name');
+
 
 class Challenge extends Component {
   constructor(props) {
@@ -59,7 +75,6 @@ class Challenge extends Component {
   }
   componentDidMount() {
 
-
     console.log('successfully mounted');
      axios.get('/api/profile_current')
      .then((response)=> {
@@ -78,6 +93,12 @@ class Challenge extends Component {
     socket.on('serverConsoleCode', (code) => {
       this.setState({console:code})
     })
+
+  axios.get('/api/profile_current')
+    .then((response) => {
+      this.setState({ profile: response.data.avatar})
+    })
+
   }
 
 
@@ -125,6 +146,31 @@ class Challenge extends Component {
     })
   }
   render() {
+    const self = this;
+    let profile = this.state.profile;
+
+    const navBar = (
+         <Navbar inverse collapseOnSelect>
+          <Navbar.Header>
+            <Image className="logo" src={require('../../styles/img/computer.png')}/>
+            <Navbar.Brand>
+              <a className="brand" href="#">Pair Me</a>
+            </Navbar.Brand>
+            <Navbar.Toggle />
+          </Navbar.Header>
+          <Navbar.Collapse>
+          <Nav>
+
+          </Nav>
+          <Nav pullRight>
+            <NavItem><img className="profilePic" src={profile} /></NavItem>
+            <NavItem>Hello, {myGithubUsername}</NavItem>
+            <Button className="logout" href="/logout">Log out</Button>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+      );
+
     let console = this.state.console;
     let consoleArr = [];
     for (let i = 0; i < console.length; i++) {
@@ -155,39 +201,41 @@ class Challenge extends Component {
       }
     }
     return (
+      <div className='navBar'>
+      { navBar }
 
-      <div>
-        <ChallengeQuestions questions={ this.state.questions } />
-        <ChatBox user={ this.state.user } />
-      <div id='editor'>
-        <AceEditor
-          name="codeChallenges"
-          mode="javascript"
-          theme="monokai"
-          editorProps={{$blockScrolling: Infinity}}
-          tabSize={2}
-          width={1750}
-          height={600}
-          //invoke livecode function everytime the text box changess
-          onChange={ this.liveCode }
-          value={this.state.aceValue}
-        />
-      </div>
-        <input type='button' value='Submit' onClick={(e) => this.submitCode(e) } />
+        <div>
+          <ChallengeQuestions questions={ this.state.questions } />
+          <ChatBox user={ this.state.user } />
+        <div id='editor'>
+          <AceEditor
+            name="codeChallenges"
+            mode="javascript"
+            theme="monokai"
+            editorProps={{$blockScrolling: Infinity}}
+            tabSize={2}
+            width={1750}
+            height={600}
+            //invoke livecode function everytime the text box changess
+            onChange={ this.liveCode }
+            value={this.state.aceValue}
+          />
+        </div>
+          <input type='button' value='Submit' onClick={(e) => this.submitCode(e) } />
 
-      <div className="output">
-         <div className='output-header'>
-            <h4>Output:</h4>
-            <div className="consoleLog">{ consoleArr }</div>
-            { showResult }
+        <div className="output">
+           <div className='output-header'>
+              <h4>Output:</h4>
+              <div className="consoleLog">{ consoleArr }</div>
+              { showResult }
+            </div>
+          </div>
+
+          <div className="showAnswer">
+            <button onClick= {this.onClick.bind(this)}> Give me answer</button>
+            {this.state.showAnswer && <ChallengeAnswer answer= { this.state.questions } /> }
           </div>
         </div>
-
-        <div className="showAnswer">
-          <button onClick= {this.onClick.bind(this)}> Give me answer</button>
-          {this.state.showAnswer && <ChallengeAnswer answer= { this.state.questions } /> }
-        </div>
-
       </div>
 
     );
