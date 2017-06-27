@@ -28,6 +28,11 @@
   margin-bottom: 0px;
 }
 
+.logout {
+  margin: 11px;
+  padding: 3px;
+}
+
 #popover-positioned-bottom {
   min-width: 400px;
   max-width: 500px
@@ -74,7 +79,33 @@ li.sideLinks {
   width: 25%;
 }
 
-.logout {
-  margin: 11px;
-  padding: 3px;
+.friends {
+  padding-top: 190px;
+  margin: auto;
+  width: 280px;
 }
+
+.fa.fa-circle {
+  color: green;
+  margin: 15px;
+}
+
+.fa.fa-circle.offline {
+  color: grey;
+  margin: 15px;
+}
+
+.oneFriend {
+  margin: auto;
+  padding: 7px;
+  margin-bottom: 20px;
+}
+
+.friendsName {
+  float: right;
+  margin-right: 95px;
+  margin-top: 24px;
+}
+
+
+
