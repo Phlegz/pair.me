@@ -41,7 +41,8 @@ class Profile extends Component {
       avatar: this.formAvatar.value,
       name: this.formName.value,
       github_username: this.formGithubUsername.value,
-      email: this.formEmail.value
+      email: this.formEmail.value,
+      about: this.formAboutMe.value
     };
     axios.put('/api/profile', putData)
     .then(function(response) {
@@ -79,21 +80,24 @@ class Profile extends Component {
         <PageHeader>
           Profile
         </PageHeader>
+
         <div className="profile-info">
           <div className="wrapper">
             <img src={profile.avatar} />
           </div>
-            <p> Name: {profile.name} </p>
-            <p> Github Username: {profile.github_username} </p>
-            <p> Email: {profile.email} </p>
-            <p> Github Url: github.com/blahblah </p>
+          <h2> {profile.name} </h2>
         </div>
+
+        <div className="info">
+          <p> <i className="fa fa-github" aria-hidden="true"></i>: {profile.github_username} </p>
+          <p> <i className="fa fa-github-alt" aria-hidden="true"></i>: github.com/{profile.github_username} </p>
+          <p> <i className="fa fa-envelope" aria-hidden="true"></i>: {profile.email} </p>
+        </div>
+
         <div className="about-me">
-            <p> About Me: </p>
+            <p> About Me: {profile.about}</p>
         </div>
-        <div className="languages">
-            <p> Languages: </p>
-        </div>
+
 
       <div className="edit-profile" style={{height: 200}}>
         <Button
@@ -152,7 +156,7 @@ class Profile extends Component {
                   About Me
                 </Col>
                 <Col sm={10}>
-                  <FormControl componentClass="textarea" defaultValue="Type a short description" />
+                  <FormControl componentClass="textarea" inputRef={ (input) => this.formAboutMe = input } type="text" defaultValue={profile.about} defaultValue="Type a short description" />
                 </Col>
               </FormGroup>
               <FormGroup controlId="formControlsSelect">

@@ -12,7 +12,7 @@
   object-position: center right;
 }
 
-.profile-info, .about-me, .languages {
+.profile-info {
   margin: auto;
   width: 50%;
   padding: 10px;
@@ -22,4 +22,24 @@
 .edit-profile {
   float: right;
   margin: 60px;
+}
+
+.profile-info {
+  float: left;
+}
+
+.info {
+  float: right;
+  margin-right: 105px;
+  padding-right: 148px;
+  margin-top: 123px;
+  font-size: large;
+}
+
+.about-me {
+  float: right;
+  margin-right: 105px;
+  padding-right: 148px;
+  margin-top: 123px;
+  font-size: large;
 }

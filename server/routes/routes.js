@@ -115,7 +115,11 @@ module.exports = (knex) => {
   router.get('/api/profile_current', (req, res) => {
     let current_user = req.session.passport.user;
     knex
+<<<<<<< HEAD
       .select('name', 'avatar', 'email', 'github_username','id')
+=======
+      .select('name', 'avatar', 'email', 'github_username', 'about', 'twitter_handle')
+>>>>>>> Fixed profile page to include about me
       .from('users')
       .limit(1)
       .where({github_id: current_user})
@@ -132,7 +136,8 @@ module.exports = (knex) => {
         avatar: req.body.avatar,
         name: req.body.name,
         email: req.body.email,
-        github_username: req.body.github_username
+        github_username: req.body.github_username,
+        about: req.body.about
       };
     knex('users')
       .where({github_id: current_user})
@@ -269,6 +274,7 @@ module.exports = (knex) => {
   })
 
   router.post('/api/notifications/cancel', (req, res) => {
+<<<<<<< HEAD
     //TODO: if you send a request to someone, and the request is pending or accepted their name sould not show up in the searc for other ppl
     const currentUser = req.session.passport.user
     // // BUG: TODO make sure no-one is stuck on status pending (e.g. close the browser on sending request)
@@ -383,6 +389,19 @@ module.exports = (knex) => {
     }).then(() => {
       res.status(200).send();  // TODO: reconsider if this is stupid
     })
+=======
+    let currentUser = req.session.passport.user
+    let currentUserId = knex.select('id').from('users').where('github_id',currentUser);
+    let pendingNotificationId = knex.select('id').from('notifications').where('status','pending');
+    let notificationId = knex.select('notification_id').from('notifications_users').whereIn('user_id',[currentUser,req.body.acceptingUserId]).andWhere('notification_id',pendingNotificationId);
+
+    // BUG: TODO make sure no-one is stuck on status pending (e.g. close the browser on sending request)
+
+    knex('notifications').where('id', notificationId).update({status: 'rejected'})
+      .then(()=> {
+        res.status(200).send('Notification request cancelled')
+      })
+>>>>>>> Fixed profile page to include about me
   })
 
 
