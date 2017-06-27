@@ -60,3 +60,12 @@ a.brand.navbar-brand {
   width: 37px;
   border-radius: 20px;
 }
+
+a {
+  color: #333;
+}
+
+li.sideLinks {
+  font-size: larger;
+  margin: 17px;
+}

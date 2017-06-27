@@ -96,9 +96,9 @@ class Dashboard extends React.Component {
           <div className="outer-sidebar">
             <div className="sidebar">
               <ul className="links" style={{ listStyleType: 'none' }}>
-                <li><Link to="/dashboard">Dashboard</Link></li>
-                <li><Link to={"/profiles/" + myGithubUsername}>Profile</Link></li>
-                <li><Link to="/history">History</Link></li>
+                <li className="sideLinks"><Link to="/dashboard"><i className="fa fa-home" aria-hidden="true"></i>Dashboard</Link></li>
+                <li className="sideLinks"><Link to={"/profiles/" + myGithubUsername}><i className="fa fa-user" aria-hidden="true"></i> Profile</Link></li>
+                <li className="sideLinks"><Link to="/history"><i className="fa fa-history" aria-hidden="true"></i>History</Link></li>
               </ul>
             </div>
 
