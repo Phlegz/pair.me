@@ -11,39 +11,39 @@ module.exports = (knex) => {
 
   function completedDifficulties(githubId) {
     console.log('here')
-  return knex.raw(`
-    SELECT
-      challenges.completed_at,
-      questions.difficulty
-    FROM
-      questions
-      JOIN challenges ON challenges.question_id = questions.id
-      JOIN sessions ON sessions.id = challenges.session_id
-      JOIN sessions_users ON sessions_users.session_id = sessions.id
-      JOIN users ON users.id = sessions_users.user_id
-    WHERE
-      users.github_username = ?
-    ORDER BY
-      challenges.completed_at
-  `, [githubId]);
-}
-
-function history(githubId) {
-  return knex.raw(`
-    SELECT
-      challenges.submitted_answer,
-      challenges.completed_at,
-      questions.question
-    FROM
-      questions
-      JOIN challenges ON challenges.question_id = questions.id
-      JOIN sessions ON sessions.id = challenges.session_id
-      JOIN sessions_users ON sessions_users.session_id = sessions.id
-      JOIN users ON users.id = sessions_users.user_id
-    WHERE
-      users.github_username = ?
+    return knex.raw(`
+      SELECT
+        challenges.completed_at,
+        questions.difficulty
+      FROM
+        questions
+        JOIN challenges ON challenges.question_id = questions.id
+        JOIN sessions ON sessions.id = challenges.session_id
+        JOIN sessions_users ON sessions_users.session_id = sessions.id
+        JOIN users ON users.id = sessions_users.user_id
+      WHERE
+        users.github_username = ?
+      ORDER BY
+        challenges.completed_at
     `, [githubId]);
-}
+  }
+
+  function history(githubId) {
+    return knex.raw(`
+      SELECT
+        challenges.submitted_answer,
+        challenges.completed_at,
+        questions.question
+      FROM
+        questions
+        JOIN challenges ON challenges.question_id = questions.id
+        JOIN sessions ON sessions.id = challenges.session_id
+        JOIN sessions_users ON sessions_users.session_id = sessions.id
+        JOIN users ON users.id = sessions_users.user_id
+      WHERE
+        users.github_username = ?
+      `, [githubId]);
+  }
 
   function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
@@ -70,12 +70,12 @@ function history(githubId) {
   );
 
   router.get('/dashboard', ensureAuthenticated, (req, res) => {
-
     res.render('dashboard');
   })
 
 
   router.get('/api/statistics', (req, res) => {
+    //TODO Do not hard code!
     let current_user = req.session.passport.user;
     completedDifficulties("Farnaz")
      .then((result) => {
@@ -115,7 +115,7 @@ function history(githubId) {
   router.get('/api/profile_current', (req, res) => {
     let current_user = req.session.passport.user;
     knex
-      .select('name', 'avatar', 'email', 'github_username')
+      .select('name', 'avatar', 'email', 'github_username','id')
       .from('users')
       .limit(1)
       .where({github_id: current_user})
@@ -158,6 +158,7 @@ function history(githubId) {
 
 
   router.get('/api/history', (req, res) => {
+    //TODO: do not hard code
     // let current_history = req.session.passport.user;
     history("Farnaz")
       .then((result) => {
@@ -224,55 +225,142 @@ function history(githubId) {
       })
   })
 
-  // router.get('/api/notifications', (req,res) => {
-  //   let currentUser = req.session.passport.user
-  //   let currentUserId= knex.select('id').from('users').where('github_id',currentUser);
-  //   knex
-  //     .select('*')
-  //     .from('notifications')
-  //     .where({user_id: currentUserId,
-  //       status: 'pending'
-  //     })
-  //     .then((results) => {
-  //       res.json(results);
-  //     })
-  // })
+  router.get('/api/notifications', (req,res) => {
+    // let currentUser = req.session.passport.user
+    // let currentUserId= knex.select('id').from('users').where('github_id',currentUser);
+    knex
+      .select('notifications.id',
+        'status',
+        'user_id',
+        'initiator')
+      .from('notifications').leftJoin('notifications_users','notifications.id','notifications_users.notification_id')
+      .whereIn('status', ['pending', 'rejected'])
+      .then((results) => {
+        console.log(results);
+        res.json(results);
+      })
+  })
 
   router.post('/api/notifications', (req, res) => {
-    let currentUser = req.session.passport.user
-    let currentUserId= knex.select('id').from('users').where('github_id',currentUser);
-
-    return knex('notifications').returning('id').insert({})
-      .then((id)=>{
+    let currentUser = req.session.passport.user;
+      return Promise.all([
+        knex.select('id').from('users').where('github_id',currentUser),
+        knex('notifications').returning('id').insert({})
+      ])
+      .then(([currentUserId, notificationId]) => {
         return knex('notifications_users').insert([
-        {
-        notification_id: id[0],
-        user_id: currentUserId,
-        initiator: true,
-        },
-        {
-        notification_id: id[0],
-        user_id: req.body.acceptingUserId,
-        initiator: false,
-        }
+          {
+          notification_id: notificationId[0],
+          user_id: currentUserId[0].id,
+          initiator: true,
+          },
+          {
+          notification_id: notificationId[0],
+          user_id: req.body.acceptingUserId,
+          initiator: false,
+          }
         ]).then(()=> {
           res.status(200).send('Notification request sent')
         })
       })
   })
- 
+
   router.post('/api/notifications/cancel', (req, res) => {
+    //TODO: if you send a request to someone, and the request is pending or accepted their name sould not show up in the searc for other ppl
     let currentUser = req.session.passport.user
-    let currentUserId = knex.select('id').from('users').where('github_id',currentUser);
-    let pendingNotificationId = knex.select('id').from('notifications').where('status','pending');
-    let notificationId = knex.select('notification_id').from('notifications_users').whereIn('user_id',[currentUser,req.body.acceptingUserId]).andWhere('notification_id',pendingNotificationId);
-    
-    // BUG: TODO make sure no-one is stuck on status pending (e.g. close the browser on sending request)
-    
-    knex('notifications').where('id', notificationId).update({status: 'rejected'})
-      .then(()=> {
-        res.status(200).send('Notification request cancelled')
-      }) 
+    // // BUG: TODO make sure no-one is stuck on status pending (e.g. close the browser on sending request)
+    return Promise.all([
+      knex.select('id').from('users').where('github_id',currentUser),
+      knex.select('id').from('notifications').where('status','pending')
+    ])
+    .then(([currentUserId, pendingNotificationIds]) => {
+      const pendingNotificationIdsArr = pendingNotificationIds.map((id) => {return id.id})
+       knex.select('notification_id').from('notifications_users').whereIn('user_id',[currentUserId[0].id,req.body.acceptingUserId]).whereIn('notification_id',pendingNotificationIdsArr)
+       .then((notificationId) => {
+         console.log("notificationId :", notificationId[0].notification_id);
+         return knex('notifications').where('id', notificationId[0].notification_id).update({status: 'rejected'})
+       })
+    })
+    .then(() => {
+      res.status(200).send('Notification request cancelled')
+    })
+  })
+
+  // router.post('/api/notifications/accept', (req, res) => {
+  //   let currentUser = req.session.passport.user
+  //   let currentUserId = knex.select('id').from('users').where('github_id',currentUser);
+  //   let pendingNotificationId = knex.select('id').from('notifications').where('status','pending');
+  //   let notificationId = knex.select('notification_id').from('notifications_users').whereIn('user_id',[currentUser,req.body.acceptingUserId]).andWhere('notification_id',pendingNotificationId);
+
+  //   knex('notifications').where('id', notificationId).update({status: 'rejected'})
+  //     .then(()=> {
+  //       res.status(200).send('Notification request cancelled')
+  //     })
+  // })
+
+  router.post('/api/notifications/abolish', (req, res) => {
+    const currentUser = req.session.passport.user
+    knex.raw(`
+      select notifications.id
+      from users
+      join notifications_users nu on users.id = nu.user_id
+      join notifications on notifications.id = nu.notification_id
+      where users.github_id = ?
+    `, [currentUser])
+    .then((id_rows) => {
+
+      console.log("id rows:", id_rows);
+      console.log("id rows.rows:", id_rows.rows, JSON.stringify(id_rows.rows));
+      const ids = id_rows.rows.map(row => row.id);
+      console.log("ids:", ids, JSON.stringify(ids), typeof ids);
+
+
+      return knex('notifications')
+      .where('id', ids[0])
+      .update({status: 'rejected'})
+
+      // const updatePromises = id_rows.rows.map(row => {
+      //   return knex('notifications')
+      //   .where('id', row.id)
+      //   .update({status: 'rejected'})
+      // });
+      // return Promise.all(updatePromises);
+
+
+    }).then(() => {
+      res.status(200).send();  // TODO: reconsider if this is stupid
+    })
+  })
+
+
+
+
+  router.post('/api/notifications/reject', (req, res) => {
+    let currentUser = req.session.passport.user
+    // // BUG: TODO make sure no-one is stuck on status pending (e.g. close the browser on sending request)
+    return Promise.all([
+      knex.select('id').from('users').where('github_id',currentUser),
+      knex.select('id').from('notifications').where('status','pending')
+    ])
+    .then(([currentUserId, pendingNotificationIds]) => {
+      console.log("ervins id:", currentUserId);
+      console.log("pending notif id:", pendingNotificationIds);
+      console.log("req.body:", req.body.acceptingUserId);
+      const pendingNotificationIdsArr = pendingNotificationIds.map((id) => {return id.id})
+      knex.select('notification_id')
+      .from('notifications_users')
+      .whereIn('user_id',[currentUserId[0].id, req.body.acceptingUserId])
+      .whereIn('notification_id',pendingNotificationIdsArr)
+      .then((notificationId) => {
+        console.log("notificationId :", notificationId[0].notification_id);
+        return knex('notifications')
+        .where('id', notificationId[0].notification_id)
+        .update({status: 'rejected'});
+      })
+    })
+    .then(() => {
+      res.status(200).send('Notification request rejected')
+    })
   })
 
 
