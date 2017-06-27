@@ -84,6 +84,14 @@ io.on('connection', (socket) => {
     io.emit('serverLiveCode', liveCode.code);
   })
 
+
+  socket.on('submittedCode', (code) => {
+    let submittedAnswer= JSON.parse(code);
+    // console.log('does this get called?',submittedAnswer)
+    io.emit('serverSubmittedCode', submittedAnswer.result);
+    io.emit('serverConsoleCode', submittedAnswer.console);
+  })
+
   socket.on('disconnect', () => {
     console.log('server disconnected');
   })
