@@ -21,31 +21,36 @@ body {
         display:inline;
       }
 
-    .editor {
+    .output {
+
+      border: 1px solid black;
+      width: 30%;
+      height: 400px;
+      position: relative;
+      float: right;
+      margin-top: -200px;
+    }
+
+    #editor {
       display: flex;
     }
 
     .chatbar {
-      /*background: #a0a0a0;*/
+      background: #BDDFEB;
       border-top: 1px solid black;
       width: 100%;
       padding: 5px;
       float: right;
       bottom: 0;
       position: absolute;
-      /*background-color: red;*/
     }
 
 
     .chatbar-message {
       flex: 8;
       padding: 0 5px 0 5px;
-      width: 350px;
-    }
-
-    .chatbar-username {
-      flex: 2;
-      color: pink;
+      width: 90%;
+      /*margin: 0 auto;*/
     }
 
     .message {
@@ -55,23 +60,41 @@ body {
 
     .message-list {
       overflow-y:auto;
-      height: 380px;
+      height: 350px;
+    }
+
+
+    .message.from-me .chatbar-username {
+      display: none;
+    }
+
+    .message.from-me {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 5px;
+    }
+
+    .message.from-me .message-content {
+      background-color: #af9570;
+      padding: 5px 5px;
+      color: white;
+      border: 1px;
+      border-radius: 5px;
+    }
+
+
+    .message {
+      margin-bottom: 20px;
     }
 
     .message-content {
-      margin: 5px;
-      padding: 0 10px;
-      color: blue;
+      display: inline-block;
+      padding: 5px 5px;
+      background-color: #eee;
+      border: 1px;
+      border-radius: 5px;
     }
 
-    .output {
-      /*display: table;*/
-      border: 1px solid black;
-      width: 30%;
-      height: 400px;
-      position: relative;
-      float: right;
-      margin-top: -200px;
-    }
-
-
+/*     .message .chatbar-username {
+      display: none;
+    }*/
