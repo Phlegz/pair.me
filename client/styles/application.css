@@ -11,7 +11,7 @@
 
 .links {
   padding: auto;
-  position: fixed;
+  position: absolute;
 }
 
 .routes {

@@ -115,7 +115,7 @@ function history(githubId) {
   router.get('/api/profile_current', (req, res) => {
     let current_user = req.session.passport.user;
     knex
-      .select('name', 'avatar', 'email', 'github_username')
+      .select('name', 'avatar', 'email', 'github_username', 'about', 'twitter_handle')
       .from('users')
       .limit(1)
       .where({github_id: current_user})
@@ -132,7 +132,8 @@ function history(githubId) {
         avatar: req.body.avatar,
         name: req.body.name,
         email: req.body.email,
-        github_username: req.body.github_username
+        github_username: req.body.github_username,
+        about: req.body.about
       };
     knex('users')
       .where({github_id: current_user})
@@ -260,19 +261,19 @@ function history(githubId) {
         })
       })
   })
- 
+
   router.post('/api/notifications/cancel', (req, res) => {
     let currentUser = req.session.passport.user
     let currentUserId = knex.select('id').from('users').where('github_id',currentUser);
     let pendingNotificationId = knex.select('id').from('notifications').where('status','pending');
     let notificationId = knex.select('notification_id').from('notifications_users').whereIn('user_id',[currentUser,req.body.acceptingUserId]).andWhere('notification_id',pendingNotificationId);
-    
+
     // BUG: TODO make sure no-one is stuck on status pending (e.g. close the browser on sending request)
-    
+
     knex('notifications').where('id', notificationId).update({status: 'rejected'})
       .then(()=> {
         res.status(200).send('Notification request cancelled')
-      }) 
+      })
   })
 
 
