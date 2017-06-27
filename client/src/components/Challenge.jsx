@@ -70,6 +70,14 @@ class Challenge extends Component {
       this.setState({sendUpdate:true});
       this.setState({aceValue: code});
     });
+
+    socket.on('serverSubmittedCode', (code) => {
+      this.setState({result: code})
+    })
+
+    socket.on('serverConsoleCode', (code) => {
+      this.setState({console:code})
+    })
   }
 
 
@@ -104,7 +112,14 @@ class Challenge extends Component {
       let outputData = JSON.parse(response.data);
       this.setState({result: outputData.result});
       this.setState({console: outputData.console});
+
+      socket.emit('submittedCode', JSON.stringify(
+        {
+          result: this.state.result,
+          console: this.state.console
+        }))
     })
+
     .catch((error)=> {
       console.log(error);
     })
@@ -128,6 +143,8 @@ class Challenge extends Component {
                        <ul>Expected Answer => {test_result}</ul>
                        <h3>CORRECT!</h3>
                      </div>
+
+
       } else {
         showResult = <div className="resultLog">
                        <ul>Unit Test=> {this.state.questions.unit_test}</ul>
@@ -167,7 +184,7 @@ class Challenge extends Component {
         </div>
 
         <div className="showAnswer">
-          <button onClick= {this.onClick.bind(this)}> Give me answeR</button>
+          <button onClick= {this.onClick.bind(this)}> Give me answer</button>
           {this.state.showAnswer && <ChallengeAnswer answer= { this.state.questions } /> }
         </div>
 
