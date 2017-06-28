@@ -6,6 +6,7 @@ class Header extends Component {
       <div className='chat-header'>
         <span className='chat-title'>
           Chatbox
+          {/*<h4>hatting with your PAIR</h4>*/}
         </span>
       </div>
     )

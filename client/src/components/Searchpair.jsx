@@ -20,16 +20,24 @@ class Searchpair extends Component {
       challengesCompleted: null,
       pairMeModal: false,
       pair: {id:"",github_username:"",avatar:""},
-      waitModal: false
+      waitModal: false,
+      recipientModal: false,
+      intervalId: null,
+      currentUser: {github_username: "", id: ""},
+      senderUser: ""
     }
 
     // this.handleChange = this.handleChange.bind(this);
     // this.handleSubmit = this.handleSubmit.bind(this);
     this.pairMe = this.pairMe.bind(this);
+    this.timer = this.timer.bind(this);
     this.sendRequest = this.sendRequest.bind(this);
     this.cancelRequest = this.cancelRequest.bind(this);
-  }
+    // this.acceptRequest = this.acceptRequest.bind(this);
+    this.rejectRequest = this.rejectRequest.bind(this);
 
+
+}
   // handleChange(event) {
   //   this.setState({language: event.target.value});
   //   this.setState({difficulty: event.target.value});
@@ -59,8 +67,8 @@ class Searchpair extends Component {
     .then((response) => {
       // console.log(response.data);
       this.setState({pair: response.data});
-      console.log("sdasdasdasdasd");
-      console.log("pair state:", this.state.pair);
+      // console.log("sdasdasdasdasd");
+      // console.log("pair state:", this.state.pair);
     })
     .catch(error => {
       console.log(error);
@@ -87,8 +95,42 @@ class Searchpair extends Component {
     event.preventDefault();
     this.setState({ waitModal: false})
 
-    axios.post('/api/notifications/cancel', {
+    axios.post('/api/notifications/abolish', {
       acceptingUserId: this.state.pair.id
+    })
+    .then((response) => {
+    console.log(response.data);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    //DOES NOT WORK YET
+    this.setState({ recipientModal: false})
+  }
+
+  // acceptRequest(event) {
+  //   event.preventDefault();
+  //   this.setState({ waitModal: false})
+
+  //   axios.post('/api/notifications/accept', {
+  //     acceptingUserId: this.state.pair.id
+  //   })
+  //   .then((response) => {
+  //   console.log(response.data);
+  //   })
+  //   .catch(error => {
+  //     console.log(error);
+  //   });
+  //   this.setState({ recipientModal: false})
+  // }
+
+  rejectRequest(event) {
+    event.preventDefault();
+    this.setState({ waitModal: false})
+    this.setState({ recipientModal: false})
+    console.log("senderUser should be me:", this.state.senderUser)
+    axios.post('/api/notifications/abolish', {
+      // senderUserId: this.state.senderUser
     })
     .then((response) => {
     console.log(response.data);
@@ -98,19 +140,56 @@ class Searchpair extends Component {
     });
   }
 
-  // timer() {
-  //   axios.get('/api/notifications')
-  //     .then((response) => {
-  //       console.log(response.data)
-  //     })
-  // }
+  timer() {
+    axios.get('/api/notifications')
+      .then((response) => {
+        console.log(response.data);
+        let requestArr = response.data;
+        console.log("LENGTH",requestArr.length);
+        if(requestArr.length > 0) {
+          requestArr.forEach((request) => {
+
+            if (request.user_id === this.state.currentUser.id) {
+              if (request.status === 'pending') {
+
+                console.log("there's a request pending for me");
+                if (request.initiator) {   // I initiated this!
+                  this.setState({senderUser: request.user_id})
+                } else {                  // I'm the recipient!
+                  this.setState({recipientModal: true})
+                }
+
+                // console.log("There is a request.",request);
+                // if((request.initiator === false) && (request.user_id === this.state.currentUser.id)) {
+                //   console.log("Request received.");
+                //   this.setState({recipientModal: true})
+                //
+                // }
+              } else if (request.status === 'rejected') {
+                // TODO: something sane
+                this.setState({recipientModal: false})
+              }
+            }
+
+          })
+        }
+        if(requestArr.length = 0){
+          this.setState({recipientModal: false})
+        }
+      })
+  }
 
   componentWillMount() {
+    axios.get('/api/profile_current')
+    .then((response) => {
+      this.setState({currentUser: response.data})
+    })
+
     axios.get('/api/statistics')
     .then((response)=> {
       this.setState({data: response.data.rows});
       const data = this.state.data;
-      console.log(data, 'current state of data');
+      // console.log(data, 'current state of data');
       const difficultyList = [];
 
       if(data != null) {
@@ -140,19 +219,20 @@ class Searchpair extends Component {
       console.log(error);
     });
 
-    // CONTINUE after merge
-    // let intervalId = setInterval(this.timer, 2000);
+    let intervalId = setInterval(this.timer, 2000);
+    this.setState({intervalId: intervalId});
   }
 
-  // componentWillUnmount() {
-  //  // use intervalId from the state to clear the interval
-  //  clearInterval(this.state.intervalId);
-  // }
+  componentWillUnmount() {
+   // use intervalId from the state to clear the interval
+   clearInterval(this.state.intervalId);
+  }
 
   render() {
     const data = this.state.data;
     let closePairModal = () => this.setState({ pairMeModal: false});
     let closeWaitModal = () => this.setState({ waitModal: false});
+    let closeRecipientModal = () => this.setState({ recipientModal: false});
     const challengesCompleted = "1 challenge completed";
     const today = Date.now();
     const yesterday = Date.now() - 86400000;
@@ -171,32 +251,6 @@ class Searchpair extends Component {
         return dates
       });
     }
-    console.log('this is the dates array', dates)
-    console.log("DATE NOW",Date.now())
-    dates.forEach((ele, index) => {
-      console.log('ele', moment(ele).format('L'));
-      console.log(ele.slice(0,-14));
-
-
-      // console.log('yesterdate', yesterdate)
-      // console.log('yesterday', moment(yesterday).format('L'));
-
-
-    })
-
-    // for(var i = 0; i < dates.length; i++) {
-    //   if(moment(dates[i]).format('ll') === moment(yesterday).format('ll')) {
-    //     console.log(dates[i], 'dates[i]')
-
-    //     return true;
-    //   }
-    // }
-
-    // let test = moment(dates[0]).format('ll');
-    // console.log(test, 'date-DB');
-    // console.log(moment(twoDaysAgo).format('ll'), '2DayaAgo');
-    // console.log(dates, 'dates');
-
 
   return (
     <div>
@@ -335,6 +389,39 @@ class Searchpair extends Component {
           </Button>
         </Modal.Body>
       </Modal>
+
+      <Modal
+        show={this.state.recipientModal}
+        onHide={closeRecipientModal}
+        container={this}
+        aria-labelledby="contained-modal-title"
+        backdrop="static"
+        keyboard={false}
+      >
+      {/* <Modal.Header>
+        <Modal.Title>{this.state.senderUser} sent you a request.</Modal.Title>
+      </Modal.Header> */}
+      <Modal.Body>
+        <div className="wrapper">
+          <img src={this.state.pair.avatar} />
+        </div>
+        <p>Visit {this.state.pair.github_username}&#39;s <a href={"https://github.com/" + this.state.pair.github_username}> Github </a> Account</p>
+        <Button
+          bsStyle="success"
+          bsSize="large"
+          href="/challenge"
+        >
+        Accept
+        </Button>
+        <Button
+          bsStyle="danger"
+          bsSize="large"
+          onClick={(e) => this.rejectRequest(e)}
+        >
+        Reject
+        </Button>
+      </Modal.Body>
+    </Modal>
 
     </div>
   );
