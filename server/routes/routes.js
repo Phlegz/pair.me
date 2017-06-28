@@ -221,8 +221,8 @@ module.exports = (knex) => {
       .select('*')
       .from('questions')
       .then((results) => {
-        let shuffled = results.sort(() => Math.random() * 2 - 1);
-        res.json(shuffled);
+        // let shuffled = results.sort(() => Math.random() * 2 - 1);
+        res.json(results);
       })
   })
 
