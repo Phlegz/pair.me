@@ -271,8 +271,8 @@ class Challenge extends Component {
             editorProps={{$blockScrolling: Infinity}}
             tabSize={2}
             width={1750}
-            height={600}
-            fontSize={20}
+            height={450}
+            fontSize={18}
             //invoke livecode function everytime the text box changess
             onChange={ this.liveCode }
             value={this.state.aceValue}
