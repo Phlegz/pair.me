@@ -19,12 +19,12 @@ class Searchpair extends Component {
       completedAt: null,
       challengesCompleted: null,
       pairMeModal: false,
-      pair: {id:"",github_username:"",avatar:""},
+      pair: {id:null,github_username:"",avatar:""},
       waitModal: false,
       recipientModal: false,
       intervalId: null,
       currentUser: {github_username: "", id: ""},
-      senderUser: ""
+      senderUser: {id:null,github_username:"",avatar:""}
     }
 
     // this.handleChange = this.handleChange.bind(this);
@@ -94,9 +94,10 @@ class Searchpair extends Component {
   cancelRequest(event) {
     event.preventDefault();
     this.setState({ waitModal: false})
-
-    axios.post('/api/notifications/abolish', {
-      acceptingUserId: this.state.pair.id
+    this.setState({ recipientModal: false})
+      console.log("receiptor:",this.state.pair.id);
+    axios.post('/api/notifications/cancel', {
+      // acceptingUserId: this.state.pair.id
     })
     .then((response) => {
     console.log(response.data);
@@ -105,7 +106,7 @@ class Searchpair extends Component {
       console.log(error);
     });
     //DOES NOT WORK YET
-    this.setState({ recipientModal: false})
+    // this.setState({ recipientModal: false})
   }
 
   // acceptRequest(event) {
@@ -126,11 +127,8 @@ class Searchpair extends Component {
 
   rejectRequest(event) {
     event.preventDefault();
-    this.setState({ waitModal: false})
     this.setState({ recipientModal: false})
-    console.log("senderUser should be me:", this.state.senderUser)
-    axios.post('/api/notifications/abolish', {
-      // senderUserId: this.state.senderUser
+    axios.post('/api/notifications/reject', {
     })
     .then((response) => {
     console.log(response.data);
@@ -138,24 +136,44 @@ class Searchpair extends Component {
     .catch(error => {
       console.log(error);
     });
+    this.setState({ waitModal: false})
   }
 
   timer() {
     axios.get('/api/notifications')
       .then((response) => {
+
         console.log(response.data);
         let requestArr = response.data;
         console.log("LENGTH",requestArr.length);
         if(requestArr.length > 0) {
           requestArr.forEach((request) => {
-
+            console.log('RRRRRRRRRRRrequest:', request);
             if (request.user_id === this.state.currentUser.id) {
+              console.log("MMMMMMMMMMMMMMMMMMMMMMMM");
+              console.log(this.state.currentUser.id);
+              console.log(request.user_id);
               if (request.status === 'pending') {
 
                 console.log("there's a request pending for me");
                 if (request.initiator) {   // I initiated this!
-                  this.setState({senderUser: request.user_id})
-                } else {                  // I'm the recipient!
+                  this.setState({senderUser: {
+                    id: request.user_id,
+                    github_username: "hahhahahahah",
+                    avatar: request.avatar
+                    }
+                  })
+                  console.log("BBBBBOOOOOOOOOOOOOOOOOOOOO");
+                  console.log(this.state.senderUser);
+                } else {
+                  // this.setState({senderUser: {
+                  //   id: request.user_id,
+                  //   github_username: "jshdkajshdkajsd",
+                  //   avatar: request.avatar
+                  //   }
+                  // })// I'm the recipient!
+                  console.log("CCCCCCCCCCOOOOOOOO");
+                  console.log(this.state.senderUser);
                   this.setState({recipientModal: true})
                 }
 
@@ -166,15 +184,38 @@ class Searchpair extends Component {
                 //
                 // }
               } else if (request.status === 'rejected') {
+                console.log("HEEEEEEEEEEEREEEEEEEEEEE");
                 // TODO: something sane
-                this.setState({recipientModal: false})
+                if (request.initiator) {   // I initiated this!
+                  this.setState({waitModal: false})
+                  this.setState({recipientModal: false})
+
+                } else {                  // I'm the recipient!
+                console.log("hereeee");
+                  this.setState({recipientModal: false})
+                  this.setState({waitModal: false})
+
+                }
+                // this.setState({
+                //   recipientModal: false,
+                //   waitModal: false
+                // })
+                axios.post('/api/notifications/abolish', {});
               }
+            }
+            if(request.initiator == true) {
+              this.setState({senderUser: {
+                id: request.user_id,
+                github_username: request.github_username,
+                avatar: request.avatar
+                }
+              })
             }
 
           })
         }
-        if(requestArr.length = 0){
-          this.setState({recipientModal: false})
+        if(requestArr.length == 0){
+          this.setState({recipientModal: false, waitModal:false})
         }
       })
   }
@@ -219,7 +260,7 @@ class Searchpair extends Component {
       console.log(error);
     });
 
-    let intervalId = setInterval(this.timer, 2000);
+    let intervalId = setInterval(this.timer, 3000);
     this.setState({intervalId: intervalId});
   }
 
@@ -433,13 +474,13 @@ class Searchpair extends Component {
         keyboard={false}
       >
       {/* <Modal.Header>
-        <Modal.Title>{this.state.senderUser} sent you a request.</Modal.Title>
+        <Modal.Title>{this.state.senderUser.github_username} sent you a request.</Modal.Title>
       </Modal.Header> */}
       <Modal.Body>
         <div className="wrapper">
-          <img src={this.state.pair.avatar} />
+          <img src={this.state.senderUser.avatar} />
         </div>
-        <p>Visit {this.state.pair.github_username}&#39;s <a href={"https://github.com/" + this.state.pair.github_username}> Github </a> Account</p>
+        <p>Visit {this.state.senderUser.github_username}&#39;s <a href={"https://github.com/" + this.state.senderUser.github_username}> Github </a> Account</p>
         <Button
           bsStyle="success"
           bsSize="large"
