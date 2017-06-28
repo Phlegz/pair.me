@@ -36,6 +36,17 @@ knex.raw('TRUNCATE TABLE questions CASCADE')
        difficulty: 3
       },
       {
+       question: "Write a JavaScript function to compute the value of b^n where n is the exponent and b is the bases. Accept b and n from the user and display the result.",
+       example: "\/*\r\n\r\nExample:\r\nexp(b,n);\r\n\r\nExpected Output: \r\n=> 8\r\n\r\n*\/",
+       placeholder: "function exp(b,n) {\r\n  \/* Put your code here *\/\r\n\r\n}",
+       answer: "function exp(b,n) {\r\n  let ans = 1;\r\n  for (let i = 1; i <= n; i++) {\r\n    ans = b * ans;        \r\n  }\r\n  return ans;\r\n}",
+       unit_test: "exp(2,3);",
+       test_result: "8",
+       language_id: languagesIds[0],
+       title: "Compute the value of bn where n is the exponent and b is the bases",
+       difficulty: 3
+      },
+      {
        question: "Write a JavaScript function that accepts a number as a parameter and check the number is prime or not.\n\nNote : A prime number (or a prime) is a natural number greater than 1 that has no positive divisors other than 1 and itself.",
        example: "\/*\r\n\r\nExample:\r\ntest_prime(37);\r\n\r\nExpected Output: \r\n=> true\r\n\r\n*\/",
        placeholder: "function test_prime(n) {\r\n  \/* Put your code here *\/\r\n\r\n}",
@@ -45,8 +56,19 @@ knex.raw('TRUNCATE TABLE questions CASCADE')
        language_id: languagesIds[0],
        title: "Check a number is prime or not",
        difficulty: 3
+      },
+      {
+       question: "Write a JavaScript function that accepts a string as a parameter and counts the number of vowels within the string.\n\nNote : As the letter 'y' can be regarded as both a vowel and a consonant, we do not count 'y' as vowel here.",
+       example: "\/*\r\n\r\nExample:\r\nvowel_count(str);\r\n\r\nExpected Output: \r\n=> 5\r\n\r\n*\/",
+       placeholder: "function vowel_count(str) {\r\n  \/* Put your code here *\/\r\n\r\n}",
+       answer: "function vowel_count(str) {\r\n  let vowelList = \'aeiouAEIOU\';\r\n  let vowelCount = 0;\r\n  for(let x = 0; x < str.length ; x++) {\r\n    if (vowelList.indexOf(str[x]) !== -1) {\r\n      vowelCount += 1;\r\n    }\r\n  }\r\n  return vowelCount;\r\n}",
+       unit_test: "vowel_count('The quick brown fox');",
+       test_result: "5",
+       language_id: languagesIds[0],
+       title: "Counts the number of vowels within a string",
+       difficulty: 3
       }
-    ]);
+    ])
   })
   .then(() => {
     knex.destroy();
