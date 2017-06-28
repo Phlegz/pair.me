@@ -18,7 +18,12 @@ body {
     .challenge-question .title {
       margin: 10px 0 0 0;
       font-weight: bold;
+      margin-bottom: 15px;
     }
+
+      h5 {
+        margin-top: 13px;
+      }
 
     .output-header {
       display: flex;

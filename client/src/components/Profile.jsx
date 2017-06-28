@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { PageHeader, Jumbotron, Button, Modal, FormGroup, Form, Col, ControlLabel, FormControl } from 'react-bootstrap';
+import { PageHeader, Jumbotron, Button, Modal, FormGroup, Form, Col, ControlLabel, FormControl, Image } from 'react-bootstrap';
 
 
 class Profile extends Component {
@@ -81,14 +81,20 @@ class Profile extends Component {
           Profile
         </PageHeader>
 
-        <Jumbotron>
+        <Jumbotron className='jumbotron-profile'>
         </Jumbotron>
+
+
         <div className="profile-info">
           <div className="wrapper">
-            <img src={profile.avatar} />
+            <img className='profile-pic' src={profile.avatar} />
           </div>
-          <h2> {profile.name} </h2>
+
+        <div className='profile-name'>Derrell Wong</div>
+       {/*}
+
         </div>
+
 
         <div className="info">
           <Jumbotron>
@@ -111,6 +117,7 @@ class Profile extends Component {
         >
         Edit Profile
         </Button>
+      */}
 
         <Modal
           show={this.state.show}
