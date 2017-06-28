@@ -10,7 +10,6 @@ class ChallengeAnswer extends Component {
   render() {
     return (
       <span className="challenge-answer">
-        Answer
         <AceEditor
           name="answerKey"
           mode="javascript"
