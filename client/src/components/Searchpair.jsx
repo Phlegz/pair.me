@@ -24,7 +24,8 @@ class Searchpair extends Component {
       recipientModal: false,
       intervalId: null,
       currentUser: {github_username: "", id: ""},
-      senderUser: {id:null,github_username:"",avatar:""}
+      senderUser: {id:null,github_username:"",avatar:""},
+      onlineFriends: this.props.onlineFriends
     }
 
     // this.handleChange = this.handleChange.bind(this);
@@ -35,26 +36,7 @@ class Searchpair extends Component {
     this.cancelRequest = this.cancelRequest.bind(this);
     // this.acceptRequest = this.acceptRequest.bind(this);
     this.rejectRequest = this.rejectRequest.bind(this);
-
-
-}
-  // handleChange(event) {
-  //   this.setState({language: event.target.value});
-  //   this.setState({difficulty: event.target.value});
-  // }
-
-  // handleSubmit(event) {
-  //   alert('You picked ' + this.state.language + ' level ' + this.state.difficulty + '!');
-  //   event.preventDefault();
-  //   var self = this;
-  //   axios.post('/dashboard')
-  //   .then(function(response) {
-  //     // console.log(response.data, 'ADSFJK;L');
-  //   })
-  //   .catch(function(error) {
-  //     console.log(error);
-  //   });
-  // }
+  }
 
   pairMe(event) {
     event.preventDefault();
@@ -62,17 +44,16 @@ class Searchpair extends Component {
     let postData = {
       language: this.language.value,
       difficulty: this.difficulty.value,
+      friend: this.friend.value
     };
     axios.post('/api/dashboard', postData)
     .then((response) => {
-      // console.log(response.data);
       this.setState({pair: response.data});
-      // console.log("sdasdasdasdasd");
-      // console.log("pair state:", this.state.pair);
+
     })
     .catch(error => {
       console.log(error);
-    });
+    })
   }
 
   sendRequest(event) {
@@ -270,6 +251,7 @@ class Searchpair extends Component {
   }
 
   render() {
+    const onlineFriends = this.state.onlineFriends;
     const data = this.state.data;
     let closePairModal = () => this.setState({ pairMeModal: false});
     let closeWaitModal = () => this.setState({ waitModal: false});
@@ -282,49 +264,22 @@ class Searchpair extends Component {
     const fourDaysAgo = Date.now() - (86400000*4);
     const dates = [];
 
-    // const today1 = moment(today)._i;
-
-    // const numberOfChallenges = 0;
-
     if (data != null) {
       data.forEach((completed_at) => {
         dates.push(data[0].completed_at);
         return dates
       });
     }
-    // console.log('this is the dates array', dates)
-    // console.log("DATE NOW",Date.now())
-    dates.forEach((ele, index) => {
-      // console.log('ele', moment(ele).format('L'));
-      // console.log(ele.slice(0,-14));
 
-
-      // console.log('yesterdate', yesterdate)
-      // console.log('yesterday', moment(yesterday).format('L'));
-
-
-    })
-
-    // for(var i = 0; i < dates.length; i++) {
-    //   if(moment(dates[i]).format('ll') === moment(yesterday).format('ll')) {
-    //     console.log(dates[i], 'dates[i]')
-
-    //     return true;
-    //   }
-    // }
-
-    // let test = moment(dates[0]).format('ll');
-    // console.log(test, 'date-DB');
-    // console.log(moment(twoDaysAgo).format('ll'), '2DayaAgo');
-    // console.log(dates, 'dates');
-
-
-
-
-
+    const pairOnlineFriend = (
+      onlineFriends.map(function(friend) {
+        return <option value={friend}>{friend}</option>
+      })
+    );
 
   return (
-    <div>
+    <div className="outerContainer">
+      <div className="middleContainer">
       <PageHeader>
         Search for a Pair
       </PageHeader>
@@ -364,25 +319,39 @@ class Searchpair extends Component {
             </FormControl>
           </Col>
         </FormGroup>
-        <input type='button' value='pair me' onClick={(e) => this.pairMe(e)}/>
-
+        <FormGroup controlId="formControlsSelect">
+          <Col componentClass={ControlLabel} sm={4}>
+            Select a friend
+          </Col>
+          <br />
+          <Col sm={10}>
+            <FormControl componentClass="select" placeholder="select" inputRef={ (input) => this.friend = input}>
+              <option value="random">I don't have a friend, give me someone random</option>
+              {pairOnlineFriend}
+            </FormControl>
+          </Col>
+        </FormGroup>
+        <Button className="pairMeButton" bsStyle="primary" onClick={(e) => this.pairMe(e)}>PAIR ME!</Button>
       </form>
+      </div>
 
-      <div className="progressBar">
-        <h2>Progress</h2>
-        <p>Your progress on completed challenges over time</p>
-        <Col sm={5}>
-          <Label> <Moment calendar>{today}</Moment> </Label>
-          <ProgressBar min={0} max={5} now={1} />
-          <Label> <Moment format="LL">{yesterday}</Moment> </Label>
-          <ProgressBar bsStyle="success" now={0} label={`${challengesCompleted}%`}/>
-          <Label> <Moment format="LL">{twoDaysAgo}</Moment> </Label>
-          <ProgressBar bsStyle="info" now={20} />
-          <Label> <Moment format="LL">{threeDaysAgo}</Moment> </Label>
-          <ProgressBar bsStyle="warning" now={60} />
-          <Label> <Moment format="LL">{fourDaysAgo}</Moment> </Label>
-          <ProgressBar bsStyle="danger" now={100} />
-        </Col>
+      <div className="statistics">
+        <div className="progressBar">
+          <h2>Progress</h2>
+          <p>Your progress on completed challenges over time</p>
+          <Col className="innerProgressBar" sm={5}>
+            <Label> <Moment calendar>{today}</Moment> </Label>
+            <ProgressBar min={0} max={5} now={1} />
+            <Label> <Moment format="LL">{yesterday}</Moment> </Label>
+            <ProgressBar bsStyle="success" now={0} label={`${challengesCompleted}%`}/>
+            <Label> <Moment format="LL">{twoDaysAgo}</Moment> </Label>
+            <ProgressBar bsStyle="info" now={20} />
+            <Label> <Moment format="LL">{threeDaysAgo}</Moment> </Label>
+            <ProgressBar bsStyle="warning" now={60} />
+            <Label> <Moment format="LL">{fourDaysAgo}</Moment> </Label>
+            <ProgressBar bsStyle="danger" now={100} />
+          </Col>
+        </div>
         <div className="pieChart">
           <PieChart
             sectorStrokeWidth={2}

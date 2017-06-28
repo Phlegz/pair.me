@@ -45,6 +45,26 @@ module.exports = (knex) => {
       `, [githubId]);
   }
 
+  function friendshipList(githubId) {
+    return knex.raw(`
+      SELECT
+        other.id,
+        other.avatar,
+        other.github_username,
+        other.online
+      FROM
+        friendships_users as fsu_other
+        JOIN friendships on friendships.id = fsu_other.friendship_id
+        JOIN friendships_users as fsu_me on fsu_me.friendship_id = friendships.id
+        JOIN users as me on me.id = fsu_me.user_id
+        JOIN users as other on other.id = fsu_other.user_id
+      WHERE
+        fsu_other.user_id <> fsu_me.user_id
+        and friendships.status = 'accepted'
+        and me.github_id = ?
+      `, [githubId]);
+  }
+
   function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
       res.redirect('/')
@@ -88,29 +108,31 @@ module.exports = (knex) => {
     let pairResult = {
         difficulty: req.body.difficulty,
         language: req.body.language,
+        friend: req.body.friend
       };
     let currentUser = req.session.passport.user
-    knex.raw('select * from users where online=true and github_id != ?',[currentUser])
-    .then((results) => {
-      let shuffled = results.rows.sort(() => Math.random() * 2 - 1);
-      res.json(shuffled[0]);
-    })
-
+    console.log(pairResult, "PAIRRESULT");
+    if(pairResult.friend === 'random') {
+      knex.raw('select * from users where online = true and github_id != ?',[currentUser])
+      .then((results) => {
+        let shuffled = results.rows.sort(() => Math.random() * 2 - 1);
+        res.json(shuffled[0]);
+      })
+    } else {
+      knex.raw('select * from users where github_username = ?', [pairResult.friend])
+      .then((results) => {
+        res.json(results);
+      })
+    }
   })
 
-//   router.get('/api/dashboard', (req, res) => {
-//     let current_user = req.session.passport.user;
-//     knex
-//       .select('difficulty')
-//       .from('questions')
-//       .where('difficulty', '>', 0)
-//       .then((results) => {
-//         return res.json(results);
-//         console.log(results, 'RESULLTSS');
-//       })
-//     return res.render('dashboard');
-//   })
-//
+  router.get('/api/friends', (req,res) => {
+    let current_user = req.session.passport.user;
+    friendshipList(current_user)
+    .then((result) => {
+      res.json(result.rows);
+    })
+  });
 
   router.get('/api/profile_current', (req, res) => {
     let current_user = req.session.passport.user;
@@ -124,7 +146,6 @@ module.exports = (knex) => {
         res.json(results[0]);
       })
   });
-
 
   router.put('/api/profile', (req, res) => {
     let current_user = req.session.passport.user;
@@ -270,6 +291,7 @@ module.exports = (knex) => {
   })
 
   router.post('/api/notifications/cancel', (req, res) => {
+
     //TODO: if you send a request to someone, and the request is pending or accepted their name sould not show up in the searc for other ppl
     const currentUser = req.session.passport.user
     // // BUG: TODO make sure no-one is stuck on status pending (e.g. close the browser on sending request)

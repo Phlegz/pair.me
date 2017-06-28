@@ -76,15 +76,13 @@ class Profile extends Component {
     //TO DO: input should only be emails
     //TO DO: Fix github url
     return (
-      <div>
+      <div className="container">
         <PageHeader>
           Profile
         </PageHeader>
 
         <Jumbotron className='jumbotron-profile'>
         </Jumbotron>
-
-
         <div className="profile-info">
           <div className="wrapper">
             <img className='profile-pic' src={profile.avatar} />
@@ -96,6 +94,11 @@ class Profile extends Component {
         </div>
 
 
+=======
+          <h2> {profile.name} </h2>
+        </div>
+
+>>>>>>> feature/friends
         <div className="info">
           <Jumbotron>
           <p> <i className="fa fa-github" aria-hidden="true"></i>: {profile.github_username} </p>

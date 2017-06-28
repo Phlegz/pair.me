@@ -15,6 +15,7 @@ import { Image, Navbar, Nav, NavItem, MenuItem, NavDropdown } from 'react-bootst
 
 
 
+
 const io = require('socket.io-client');
 const socket = io();
 
@@ -78,7 +79,6 @@ class Challenge extends Component {
     })
   }
   componentDidMount() {
-
     console.log('successfully mounted');
      axios.get('/api/profile_current')
      .then((response)=> {
@@ -308,8 +308,6 @@ class Challenge extends Component {
             </div>
         </div>
       </div>
-
-
     );
   }
 }

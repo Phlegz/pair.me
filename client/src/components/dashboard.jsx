@@ -13,11 +13,6 @@ import { Image, Navbar, Nav, NavItem, MenuItem, NavDropdown, Button } from 'reac
 
 const routes = [
   {
-    path: '/dashboard',
-    exact: true,
-    main: () => (<Searchpair />)
-  },
-  {
     path: '/profiles/:username',
     main: Profile
   },
@@ -41,6 +36,7 @@ function readCookie(name) {
 }
 
 const myGithubUsername = readCookie('unsafe_user_name');
+console.log("github username", myGithubUsername);
 
 class Dashboard extends React.Component {
 
@@ -52,24 +48,31 @@ class Dashboard extends React.Component {
         github_username: "",
         avatar: '',
         online: ''
-      }
+      },
+      onlineFriends: []
     }
   }
 
+
   componentDidMount() {
-    console.log('sucess mount')
+    console.log('dashboard sucess mount')
 
     axios.get('/api/profile_current')
     .then((response) => {
-      console.log('blabla', response.data.avatar);
       this.setState({ profile: response.data.avatar})
     })
 
     axios.get('/api/friends')
     .then((response) => {
-      console.log('response from FRIENDS', response)
       this.setState({friends: response.data})
-      console.log("MYFRIENDS",this.state.friends);
+      let friends = this.state.friends
+      let onlineFriends = [];
+      for (let i = 0; i < friends.length; i++) {
+        if(friends[i].online == true) {
+          onlineFriends.push(friends[i].github_username)
+        }
+      }
+      this.setState({onlineFriends: onlineFriends});
     })
   }
 
@@ -79,8 +82,6 @@ class Dashboard extends React.Component {
     let friends = this.state.friends;
     let friendsArr = [];
 
-
-
     for (let i = 0; i < friends.length; i++) {
       friendsArr.push(
       <div className="oneFriend">
@@ -89,11 +90,18 @@ class Dashboard extends React.Component {
             ? <i className="fa fa-circle" aria-hidden="true"></i>
             : <i className="fa fa-circle offline" aria-hidden="true"></i>
           }
-        <Image circle className="friendsPic" src={friends[i].avatar} />
+        <Link to={"/profiles/" + friends[i].github_username}><Image circle className="friendsPic" src={friends[i].avatar} /></Link>
         <p className="friendsName">{friends[i].github_username} </p>
       </div>
       )
+
     }
+    const searchPairRoute = (<Route
+                key={Math.random()}
+                path={'/dashboard'}
+                exact={true}
+                component={() => (<Searchpair onlineFriends={this.state.onlineFriends}/>)}
+              />);
     const navBar = (
          <Navbar inverse collapseOnSelect>
           <Navbar.Header>
@@ -134,6 +142,7 @@ class Dashboard extends React.Component {
             </div>
 
           <div className="routes">
+          {searchPairRoute}
             {routes.map((route, index) => (
               // Render more <Route>s with the same paths as
               // above, but different components this time.
@@ -144,6 +153,7 @@ class Dashboard extends React.Component {
                 component={route.main}
               />
             ))}
+
           </div>
         </div>
       </div>
