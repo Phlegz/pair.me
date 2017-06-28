@@ -22,21 +22,22 @@ class Searchpair extends Component {
       pair: {id:null,github_username:"",avatar:""},
       waitModal: false,
       recipientModal: false,
+      rejectModal: false,
+      acceptModal: false,
       intervalId: null,
       currentUser: {github_username: "", id: ""},
-      senderUser: {id:null,github_username:"",avatar:""},
+      senderUser: {id: null,github_username: "",avatar: ""},
+      challengeType: {language: 'Javascript', difficulty: '3'},
       onlineFriends: this.props.onlineFriends
     }
 
-    // this.handleChange = this.handleChange.bind(this);
-    // this.handleSubmit = this.handleSubmit.bind(this);
     this.pairMe = this.pairMe.bind(this);
     this.timer = this.timer.bind(this);
     this.sendRequest = this.sendRequest.bind(this);
     this.cancelRequest = this.cancelRequest.bind(this);
-    // this.acceptRequest = this.acceptRequest.bind(this);
+    this.acceptRequest = this.acceptRequest.bind(this);
     this.rejectRequest = this.rejectRequest.bind(this);
-  }
+}
 
   pairMe(event) {
     event.preventDefault();
@@ -46,14 +47,16 @@ class Searchpair extends Component {
       difficulty: this.difficulty.value,
       friend: this.friend.value
     };
+    this.setState({challengeType: postData})
+    console.log("LANGUAGE,DIFFICULTY,",this.state.challengeType)
     axios.post('/api/dashboard', postData)
     .then((response) => {
       this.setState({pair: response.data});
-
+      // console.log("PAAAAAIIIIIRRRRR", this.state.pair)
     })
     .catch(error => {
       console.log(error);
-    })
+    });
   }
 
   sendRequest(event) {
@@ -86,25 +89,21 @@ class Searchpair extends Component {
     .catch(error => {
       console.log(error);
     });
-    //DOES NOT WORK YET
-    // this.setState({ recipientModal: false})
   }
 
-  // acceptRequest(event) {
-  //   event.preventDefault();
-  //   this.setState({ waitModal: false})
+  acceptRequest(event) {
+    // event.preventDefault();
+    this.setState({ recipientModal: false})
+    axios.post('/api/notifications/accept', {
+    })
+    .then((response) => {
+    console.log("ACCEPTED EVENT,",response.data);
+    })
+    .catch(error => {
+      console.log(error);
+    });
 
-  //   axios.post('/api/notifications/accept', {
-  //     acceptingUserId: this.state.pair.id
-  //   })
-  //   .then((response) => {
-  //   console.log(response.data);
-  //   })
-  //   .catch(error => {
-  //     console.log(error);
-  //   });
-  //   this.setState({ recipientModal: false})
-  // }
+  }
 
   rejectRequest(event) {
     event.preventDefault();
@@ -131,7 +130,6 @@ class Searchpair extends Component {
           requestArr.forEach((request) => {
             console.log('RRRRRRRRRRRrequest:', request);
             if (request.user_id === this.state.currentUser.id) {
-              console.log("MMMMMMMMMMMMMMMMMMMMMMMM");
               console.log(this.state.currentUser.id);
               console.log(request.user_id);
               if (request.status === 'pending') {
@@ -140,47 +138,34 @@ class Searchpair extends Component {
                 if (request.initiator) {   // I initiated this!
                   this.setState({senderUser: {
                     id: request.user_id,
-                    github_username: "hahhahahahah",
+                    github_username: request.github_username,
                     avatar: request.avatar
                     }
                   })
-                  console.log("BBBBBOOOOOOOOOOOOOOOOOOOOO");
-                  console.log(this.state.senderUser);
                 } else {
-                  // this.setState({senderUser: {
-                  //   id: request.user_id,
-                  //   github_username: "jshdkajshdkajsd",
-                  //   avatar: request.avatar
-                  //   }
-                  // })// I'm the recipient!
-                  console.log("CCCCCCCCCCOOOOOOOO");
-                  console.log(this.state.senderUser);
                   this.setState({recipientModal: true})
                 }
-
-                // console.log("There is a request.",request);
-                // if((request.initiator === false) && (request.user_id === this.state.currentUser.id)) {
-                //   console.log("Request received.");
-                //   this.setState({recipientModal: true})
-                //
-                // }
               } else if (request.status === 'rejected') {
-                console.log("HEEEEEEEEEEEREEEEEEEEEEE");
                 // TODO: something sane
                 if (request.initiator) {   // I initiated this!
                   this.setState({waitModal: false})
                   this.setState({recipientModal: false})
-
+                  // this.setState({rejectModal: true})
                 } else {                  // I'm the recipient!
-                console.log("hereeee");
                   this.setState({recipientModal: false})
                   this.setState({waitModal: false})
-
                 }
-                // this.setState({
-                //   recipientModal: false,
-                //   waitModal: false
-                // })
+                axios.post('/api/notifications/abolish', {});
+              } else if (request.status === 'accepted') {
+                // TODO: something sane
+                if (request.initiator) {   // I initiated this!
+                  this.setState({waitModal: false})
+                  this.setState({recipientModal: false})
+                  this.setState({acceptModal: true})
+                } else {                  // I'm the recipient!
+                  this.setState({recipientModal: false})
+                  this.setState({waitModal: false})
+                }
                 axios.post('/api/notifications/abolish', {});
               }
             }
@@ -192,7 +177,6 @@ class Searchpair extends Component {
                 }
               })
             }
-
           })
         }
         if(requestArr.length == 0){
@@ -256,6 +240,8 @@ class Searchpair extends Component {
     let closePairModal = () => this.setState({ pairMeModal: false});
     let closeWaitModal = () => this.setState({ waitModal: false});
     let closeRecipientModal = () => this.setState({ recipientModal: false});
+    let closeRejectModal = () => this.setState({ rejectModal: false});
+    let closeAcceptModal = () => this.setState({ acceptModal: false});
     const challengesCompleted = "1 challenge completed";
     const today = Date.now();
     const yesterday = Date.now() - 86400000;
@@ -264,19 +250,21 @@ class Searchpair extends Component {
     const fourDaysAgo = Date.now() - (86400000*4);
     const dates = [];
 
+    // const today1 = moment(today)._i;
+
+    // const numberOfChallenges = 0;
+
     if (data != null) {
       data.forEach((completed_at) => {
         dates.push(data[0].completed_at);
         return dates
       });
     }
-
     const pairOnlineFriend = (
       onlineFriends.map(function(friend) {
         return <option value={friend}>{friend}</option>
       })
     );
-
   return (
     <div className="outerContainer">
       <div className="middleContainer">
@@ -319,7 +307,7 @@ class Searchpair extends Component {
             </FormControl>
           </Col>
         </FormGroup>
-        <FormGroup controlId="formControlsSelect">
+        	        <FormGroup controlId="formControlsSelect">
           <Col componentClass={ControlLabel} sm={4}>
             Select a friend
           </Col>
@@ -332,26 +320,25 @@ class Searchpair extends Component {
           </Col>
         </FormGroup>
         <Button className="pairMeButton" bsStyle="primary" onClick={(e) => this.pairMe(e)}>PAIR ME!</Button>
-      </form>
-      </div>
 
-      <div className="statistics">
-        <div className="progressBar">
-          <h2>Progress</h2>
-          <p>Your progress on completed challenges over time</p>
-          <Col className="innerProgressBar" sm={5}>
-            <Label> <Moment calendar>{today}</Moment> </Label>
-            <ProgressBar min={0} max={5} now={1} />
-            <Label> <Moment format="LL">{yesterday}</Moment> </Label>
-            <ProgressBar bsStyle="success" now={0} label={`${challengesCompleted}%`}/>
-            <Label> <Moment format="LL">{twoDaysAgo}</Moment> </Label>
-            <ProgressBar bsStyle="info" now={20} />
-            <Label> <Moment format="LL">{threeDaysAgo}</Moment> </Label>
-            <ProgressBar bsStyle="warning" now={60} />
-            <Label> <Moment format="LL">{fourDaysAgo}</Moment> </Label>
-            <ProgressBar bsStyle="danger" now={100} />
-          </Col>
-        </div>
+      </form>
+
+      <div className="progressBar">
+        <h2>Progress</h2>
+        <p>Your progress on completed challenges over time</p>
+        <Col className="innerProgressBar" sm={5}>
+          <Label> <Moment calendar>{today}</Moment> </Label>
+          <ProgressBar min={0} max={5} now={1} />
+          <Label> <Moment format="LL">{yesterday}</Moment> </Label>
+          <ProgressBar bsStyle="success" now={0} label={`${challengesCompleted}%`}/>
+          <Label> <Moment format="LL">{twoDaysAgo}</Moment> </Label>
+          <ProgressBar bsStyle="info" now={20} />
+          <Label> <Moment format="LL">{threeDaysAgo}</Moment> </Label>
+          <ProgressBar bsStyle="warning" now={60} />
+          <Label> <Moment format="LL">{fourDaysAgo}</Moment> </Label>
+          <ProgressBar bsStyle="danger" now={100} />
+        </Col>
+         </div>
         <div className="pieChart">
           <PieChart
             sectorStrokeWidth={2}
@@ -384,6 +371,10 @@ class Searchpair extends Component {
           <Modal.Title>You have been matched with {this.state.pair.github_username}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <div>
+            <h4>Language: {this.state.challengeType.language}</h4><br />
+            <h4>Difficulty: {this.state.challengeType.difficulty}</h4>
+          </div>
           <div className="wrapper">
             <img src={this.state.pair.avatar} />
           </div>
@@ -417,6 +408,10 @@ class Searchpair extends Component {
           <Modal.Header>
             <Modal.Title>Waiting for {this.state.pair.github_username}&#39;s Response</Modal.Title>
           </Modal.Header>
+          <div>
+            <h4>Language: {this.state.challengeType.language}</h4><br />
+            <h4>Difficulty: {this.state.challengeType.difficulty}</h4>
+          </div>
           <div className="wrapper">
             <img src={this.state.pair.avatar} />
           </div>
@@ -438,10 +433,14 @@ class Searchpair extends Component {
         backdrop="static"
         keyboard={false}
       >
-      {/* <Modal.Header>
+      <Modal.Header>
         <Modal.Title>{this.state.senderUser.github_username} sent you a request.</Modal.Title>
-      </Modal.Header> */}
+      </Modal.Header>
       <Modal.Body>
+        <div>
+          <h4>Language: {this.state.challengeType.language}</h4><br />
+          <h4>Difficulty: {this.state.challengeType.difficulty}</h4>
+        </div>
         <div className="wrapper">
           <img src={this.state.senderUser.avatar} />
         </div>
@@ -449,7 +448,9 @@ class Searchpair extends Component {
         <Button
           bsStyle="success"
           bsSize="large"
+          onClick={(e) => this.acceptRequest(e)}
           href="/challenge"
+
         >
         Accept
         </Button>
@@ -462,6 +463,64 @@ class Searchpair extends Component {
         </Button>
       </Modal.Body>
     </Modal>
+
+    <Modal
+        show={this.state.rejectModal}
+        onHide={closeRejectModal}
+        container={this}
+        aria-labelledby="contained-modal-title"
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Body>
+          <Modal.Header>
+            <Modal.Title>{this.state.pair.github_username} Rejected your request</Modal.Title>
+          </Modal.Header>
+          <div>
+            <h4>Language: {this.state.challengeType.language}</h4><br />
+            <h4>Difficulty: {this.state.challengeType.difficulty}</h4>
+          </div>
+          <div className="wrapper">
+            <img src={this.state.pair.avatar} />
+          </div>
+          <Button
+            bsStyle="info"
+            bsSize="large"
+            onClick={closeRejectModal}
+          >
+          Close
+          </Button>
+        </Modal.Body>
+      </Modal>
+
+      <Modal
+        show={this.state.acceptModal}
+        onHide={closeAcceptModal}
+        container={this}
+        aria-labelledby="contained-modal-title"
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Body>
+          <Modal.Header>
+            <Modal.Title>{this.state.pair.github_username} Accepted your request</Modal.Title>
+          </Modal.Header>
+          <div>
+            <h4>Language: {this.state.challengeType.language}</h4><br />
+            <h4>Difficulty: {this.state.challengeType.difficulty}</h4>
+          </div>
+          <div className="wrapper">
+            <img src={this.state.pair.avatar} />
+          </div>
+          <Button
+            bsStyle="success"
+            bsSize="large"
+            href="/challenge"
+          >
+          Start Challenge
+          </Button>
+        </Modal.Body>
+      </Modal>
 
     </div>
   );
