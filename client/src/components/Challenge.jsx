@@ -11,7 +11,12 @@ import ChatBox from './ChatBox.jsx';
 import ChallengeQuestions from './ChallengeQuestions.jsx'
 import ChallengeAnswer from './ChallengeAnswer.jsx'
 
-// import { Image, Navbar, Nav, NavItem, MenuItem, NavDropdown, Button } from 'react-bootstrap';
+
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from 'react-router-dom'
 
 const io = require('socket.io-client');
 const socket = io();
@@ -51,11 +56,14 @@ class Challenge extends Component {
       },
       sendUpdate: true,
       showResultModal: true,
-      qCount: 0
+      qCount: 0,
+      showRedirectModal: false,
+      redirect: false
     }
     this.socket = io.connect();
     this.liveCode = this.liveCode.bind(this);
     this.nextQuestion = this.nextQuestion.bind(this);
+    this.log = this.log.bind(this);
   }
 
   componentWillMount() {
@@ -110,6 +118,14 @@ class Challenge extends Component {
     this.setState({ showAnswer: !this.state.showAnswer })
   }
 
+  onRedirect(e) {
+    // e.preventDefault();
+    this.setState({
+      showRedirectModal: !this.state.showRedirectModal,
+    })
+
+  }
+
   //function to track changes and send to server for broadcast
   liveCode() {
     // console.log('calling function');
@@ -147,6 +163,11 @@ class Challenge extends Component {
       console.log(error);
     })
   }
+
+  log(event){
+    this.setState({ redirect: true })
+  }
+
   nextQuestion(event){
     let i = this.state.qCount;
     i += 1;
@@ -171,6 +192,7 @@ class Challenge extends Component {
     })
   }
   render() {
+    const { redirect } = this.state;
     const self = this;
     let profile = this.state.profile;
 
@@ -179,7 +201,7 @@ class Challenge extends Component {
           <Navbar.Header>
             <Image className="logo" src={require('../../styles/img/computer.png')}/>
             <Navbar.Brand>
-              <a className="brand" href="#">Pair Me</a>
+              <a className="brand" onClick={(e) => this.onRedirect(e)} >Pair Me</a>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
@@ -196,7 +218,11 @@ class Challenge extends Component {
       </Navbar>
       );
 
-    let closeResultModal = () => this.setState({ showResultModal: false});
+    let closeResultModal = () => this.setState({
+      showResultModal: false,
+      showRedirectModal: false
+      });
+
     let console = this.state.console;
     let consoleArr = [];
     for (let i = 0; i < console.length; i++) {
@@ -306,8 +332,40 @@ class Challenge extends Component {
             </div>
         </div>
         {showResultModal}
+
+          <Modal show={this.state.showRedirectModal}
+
+              container={this}
+              aria-labelledby="contained-modal-title"
+              backdrop="static"
+              keyboard={false}
+            >
+            <Modal.Header closeButton>
+              <Modal.Title>Confirm close</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+               <Button
+                bsStyle="info"
+                bsSize="large"
+                href="/dashboard"
+              >
+              Confirm
+              </Button>
+
+              <Button
+                bsStyle="info"
+                bsSize="large"
+                onClick={closeResultModal}
+              >
+              Close
+              </Button>
+            </Modal.Body>
+          </Modal>
+
+
       </div>
     );
   }
 }
 export default Challenge;
+
