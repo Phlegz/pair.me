@@ -17,15 +17,12 @@
   width: 50%;
   padding: 10px;
   text-align: center;
+  float: left;
 }
 
 .edit-profile {
   float: right;
   margin: 60px;
-}
-
-.profile-info {
-  float: left;
 }
 
 .info {

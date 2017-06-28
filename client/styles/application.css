@@ -1,19 +1,36 @@
+body h1 {
+  color: #777;
+}
+
 .outer-sidebar {
   display: flex;
 }
 
 .sidebar {
   padding: 3em;
-  width: 20%;
+  width: 16%;
   background: #eee;
   height: auto;
-  margin-top: -2em;
+  margin-top: 0em;
+  margin-left: 14em;
+  margin-bottom: 11em;
 }
 
 .links {
   padding: auto;
   position: absolute;
-  margin-left: -4em;
+  margin-left: -6em;
+  margin-top: -3em;
+}
+
+a:focus {
+  color: #777;
+}
+
+a:hover {
+  background-color: #ddd;
+  color: #333;
+  text-decoration: none;
 }
 
 .routes {
@@ -82,14 +99,26 @@ li.sideLinks {
 }
 
 .middleContainer {
-  width: 70%;
+  width: 84%;
   margin: auto;
+  background-color: #eee;
+  padding: 116px;
+  margin-top: -132px;
+  margin-left: 12px;
+}
+
+.form-group {
+  margin-bottom: 30px;
+}
+
+.col-sm-4 {
+  margin: 5px;
 }
 
 .pairMeButton {
   position: relative;
-  bottom: -7em;
-  left: -36%;
+  bottom: -5em;
+  left: -33%;
   margin-left: -7em;
 }
 
