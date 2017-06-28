@@ -1,0 +1,65 @@
+.friendsPic {
+  width: 17%;
+  -webkit-transition: all 1s ease; /* Safari and Chrome */
+  -moz-transition: all 1s ease; /* Firefox */
+  -ms-transition: all 1s ease; /* IE 9 */
+  -o-transition: all 1s ease; /* Opera */
+  transition: all 1s ease;
+}
+
+.friendsPic:hover {
+  -webkit-transform:scale(1.25); /* Safari and Chrome */
+  -moz-transform:scale(1.25); /* Firefox */
+  -ms-transform:scale(1.25); /* IE 9 */
+  -o-transform:scale(1.25); /* Opera */
+  transform:scale(1.25);
+}
+
+.friends {
+  padding-top: 190px;
+  margin: auto;
+  width: 280px;
+  margin-left: -39px;
+}
+
+.fa.fa-circle {
+  color: #00d604;
+  margin: 15px;
+  font-size: xx-small;
+}
+
+.fa.fa-circle.offline {
+  color: grey;
+  margin: 15px;
+  font-size: xx-small;
+}
+
+.oneFriend {
+  margin: auto;
+  padding: 0px;
+  margin-bottom: 20px;
+}
+
+.oneFriend:hover {
+  background-color: #ddd;
+}
+
+.friendsName {
+  float: right;
+  margin-right: 130px;
+  margin-top: 15px;
+  font-family: sans-serif;
+  font-weight: normal;
+  color: darkslategray;
+}
+
+h3 {
+  font-size: 19px;
+  font-weight: bold;
+  border-bottom: solid;
+  border-bottom-style: outset;
+  border-bottom-width: thin;
+  width: 13em;
+  color: darkslategrey;
+  margin-left: 7px;
+}

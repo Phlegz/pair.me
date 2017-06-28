@@ -175,7 +175,8 @@ class Searchpair extends Component {
     );
 
   return (
-    <div>
+    <div className="outerContainer">
+      <div className="middleContainer">
       <PageHeader>
         Search for a Pair
       </PageHeader>
@@ -227,25 +228,27 @@ class Searchpair extends Component {
             </FormControl>
           </Col>
         </FormGroup>
-        <input type='button' value='pair me' onClick={(e) => this.pairMe(e)}/>
-
+        <Button className="pairMeButton" bsStyle="primary" onClick={(e) => this.pairMe(e)}>PAIR ME!</Button>
       </form>
+      </div>
 
-      <div className="progressBar">
-        <h2>Progress</h2>
-        <p>Your progress on completed challenges over time</p>
-        <Col sm={5}>
-          <Label> <Moment calendar>{today}</Moment> </Label>
-          <ProgressBar min={0} max={5} now={1} />
-          <Label> <Moment format="LL">{yesterday}</Moment> </Label>
-          <ProgressBar bsStyle="success" now={0} label={`${challengesCompleted}%`}/>
-          <Label> <Moment format="LL">{twoDaysAgo}</Moment> </Label>
-          <ProgressBar bsStyle="info" now={20} />
-          <Label> <Moment format="LL">{threeDaysAgo}</Moment> </Label>
-          <ProgressBar bsStyle="warning" now={60} />
-          <Label> <Moment format="LL">{fourDaysAgo}</Moment> </Label>
-          <ProgressBar bsStyle="danger" now={100} />
-        </Col>
+      <div className="statistics">
+        <div className="progressBar">
+          <h2>Progress</h2>
+          <p>Your progress on completed challenges over time</p>
+          <Col className="innerProgressBar" sm={5}>
+            <Label> <Moment calendar>{today}</Moment> </Label>
+            <ProgressBar min={0} max={5} now={1} />
+            <Label> <Moment format="LL">{yesterday}</Moment> </Label>
+            <ProgressBar bsStyle="success" now={0} label={`${challengesCompleted}%`}/>
+            <Label> <Moment format="LL">{twoDaysAgo}</Moment> </Label>
+            <ProgressBar bsStyle="info" now={20} />
+            <Label> <Moment format="LL">{threeDaysAgo}</Moment> </Label>
+            <ProgressBar bsStyle="warning" now={60} />
+            <Label> <Moment format="LL">{fourDaysAgo}</Moment> </Label>
+            <ProgressBar bsStyle="danger" now={100} />
+          </Col>
+        </div>
         <div className="pieChart">
           <PieChart
             sectorStrokeWidth={2}

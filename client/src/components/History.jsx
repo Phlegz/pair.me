@@ -52,7 +52,7 @@ class History extends Component {
     const allHistory = this.state.history.map((hist, index) => {
       const toggle = () => { this.setOpenTab(hist); }
       return (
-      <div key={index}><div>
+      <div className="container" key={index}><div>
           {/*call toggle handler and change state whenever button is pressed */}
           <Button onClick={ toggle }>{hist.question}</Button>
           {/*undefined state when opened*/}

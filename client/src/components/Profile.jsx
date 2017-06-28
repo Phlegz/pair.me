@@ -76,7 +76,7 @@ class Profile extends Component {
     //TO DO: input should only be emails
     //TO DO: Fix github url
     return (
-      <div>
+      <div className="container">
         <PageHeader>
           Profile
         </PageHeader>
