@@ -11,7 +11,8 @@ class ChallengeQuestions extends Component {
     return (
       <div className='challenge-question'>
         <h1>Question</h1>
-        {this.props.questions.question}
+        <h3>JavaScript: {this.props.questions.title}</h3>
+        <h4>{this.props.questions.question}</h4>
       </div>
     )
   }
