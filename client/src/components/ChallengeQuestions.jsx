@@ -10,7 +10,7 @@ class ChallengeQuestions extends Component {
   render() {
     return (
       <div className='challenge-question'>
-       <h1>Question</h1>
+       <h1 className='title'>Question</h1>
        <h3>JavaScript: {this.props.questions.title}</h3>
        <h4>{this.props.questions.question}</h4>
       </div>

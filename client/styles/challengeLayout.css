@@ -1,59 +1,54 @@
 body {
       background: white;
       color: black;
-      font-family: 'Open Sans', sans-serif;
+      /*font-family: 'Open Sans', sans-serif;*/
+      font-family: 'Roboto', sans-serif;
       font-size: 14px;
       /*margin: 70px 0;*/
     }
 
 
     .challenge-question {
-      margin-bottom: 10px;
-      background: #eee;
-      padding-left: 15px;
+      margin-bottom: 20px;
+      background: #F2F5F8;
+      padding: 8px 10px 10px 15px;
+      height: 150px;
     }
 
-      h1 {
+     .challenge-question .title {
         margin: 10px 0 0 0;
-      }
-
-
-    .chat-container {
-      /*display:;*/
-      border: 1px solid black;
-      width: 30%;
-      height: 600px;
-      position: relative;
-      float:right;
-    }
-
-      h4 {
-        display:inline;
+        font-weight: bold;
       }
 
     .output-header {
       display: flex;
       width: 100%;
-      background: #eee;
-      height: 30px;
-      padding: 5px;
+      background: #F2F5F8;
+      border-bottom: 2px solid white;
+      height: 50px;
+      padding: 10px;
+      font-weight: bold;
+      font-size: 20px;
+      margin-bottom: 20px;
     }
 
-      h4 {
-        margin: 0;
-      }
 
     .output {
-      border: 1px solid black;
+      border: 1px solid #eee;
       width: 30%;
-      height: 200px;
+      height: 212px;
       position: relative;
       float: right;
       margin-top: 48px;
+      background: #F2F5F8;
     }
 
     #editor {
       display: flex;
+    }
+
+    .resultLog {
+      font-size: 14px;
     }
 
     .showAnswer {
@@ -65,19 +60,40 @@ body {
       margin-top: 10px;
     }
 
-    .chat-header  {
+    .chat-container {
+      /*border: 1px solid black;*/
+      width: 30%;
+      height: 600px;
+      position: relative;
+      float:right;
+      background: #F2F5F8;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+
+      h4 {
+        display:inline;
+      }
+
+    .chat-header {
       display: flex;
       width: 100%;
-      background: #eee;
-      height: 30px;
-      padding: 5px;
+      background: #F2F5F8;
+      height: 50px;
+      padding: 10px;
+      border-bottom: 2px solid white;
+    }
+
+    .chat-title {
+      font-weight: bold;
+      font-size: 20px;
     }
 
     footer.chatbar {
-      background: #EEE;
-      border-top: 1px solid black;
+      background: #F2F5F8;
+      border-top: 2px solid white;
       width: 100%;
-      padding: 5px;
+      padding: 20px;
       float: right;
       bottom: 0;
       position: absolute;
@@ -87,58 +103,77 @@ body {
     .chatbar-message {
       flex: 8;
       padding: 0 5px 0 5px;
-      width: 90%;
+      width: 100%;
       /*margin: 0 auto;*/
+    }
+
+     textarea {
+      width: 100%;
+      border: none;
+      padding: 10px 20px;
+      font: 14px/22px "Lato", Arial, sans-serif;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      resize: none;
+
     }
 
     .message {
       display: flex;
       padding: 5px;
+      padding: 8px 25px;
+      line-height: 26px;
+      font-size: 16px;
+      border-radius: 7px;
+      margin-bottom: 10px;
+      justify-content: flex-end
     }
 
     .message-list {
-      overflow-y:scroll;
-      height: 500px;
-    }
-
-
-    .message.from-me .chatbar-username {
-      display: none;
+      overflow-y:auto;
+      border-bottom: 2px solid white;
+      height: 430px;
     }
 
     .message.from-me {
       display: flex;
-      justify-content: flex-end;
+      justify-content: flex-start;
       margin-bottom: 5px;
     }
 
     .message.from-me .message-content {
-      background-color: #af9570;
-      padding: 5px 5px;
+      background-color: #86BB71;
+      padding: 5px 10px;
       color: white;
       border: 1px;
       border-radius: 5px;
     }
 
-
-    .message {
-      margin-bottom: 20px;
-    }
-
     .message-content {
       display: inline-block;
+      justify-content: flex-end;
       padding: 5px 5px;
-      background-color: #eee;
+      background-color: #94C2ED;
       border: 1px;
       border-radius: 5px;
+      color:white;
+
+      /*margin-top: 25px;*/
     }
 
-     .message .chatbar-username {
-      /*display: none;*/
+
+     .from-me .chatbar-username {
+      display:none;
     }
+
+    .message .chatbar-username {
+      color: #92959E;
+      padding-right: 15px;
+    }
+
 
     .navbar {
-      margin-bottom: 0px;
+      margin-bottom: 20px;
     }
 
     .logout {
@@ -178,3 +213,10 @@ body {
       width: 37px;
       border-radius: 20px;
     }
+
+
+    .showAnswer button {
+      margin-right: 20px;
+      margin-left: 15px;
+    }
+
