@@ -81,6 +81,8 @@ class Profile extends Component {
           Profile
         </PageHeader>
 
+        <Jumbotron>
+        </Jumbotron>
         <div className="profile-info">
           <div className="wrapper">
             <img src={profile.avatar} />
