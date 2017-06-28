@@ -184,19 +184,18 @@ class Challenge extends Component {
       let test_result = this.state.questions.test_result
       if (result === test_result){
         showResult = <div className="resultLog">
-                       <ul>Unit Test => {this.state.questions.unit_test}</ul>
-                       <ul>Result => { result }</ul>
-                       <ul>Expected Answer => {test_result}</ul>
-                       <h3>CORRECT!</h3>
+                       <ul>Unit Test: {this.state.questions.unit_test}</ul>
+                       <ul>Result: { result }</ul>
+                       <ul>Expected Answer: {test_result}</ul>
                      </div>
 
 
       } else {
         showResult = <div className="resultLog">
-                       <ul>Unit Test=> {this.state.questions.unit_test}</ul>
-                       <ul>Result => { result }</ul>
-                       <ul>Expected Answer => {test_result}</ul>
-                       <h3>Wrong, please try again</h3>
+                       <ul>Unit Test: {this.state.questions.unit_test}</ul>
+                       <ul>Result: { result }</ul>
+                       <ul>Expected Answer: {test_result}</ul>
+                       <h3>Please try again</h3>
                      </div>
       }
     }
@@ -216,7 +215,7 @@ class Challenge extends Component {
             tabSize={2}
             width={1750}
             height={600}
-            fontSize={19}
+            fontSize={20}
             //invoke livecode function everytime the text box changess
             onChange={ this.liveCode }
             value={this.state.aceValue}
@@ -245,15 +244,14 @@ class Challenge extends Component {
 
         <div className="output">
            <div className='output-header'>
-              <h4>Output:</h4>
-              <div className="consoleLog">{ consoleArr }</div>
+              Output
+          </div>
+            <div className="consoleLog">{ consoleArr }</div>
               { showResult }
             </div>
-          </div>
-
-
         </div>
       </div>
+
 
     );
   }

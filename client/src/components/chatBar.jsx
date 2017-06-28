@@ -27,11 +27,12 @@ class ChatBar extends Component {
   render () {
     return (
       <footer className="chatbar">
-        <input className="chatbar-message"
+        <textarea className="chatbar-message"
           placeholder="write a message"
           onChange={this.onMessage}
           onKeyPress={this.handleKeyPress}
           value = { this.state.content }
+          rows={3}
           />
       </footer>
     )
