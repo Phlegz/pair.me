@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import brace from 'brace';
 import AceEditor from 'react-ace';
 import axios from 'axios';
+import { PageHeader, Jumbotron, Button, Modal, FormGroup, ControlLabel, FormControl, Col, ProgressBar, Label } from 'react-bootstrap';
 
 import 'brace/mode/javascript';
 import 'brace/theme/monokai';
@@ -51,9 +52,12 @@ class Challenge extends Component {
         test_result: ""
       },
       sendUpdate: true,
+      showResultModal: true,
+      qCount: 0
     }
     this.socket = io.connect();
     this.liveCode = this.liveCode.bind(this);
+    this.nextQuestion = this.nextQuestion.bind(this);
   }
 
   componentWillMount() {
@@ -145,6 +149,29 @@ class Challenge extends Component {
       console.log(error);
     })
   }
+  nextQuestion(event){
+    let i = this.state.qCount;
+    i += 1;
+    this.setState({qCount: i});
+    this.setState({ showAnswer: !this.state.showAnswer })
+    axios.get('/api/questions')
+    .then((response)=> {
+      this.setState({questions: {
+        id: response.data[i].id,
+        title: response.data[i].title,
+        question: response.data[i].question,
+        example: response.data[i].example,
+        placeholder: response.data[i].placeholder,
+        answer: response.data[i].answer,
+        unit_test: response.data[i].unit_test,
+        test_result: response.data[i].test_result
+        }
+      },
+      this.setState({aceValue: `${response.data[i].example}\n\n${response.data[i].placeholder}`}))
+      this.setState({result: null})
+      this.setState({console: []})
+    })
+  }
   render() {
     const self = this;
     let profile = this.state.profile;
@@ -179,23 +206,53 @@ class Challenge extends Component {
       )
     }
     let showResult = '';
+    let showResultModal = '';
     let result = this.state.result;
     if (result !== null && result !== 'null') {
       let test_result = this.state.questions.test_result
       if (result === test_result){
         showResult = <div className="resultLog">
-                       <ul>Unit Test: {this.state.questions.unit_test}</ul>
-                       <ul>Result: { result }</ul>
-                       <ul>Expected Answer: {test_result}</ul>
-                     </div>
-
-
+                       <ul>Unit Test => {this.state.questions.unit_test}</ul>
+                       <ul>Expected Answer => {test_result}</ul>
+                       <ul>Result => { result }</ul>
+                     </div>;
+        showResultModal = <Modal
+                            show={this.state.showResultModal}
+                            onHide={closeResultModal}
+                            container={this}
+                            aria-labelledby="contained-modal-title"
+                            backdrop="static"
+                            keyboard={false}
+                          >
+                          <Modal.Header closeButton>
+                            <Modal.Title>CORRECT! Nice work</Modal.Title>
+                          </Modal.Header>
+                          <Modal.Body>
+                            <h5>Unit Test => {this.state.questions.unit_test}</h5>
+                            <h5>Expected Answer => {test_result}</h5>
+                            <h5>Result => { result }</h5>
+                            <Button
+                              bsStyle="primary"
+                              bsSize="large"
+                              onClick={(e) => this.nextQuestion(e)}
+                            >
+                            Next Question
+                            </Button>
+                            <Button
+                              bsStyle="info"
+                              bsSize="large"
+                              onClick={closeResultModal}
+                            >
+                            Close
+                            </Button>
+                          </Modal.Body>
+                        </Modal>
       } else {
         showResult = <div className="resultLog">
-                       <ul>Unit Test: {this.state.questions.unit_test}</ul>
-                       <ul>Result: { result }</ul>
-                       <ul>Expected Answer: {test_result}</ul>
-                       <h3>Please try again</h3>
+                       <ul>Unit Test=> {this.state.questions.unit_test}</ul>
+                       <ul>Expected Answer => {test_result}</ul>
+                       <ul>Result => { result }</ul>
+                       <h3>Wrong, please try again</h3>
                      </div>
       }
     }
