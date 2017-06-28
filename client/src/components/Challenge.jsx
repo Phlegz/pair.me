@@ -11,7 +11,7 @@ import ChatBox from './ChatBox.jsx';
 import ChallengeQuestions from './ChallengeQuestions.jsx'
 import ChallengeAnswer from './ChallengeAnswer.jsx'
 
-import { Image, Navbar, Nav, NavItem, MenuItem, NavDropdown, Button } from 'react-bootstrap';
+import { Image, Navbar, Nav, NavItem, MenuItem, NavDropdown } from 'react-bootstrap';
 
 
 
