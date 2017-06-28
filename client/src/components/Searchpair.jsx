@@ -54,7 +54,8 @@ class Searchpair extends Component {
     this.setState({ pairMeModal: true})
     let postData = {
       language: this.language.value,
-      difficulty: this.difficulty.value
+      difficulty: this.difficulty.value,
+      friend: this.friend.value
     };
     axios.post('/api/dashboard', postData)
     .then((response) => {
@@ -221,6 +222,7 @@ class Searchpair extends Component {
           <br />
           <Col sm={10}>
             <FormControl componentClass="select" placeholder="select" inputRef={ (input) => this.friend = input}>
+              <option value="random">I don't have a friend, give me someone random</option>
               {pairOnlineFriend}
             </FormControl>
           </Col>

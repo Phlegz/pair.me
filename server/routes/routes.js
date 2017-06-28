@@ -108,14 +108,22 @@ module.exports = (knex) => {
     let pairResult = {
         difficulty: req.body.difficulty,
         language: req.body.language,
+        friend: req.body.friend
       };
     let currentUser = req.session.passport.user
-    knex.raw('select * from users where online=true and github_id != ?',[currentUser])
-    .then((results) => {
-      let shuffled = results.rows.sort(() => Math.random() * 2 - 1);
-      res.json(shuffled[0]);
-    })
-
+    console.log(pairResult, "PAIRRESULT");
+    if(pairResult.friend === 'random') {
+      knex.raw('select * from users where online = true and github_id != ?',[currentUser])
+      .then((results) => {
+        let shuffled = results.rows.sort(() => Math.random() * 2 - 1);
+        res.json(shuffled[0]);
+      })
+    } else {
+      knex.raw('select * from users where github_username = ?', [pairResult.friend])
+      .then((results) => {
+        res.json(results);
+      })
+    }
   })
 
   router.get('/api/friends', (req,res) => {

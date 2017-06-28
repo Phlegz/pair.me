@@ -5,7 +5,7 @@ exports.up = function(knex, Promise) {
     table.integer('user_id');
     table.foreign('user_id').references('users.id');
     table.integer('notification_id');
-    table.foreign('notification_id').references('notifications.id');
+    table.foreign('notification_id')
     table.boolean('initiator');
     table.unique(['user_id', 'notification_id']);
     table.unique(['notification_id', 'initiator']);
