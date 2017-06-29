@@ -7,6 +7,8 @@ import AceEditor from 'react-ace';
 import brace from 'brace';
 import 'brace/mode/javascript';
 import 'brace/theme/monokai';
+
+
 class History extends Component {
   constructor(props) {
     super(props);
@@ -22,6 +24,7 @@ class History extends Component {
     })
     this.getOverlay = this.getOverlay.bind(this);
   }
+
   setOpenTab(hist) {
     if(this.state.openTab === hist){
       this.setState({openTab: undefined});
@@ -29,6 +32,7 @@ class History extends Component {
       this.setState({openTab: hist});
     }
   }
+
   getOverlay(historyItem) {
     console.log(JSON.stringify(historyItem));
     const popoverBottom = (
@@ -47,13 +51,14 @@ class History extends Component {
     );
     return popoverBottom;
   }
+
   render() {
     const allHistory = this.state.history.map((hist, index) => {
       const toggle = () => { this.setOpenTab(hist); }
       return (
-      <div className="container" key={index}><div>
+      <div className="historyContainer" key={index}>
           {/*call toggle handler and change state whenever button is pressed */}
-          <Button onClick={ toggle }>{hist.question}</Button>
+          <Button onClick={ toggle }>{hist.title}</Button>
           {/*undefined state when opened*/}
           <Panel collapsible expanded={this.state.openTab === hist}>
             <AceEditor
@@ -66,25 +71,29 @@ class History extends Component {
               value={hist.submitted_answer}
               showGutter={false}
             />
-            {hist.submitted_answer}
+            {moment(hist.completed_at).format('LL')}
           </Panel>
-          <div>
-            <OverlayTrigger trigger="click" placement="bottom" overlay={this.getOverlay(hist)}>
-              <Button>{hist.question}</Button>
-            </OverlayTrigger>
-          </div>
-        </div>
       </div>
       )
     })
     return(
       <div>
-        <PageHeader>
-          Challenges Done
-        </PageHeader>
-        {allHistory}
+        <div className="middleContainer">
+          <div className="innerContainer">
+            <PageHeader className="historyHeader">
+              <h2>Challenges Done</h2>
+            </PageHeader>
+            {allHistory}
+          </div>
+        </div>
       </div>
     );
   }
 }
 export default History;
+
+          {/*<div>
+            <OverlayTrigger trigger="click" placement="bottom" overlay={this.getOverlay(hist)}>
+              <Button>{hist.question}</Button>
+            </OverlayTrigger>
+          </div>*/}

@@ -33,7 +33,7 @@ module.exports = (knex) => {
       SELECT
         challenges.submitted_answer,
         challenges.completed_at,
-        questions.question
+        questions.title
       FROM
         questions
         JOIN challenges ON challenges.question_id = questions.id

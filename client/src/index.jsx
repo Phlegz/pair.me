@@ -6,6 +6,7 @@ import {} from '../styles/font-awesome-4.7.0/css/font-awesome.min.css';
 import {} from '../styles/challengeLayout.css';
 import {} from '../styles/friendsList.css';
 import {} from '../styles/statistics.css';
+import {} from '../styles/history.css';
 
 import Dashboard from './components/dashboard.jsx'
 
