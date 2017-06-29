@@ -42,7 +42,8 @@ class Profile extends Component {
       name: this.formName.value,
       github_username: this.formGithubUsername.value,
       email: this.formEmail.value,
-      about: this.formAboutMe.value
+      about: this.formAboutMe.value,
+      twitter_handle: formTwitterHandle.value
     };
     axios.put('/api/profile', putData)
     .then(function(response) {
@@ -76,7 +77,7 @@ class Profile extends Component {
     //TO DO: input should only be emails
     //TO DO: Fix github url
     return (
-      <div className="container">
+             <div className="middleContainer">
         <PageHeader>
           Profile
         </PageHeader>
@@ -93,12 +94,14 @@ class Profile extends Component {
           <p> <i className="fa fa-github" aria-hidden="true"></i>: {profile.github_username} </p>
           <p> <i className="fa fa-github-alt" aria-hidden="true"></i>: github.com/{profile.github_username} </p>
           <p> <i className="fa fa-envelope" aria-hidden="true"></i>: {profile.email} </p>
+          <p> Twitter Handle: {profile.twitter_handle} </p>
           </Jumbotron>
         </div>
 
         <div className="about-me">
             <p> About Me: {profile.about}</p>
         </div>
+
 
 
       <div className="edit-profile" style={{height: 200}}>
@@ -135,6 +138,14 @@ class Profile extends Component {
                 </Col>
                 <Col sm={10}>
                   <FormControl inputRef={ (input) => this.formName = input } type="text" defaultValue={profile.name}/>
+                </Col>
+              </FormGroup>
+              <FormGroup controlId="twitter_handle">
+                <Col componentClass={ControlLabel} sm={2}>
+                  Twitter Handle
+                </Col>
+                <Col sm={10}>
+                  <FormControl inputRef={ (input) => this.formTwitterHandle = input } type="text" defaultValue={profile.twitter_handle} />
                 </Col>
               </FormGroup>
               <FormGroup controlId="github_username">
