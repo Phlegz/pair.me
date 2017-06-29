@@ -9,7 +9,7 @@ const sb = new sandbox();
 
 module.exports = (knex) => {
 
-  function completedDifficulties(githubId) {
+  function completedDifficulties(githubUsername) {
     console.log('here')
     return knex.raw(`
       SELECT
@@ -25,7 +25,7 @@ module.exports = (knex) => {
         users.github_username = ?
       ORDER BY
         challenges.completed_at
-    `, [githubId]);
+    `, [githubUsername]);
   }
 
   function history(githubId) {
@@ -97,7 +97,7 @@ module.exports = (knex) => {
   router.get('/api/statistics', (req, res) => {
     //TODO Do not hard code!
     let current_user = req.session.passport.user;
-    completedDifficulties("Farnaz")
+    completedDifficulties("donburks")
      .then((result) => {
       console.log(result.length, 'RESULTS');
       res.json(result);
@@ -124,9 +124,12 @@ module.exports = (knex) => {
           res.json(shuffled[0]);
       })
     } else {
-      knex.raw('select * from users where github_username = ?', [pairResult.friend])
+      knex
+      .select('*')
+      .from('users')
+      .where('github_username',pairResult.friend)
       .then((results) => {
-        res.json(results);
+        res.json(results[0]);
       })
     }
   })
@@ -188,7 +191,7 @@ module.exports = (knex) => {
   router.get('/api/history', (req, res) => {
     //TODO: do not hard code
     // let current_history = req.session.passport.user;
-    history("Farnaz")
+    history("donburks")
       .then((result) => {
       res.json(result);
       })
