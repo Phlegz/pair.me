@@ -153,7 +153,7 @@ class Challenge extends Component {
     let i = this.state.qCount;
     i += 1;
     this.setState({qCount: i});
-    this.setState({ showAnswer: !this.state.showAnswer })
+    this.setState({ showAnswer: false })
     axios.get('/api/questions')
     .then((response)=> {
       this.setState({questions: {
@@ -173,6 +173,9 @@ class Challenge extends Component {
     })
   }
   render() {
+    let closeResultModal = () => this.setState({
+      showResultModal: false
+      });
     const self = this;
     let profile = this.state.profile;
 
@@ -307,6 +310,33 @@ class Challenge extends Component {
               { showResult }
             </div>
         </div>
+        {showResultModal}
+          <Modal show={this.state.showRedirectModal}
+              container={this}
+              aria-labelledby="contained-modal-title"
+              backdrop="static"
+              keyboard={false}
+            >
+            <Modal.Header closeButton>
+              <Modal.Title>Confirm close</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+               <Button
+                bsStyle="info"
+                bsSize="large"
+                href="/dashboard"
+              >
+              Confirm
+              </Button>
+              <Button
+                bsStyle="info"
+                bsSize="large"
+                onClick={closeResultModal}
+              >
+              Close
+              </Button>
+            </Modal.Body>
+          </Modal>
       </div>
     );
   }
