@@ -15,7 +15,7 @@
   height: 25%;
   float: right;
   margin-right: 10em;
-  margin-top: -2em;
+  margin-top: 0em;
 }
 
 .progressBar {
@@ -28,7 +28,7 @@
 
 .avgDifficulty {
   position: absolute;
-  margin: 59px;
+  margin: 54px;
   border-radius: 47px;
 
 }

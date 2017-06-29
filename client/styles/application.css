@@ -19,8 +19,9 @@ body h1 {
 .links {
   padding: auto;
   position: absolute;
-  margin-left: -6em;
+  margin-left: -8em;
   margin-top: -3em;
+  font-size: 10px;
 }
 
 a:focus {
@@ -113,6 +114,7 @@ li.sideLinks {
 
 .col-sm-4 {
   margin: 5px;
+  width: 50.333333%;
 }
 
 .pairMeButton {
@@ -123,8 +125,10 @@ li.sideLinks {
 }
 
 .fa.fa-home, .fa.fa-user, .fa.fa-history {
-  font-size: x-large;
+  font-size: 15px;
   margin-right: 15px;
 }
+
+
 
 

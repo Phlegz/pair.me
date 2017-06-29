@@ -48,7 +48,6 @@ class History extends Component {
     return popoverBottom;
   }
   render() {
-    // console.log('history', this.state.history);
     const allHistory = this.state.history.map((hist, index) => {
       const toggle = () => { this.setOpenTab(hist); }
       return (
