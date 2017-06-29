@@ -12,12 +12,6 @@ import ChallengeQuestions from './ChallengeQuestions.jsx'
 import ChallengeAnswer from './ChallengeAnswer.jsx'
 
 
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom'
-
 const io = require('socket.io-client');
 const socket = io();
 
@@ -34,8 +28,8 @@ function readCookie(name) {
 
 const myGithubUsername = readCookie('unsafe_user_name');
 
-
 class Challenge extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -58,12 +52,10 @@ class Challenge extends Component {
       showResultModal: true,
       qCount: 0,
       showRedirectModal: false,
-      redirect: false
     }
     this.socket = io.connect();
     this.liveCode = this.liveCode.bind(this);
     this.nextQuestion = this.nextQuestion.bind(this);
-    this.log = this.log.bind(this);
   }
 
   componentWillMount() {
@@ -164,9 +156,6 @@ class Challenge extends Component {
     })
   }
 
-  log(event){
-    this.setState({ redirect: true })
-  }
 
   nextQuestion(event){
     let i = this.state.qCount;
@@ -195,6 +184,7 @@ class Challenge extends Component {
     const { redirect } = this.state;
     const self = this;
     let profile = this.state.profile;
+
 
     const navBar = (
          <Navbar inverse collapseOnSelect>
