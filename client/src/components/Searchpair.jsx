@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { PageHeader, Jumbotron, Button, Modal, FormGroup, ControlLabel, FormControl, Col, ProgressBar, Label, Glyphicon } from 'react-bootstrap';
+import { PageHeader, Jumbotron, Image, Button, Modal, FormGroup, ControlLabel, FormControl, Col, ProgressBar, Label, Glyphicon } from 'react-bootstrap';
 import PieChart from 'react-simple-pie-chart';
 import Moment from 'react-moment';
 import moment from 'moment';
@@ -384,7 +384,7 @@ class Searchpair extends Component {
             <p>Difficulty: {this.state.challengeType.difficulty}</p>
           </div>
           <div className="wrapper">
-            <img src={this.state.pair.avatar} />
+            <Image circle src={this.state.pair.avatar} className='modal-image' />
           </div>
           <p>Visit {this.state.pair.github_username}&#39;s <a href={"https://github.com/" + this.state.pair.github_username}> Github </a> Account</p>
           <Button
@@ -422,7 +422,8 @@ class Searchpair extends Component {
             <p>Difficulty: {this.state.challengeType.difficulty}</p>
           </div>
           <div className="wrapper">
-            <img src={this.state.pair.avatar} />
+            <Image circle src={this.state.pair.avatar} className='modal-image' />
+            {/* <img src={this.state.pair.avatar} /> */}
           </div>
           <Button
             bsStyle="danger"
@@ -451,7 +452,7 @@ class Searchpair extends Component {
           <p>Difficulty: {this.state.challengeType.difficulty}</p>
         </div>
         <div className="wrapper">
-          <img src={this.state.senderUser.avatar} />
+          <Image circle src={this.state.pair.avatar} className='modal-image' />
         </div>
         <p>Visit {this.state.senderUser.github_username}&#39;s <a href={"https://github.com/" + this.state.senderUser.github_username}> Github </a> Account</p>
         <Button
@@ -491,7 +492,7 @@ class Searchpair extends Component {
             <p>Difficulty: {this.state.challengeType.difficulty}</p>
           </div>
           <div className="wrapper">
-            <img src={this.state.pair.avatar} />
+            <Image circle src={this.state.pair.avatar} className='modal-image' />
           </div>
           <Button
             bsStyle="info"
@@ -520,7 +521,7 @@ class Searchpair extends Component {
             <p>Difficulty: {this.state.challengeType.difficulty}</p>
           </div>
           <div className="wrapper">
-            <img src={this.state.pair.avatar} />
+            <Image circle src={this.state.pair.avatar} className='modal-image' />
           </div>
           <Button
             bsStyle="success"
