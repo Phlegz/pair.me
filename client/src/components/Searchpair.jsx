@@ -371,9 +371,9 @@ class Searchpair extends Component {
           <Modal.Title>You have been matched with {this.state.pair.github_username}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div>
-            <h4>Language: {this.state.challengeType.language}</h4><br />
-            <h4>Difficulty: {this.state.challengeType.difficulty}</h4>
+          <div style={{float: 'right', paddingRight:90, paddingTop:90, fontSize:17}}>
+            <p>Language: {this.state.challengeType.language}</p><br />
+            <p>Difficulty: {this.state.challengeType.difficulty}</p>
           </div>
           <div className="wrapper">
             <img src={this.state.pair.avatar} />
@@ -387,6 +387,7 @@ class Searchpair extends Component {
           Search Again
           </Button>
           <Button
+            style={{marginLeft:15}}
             bsStyle="success"
             bsSize="large"
             onClick={(e) => this.sendRequest(e)}
@@ -408,9 +409,9 @@ class Searchpair extends Component {
           <Modal.Header>
             <Modal.Title>Waiting for {this.state.pair.github_username}&#39;s Response</Modal.Title>
           </Modal.Header>
-          <div>
-            <h4>Language: {this.state.challengeType.language}</h4><br />
-            <h4>Difficulty: {this.state.challengeType.difficulty}</h4>
+          <div style={{float: 'right', paddingRight:90, paddingTop:90, fontSize:17}}>
+            <p>Language: {this.state.challengeType.language}</p><br />
+            <p>Difficulty: {this.state.challengeType.difficulty}</p>
           </div>
           <div className="wrapper">
             <img src={this.state.pair.avatar} />
@@ -437,9 +438,9 @@ class Searchpair extends Component {
         <Modal.Title>{this.state.senderUser.github_username} sent you a request.</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div>
-          <h4>Language: {this.state.challengeType.language}</h4><br />
-          <h4>Difficulty: {this.state.challengeType.difficulty}</h4>
+        <div style={{float: 'right', paddingRight:90, paddingTop:90, fontSize:17}}>
+          <p>Language: {this.state.challengeType.language}</p><br />
+          <p>Difficulty: {this.state.challengeType.difficulty}</p>
         </div>
         <div className="wrapper">
           <img src={this.state.senderUser.avatar} />
@@ -455,6 +456,7 @@ class Searchpair extends Component {
         Accept
         </Button>
         <Button
+          style={{marginLeft:15}}
           bsStyle="danger"
           bsSize="large"
           onClick={(e) => this.rejectRequest(e)}
@@ -476,9 +478,9 @@ class Searchpair extends Component {
           <Modal.Header>
             <Modal.Title>{this.state.pair.github_username} Rejected your request</Modal.Title>
           </Modal.Header>
-          <div>
-            <h4>Language: {this.state.challengeType.language}</h4><br />
-            <h4>Difficulty: {this.state.challengeType.difficulty}</h4>
+          <div style={{float: 'right', paddingRight:90, paddingTop:90, fontSize:17}}>
+            <p>Language: {this.state.challengeType.language}</p><br />
+            <p>Difficulty: {this.state.challengeType.difficulty}</p>
           </div>
           <div className="wrapper">
             <img src={this.state.pair.avatar} />
@@ -505,9 +507,9 @@ class Searchpair extends Component {
           <Modal.Header>
             <Modal.Title>{this.state.pair.github_username} Accepted your request</Modal.Title>
           </Modal.Header>
-          <div>
-            <h4>Language: {this.state.challengeType.language}</h4><br />
-            <h4>Difficulty: {this.state.challengeType.difficulty}</h4>
+          <div style={{float: 'right', paddingRight:90, paddingTop:90, fontSize:17}}>
+            <p>Language: {this.state.challengeType.language}</p><br />
+            <p>Difficulty: {this.state.challengeType.difficulty}</p>
           </div>
           <div className="wrapper">
             <img src={this.state.pair.avatar} />
