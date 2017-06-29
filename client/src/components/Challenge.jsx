@@ -241,13 +241,14 @@ class Challenge extends Component {
                             >
                             Next Question
                             </Button>
-                            <Button
-                              bsStyle="info"
+                            {/* <Button
+                              style={{marginLeft:15}}
+                              bsStyle="default"
                               bsSize="large"
                               onClick={closeResultModal}
                             >
                             Close
-                            </Button>
+                            </Button> */}
                           </Modal.Body>
                         </Modal>
       } else {
