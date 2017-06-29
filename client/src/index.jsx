@@ -7,4 +7,5 @@ import {} from '../styles/font-awesome-4.7.0/css/font-awesome.min.css';
 
 import Dashboard from './components/dashboard.jsx'
 
+
 ReactDOM.render(<Dashboard />, document.getElementById('react-root'));

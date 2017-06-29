@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { PageHeader, Jumbotron, Button, Modal, FormGroup, Form, Col, ControlLabel, FormControl, Image } from 'react-bootstrap';
+import { PageHeader, Jumbotron, Button, Modal, FormGroup, Form, Col, ControlLabel, FormControl, Image, Grid, Row } from 'react-bootstrap';
+
+
 
 
 class Profile extends Component {
@@ -63,6 +65,7 @@ class Profile extends Component {
   }
 
   render() {
+
     let profile = this.state.profile;
     let close = () => this.setState({ show: false});
 
@@ -178,19 +181,18 @@ class Profile extends Component {
             </Form>
           </Modal.Body>
         </Modal>
+
       </div>
 
-       <div className="info">
-          <Jumbotron>
-          <p> <i className="fa fa-github" aria-hidden="true"></i>: {profile.github_username} </p>
-          <p> <i className="fa fa-github-alt" aria-hidden="true"></i>: github.com/{profile.github_username} </p>
-          <p> <i className="fa fa-envelope" aria-hidden="true"></i>: {profile.email} </p>
-          </Jumbotron>
-        </div>
 
-        <div className="about-me">
-            <p> About Me: {profile.about}</p>
-        </div>
+
+
+
+
+
+
+
+
 
 
     </div>
