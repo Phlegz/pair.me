@@ -24,3 +24,19 @@
   float: right;
   margin: 60px;
 }
+
+.info {
+  float: right;
+  margin-right: 105px;
+  padding-right: 148px;
+  margin-top: 123px;
+  font-size: large;
+}
+
+.about-me {
+  float: right;
+  margin-right: 105px;
+  padding-right: 148px;
+  margin-top: 123px;
+  font-size: large;
+}
