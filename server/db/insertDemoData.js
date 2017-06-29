@@ -22,11 +22,11 @@ function createUsers() {
       github_id:2345,
     },
     {
-      name: 'Loui',
+      name: 'Louie',
       online: false,
       about: 'Give me some time and I solve your problem :D',
-      email: 'ervin@gmail.commm',
-      github_username: 'ervin',
+      email: 'louie@gmail.commm',
+      github_username: 'louie56',
       avatar: 'http://brokelyn.com/wp-content/uploads/2014/07/cat-computer.jpg',
       github_id: 3445,
     },
@@ -38,7 +38,17 @@ function createUsers() {
       github_username: 'Drake',
       avatar: 'http://199.254.238.46/images/nyan-cat-02.png',
       github_id: 6789,
-    }
+    },
+    {
+      name: 'Rosy',
+      online: true,
+      about: '',
+      email: 'rosy@lhl.comm',
+      github_username: 'rosiLHL',
+      avatar: 'https://lighthouselabs.ca/uploads/team_member/avatar/77/medium_rosy_2x.jpg',
+      github_id: 123455,
+    },
+
   ]);
 }
 

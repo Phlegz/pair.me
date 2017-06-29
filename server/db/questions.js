@@ -25,17 +25,6 @@ knex.raw('TRUNCATE TABLE questions CASCADE')
        difficulty: 3
       },
       {
-       question: "Write a JavaScript function that returns a passed string with letters in alphabetical order.",
-       example: "\/*\r\n\r\nExample:\r\nalphabet_order(\'webmaster\');\r\n\r\nExpected Output: \r\n=> \'abeemrstw\'\r\n\r\n*\/",
-       placeholder: "function alphabet_order(str) {\r\n  \/* Put your code here *\/\r\n\r\n}",
-       answer: "function alphabet_order(str) {\r\n  return str.split(\'\').sort().join(\'\');\r\n}",
-       unit_test: "alphabet_order('webmaster');",
-       test_result: "'abeemrstw'",
-       language_id: languagesIds[0],
-       title: "Returns a passed string with letters in alphabetical order",
-       difficulty: 3
-      },
-      {
        question: "Write a JavaScript function to compute the value of b^n where n is the exponent and b is the bases. Accept b and n from the user and display the result.",
        example: "\/*\r\n\r\nExample:\r\nexp(b,n);\r\n\r\nExpected Output: \r\n=> 8\r\n\r\n*\/",
        placeholder: "function exp(b,n) {\r\n  \/* Put your code here *\/\r\n\r\n}",
@@ -44,6 +33,17 @@ knex.raw('TRUNCATE TABLE questions CASCADE')
        test_result: "8",
        language_id: languagesIds[0],
        title: "Compute the value of bn where n is the exponent and b is the bases",
+       difficulty: 3
+      },
+      {
+       question: "Write a JavaScript function that returns a passed string with letters in alphabetical order.",
+       example: "\/*\r\n\r\nExample:\r\nalphabet_order(\'webmaster\');\r\n\r\nExpected Output: \r\n=> \'abeemrstw\'\r\n\r\n*\/",
+       placeholder: "function alphabet_order(str) {\r\n  \/* Put your code here *\/\r\n\r\n}",
+       answer: "function alphabet_order(str) {\r\n  return str.split(\'\').sort().join(\'\');\r\n}",
+       unit_test: "alphabet_order('webmaster');",
+       test_result: "'abeemrstw'",
+       language_id: languagesIds[0],
+       title: "Returns a passed string with letters in alphabetical order",
        difficulty: 3
       },
       {
