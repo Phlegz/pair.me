@@ -90,24 +90,8 @@ class Profile extends Component {
             <img className='profile-pic' src={profile.avatar} />
           </div>
 
-        <div className='profile-name'>Derrell Wong</div>
-       {/*}
-
-        </div>
-
-
-        <div className="info">
-          <Jumbotron>
-          <p> <i className="fa fa-github" aria-hidden="true"></i>: {profile.github_username} </p>
-          <p> <i className="fa fa-github-alt" aria-hidden="true"></i>: github.com/{profile.github_username} </p>
-          <p> <i className="fa fa-envelope" aria-hidden="true"></i>: {profile.email} </p>
-          </Jumbotron>
-        </div>
-
-        <div className="about-me">
-            <p> About Me: {profile.about}</p>
-        </div>
-
+        <div className='profile-name'>{profile.github_username}</div>
+      </div>
 
       <div className="edit-profile" style={{height: 200}}>
         <Button
@@ -117,7 +101,7 @@ class Profile extends Component {
         >
         Edit Profile
         </Button>
-      */}
+
 
         <Modal
           show={this.state.show}
@@ -195,6 +179,19 @@ class Profile extends Component {
           </Modal.Body>
         </Modal>
       </div>
+
+       <div className="info">
+          <Jumbotron>
+          <p> <i className="fa fa-github" aria-hidden="true"></i>: {profile.github_username} </p>
+          <p> <i className="fa fa-github-alt" aria-hidden="true"></i>: github.com/{profile.github_username} </p>
+          <p> <i className="fa fa-envelope" aria-hidden="true"></i>: {profile.email} </p>
+          </Jumbotron>
+        </div>
+
+        <div className="about-me">
+            <p> About Me: {profile.about}</p>
+        </div>
+
 
     </div>
 
