@@ -225,7 +225,7 @@ class Searchpair extends Component {
       console.log(error);
     });
 
-    let intervalId = setInterval(this.timer, 3000);
+    let intervalId = setInterval(this.timer, 2000);
     this.setState({intervalId: intervalId});
   }
 
