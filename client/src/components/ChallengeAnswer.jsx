@@ -16,7 +16,7 @@ class ChallengeAnswer extends Component {
           theme="monokai"
           readOnly={true}
           fontSize={19}
-          width={1305}
+          width={1320}
           height={210}
           value={this.props.answer.answer}
         />
