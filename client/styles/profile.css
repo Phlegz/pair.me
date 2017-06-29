@@ -1,78 +1,26 @@
-body {
-  background: white;
-  color: black;
-  font-family: 'Roboto', sans-serif;
-  /*font-size: 14px;*/
-}
-
 .wrapper {
-  padding: 0;
-  margin: 0;
+  padding: 50px;
 }
 
 .wrapper img {
-  width: 300px;
-  height: 300px;
+  width: 250px;
+  height: 250px;
   border-radius: 50%;
-  border: 6px solid white;
-  /*object-fit: cover;*/
-  /*object-position: center right;*/
+  margin: 20px;
+
+  object-fit: cover;
+  object-position: center right;
 }
 
 .profile-info {
   margin: auto;
   width: 50%;
   padding: 10px;
-  /*text-align: center;*/
+  text-align: center;
   float: left;
 }
 
 .edit-profile {
   float: right;
   margin: 60px;
-}
-
-.info {
-  float: right;
-  margin-right: 105px;
-  padding-right: 148px;
-  margin-top: 123px;
-  font-size: large;
-}
-
-.about-me {
-  float: right;
-  margin-right: 105px;
-  padding-right: 148px;
-  margin-top: 123px;
-  font-size: large;
-}
-
-.jumbotron-profile {
-  background: #1A2980;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #26D0CE, #1A2980);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #26D0CE, #1A2980); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  height: 270px;
-  padding: 0;
-  margin: 0 0 -240px 0;
-  /*position: relative;*/
-}
-
-.profile-pic {
-  /*margin-left: 20px;*/
-  margin: 0 auto;
-  /*position: relative;*/
-  display: flex;
-  align-items: center;
-  /*margin-right: 0;*/
-}
-
-.profile-name {
-  margin: 0 auto;
-  display: table;
-  font-size: 2em;
-  color: #92959E;
-  font-weight: bold;
-  /*display: flex;*/
-  /*align-items: center;*/
 }

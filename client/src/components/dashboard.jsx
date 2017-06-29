@@ -9,7 +9,7 @@ import {
   Link
 } from 'react-router-dom'
 
-import { Image, Navbar, Nav, NavItem, MenuItem, NavDropdown, Button } from 'react-bootstrap';
+import { Image, Navbar, Nav, NavItem, MenuItem, NavDropdown, Button, ListGroup, ListGroupItem } from 'react-bootstrap';
 
 const routes = [
   {
@@ -103,7 +103,7 @@ class Dashboard extends React.Component {
                 component={() => (<Searchpair onlineFriends={this.state.onlineFriends}/>)}
               />);
     const navBar = (
-         <Navbar inverse collapseOnSelect>
+         <Navbar responsive inverse collapseOnSelect>
           <Navbar.Header>
             <Image className="logo" src={require('../../styles/img/computer.png')}/>
             <Navbar.Brand>
@@ -116,7 +116,7 @@ class Dashboard extends React.Component {
 
           </Nav>
           <Nav pullRight>
-            <NavItem><img className="profilePic" src={profile} /></NavItem>
+            <NavItem><Link to={"/profiles/" + myGithubUsername}><img className="profilePic" src={profile} /></Link></NavItem>
             <NavItem>Hello, {myGithubUsername}</NavItem>
             <Button className="logout" href="/logout">Log out</Button>
           </Nav>
@@ -131,9 +131,11 @@ class Dashboard extends React.Component {
           <div className="outer-sidebar">
             <div className="sidebar">
               <ul className="links" style={{ listStyleType: 'none' }}>
-                <li className="sideLinks"><Link to="/dashboard"><i className="fa fa-home" aria-hidden="true"></i>Dashboard</Link></li>
-                <li className="sideLinks"><Link to={"/profiles/" + myGithubUsername}><i className="fa fa-user" aria-hidden="true"></i> Profile</Link></li>
-                <li className="sideLinks"><Link to="/history"><i className="fa fa-history" aria-hidden="true"></i>History</Link></li>
+
+                <li className="sideLinks"><Link to="/dashboard" style={{ padding: 6, paddingRight: 48 }}><i className="fa fa-home" aria-hidden="true"></i>DASHBOARD</Link></li>
+                <li className="sideLinks"><Link to={"/profiles/" + myGithubUsername} style={{ padding: 6, paddingRight: 82 }}><i className="fa fa-user" aria-hidden="true"></i> PROFILE</Link></li>
+                <li className="sideLinks"><Link to="/history" style={{ padding: 6, paddingRight: 82 }}><i className="fa fa-history" aria-hidden="true"></i>HISTORY</Link></li>
+
               </ul>
               <div className="friends">
                 <h3>Friends</h3>

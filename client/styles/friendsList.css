@@ -1,5 +1,5 @@
 .friendsPic {
-  width: 17%;
+  width: 22%;
   -webkit-transition: all 1s ease; /* Safari and Chrome */
   -moz-transition: all 1s ease; /* Firefox */
   -ms-transition: all 1s ease; /* IE 9 */
@@ -16,7 +16,7 @@
 }
 
 .friends {
-  padding-top: 190px;
+  padding-top: 120px;
   margin: auto;
   width: 280px;
   margin-left: -39px;
@@ -36,8 +36,9 @@
 
 .oneFriend {
   margin: auto;
-  padding: 0px;
+  padding-left: 7px;
   margin-bottom: 20px;
+  margin-right: 61px;
 }
 
 .oneFriend:hover {
@@ -46,20 +47,18 @@
 
 .friendsName {
   float: right;
-  margin-right: 130px;
+  margin-right: 66px;
   margin-top: 15px;
   font-family: sans-serif;
   font-weight: normal;
   color: darkslategray;
+  position: relative;
 }
 
 h3 {
-  font-size: 19px;
+  font-size: 16px;
   font-weight: bold;
-  border-bottom: solid;
-  border-bottom-style: outset;
-  border-bottom-width: thin;
-  width: 13em;
+  width: 10em;
   color: darkslategrey;
-  margin-left: 7px;
+  margin-left: 20px;
 }

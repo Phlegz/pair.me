@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { PageHeader, Jumbotron, Button, Modal, FormGroup, ControlLabel, FormControl, Col, ProgressBar, Label } from 'react-bootstrap';
+import { PageHeader, Jumbotron, Button, Modal, FormGroup, ControlLabel, FormControl, Col, ProgressBar, Label, Glyphicon } from 'react-bootstrap';
 import PieChart from 'react-simple-pie-chart';
 import Moment from 'react-moment';
 import moment from 'moment';
@@ -239,10 +239,12 @@ class Searchpair extends Component {
     const data = this.state.data;
     let closePairModal = () => this.setState({ pairMeModal: false});
     let closeWaitModal = () => this.setState({ waitModal: false});
+
     let closeRecipientModal = () => this.setState({ recipientModal: false});
     let closeRejectModal = () => this.setState({ rejectModal: false});
     let closeAcceptModal = () => this.setState({ acceptModal: false});
-    const challengesCompleted = "1 challenge completed";
+    const challengesCompleted = "3 challenge";
+
     const today = Date.now();
     const yesterday = Date.now() - 86400000;
     const twoDaysAgo = Date.now() - (86400000*2);
@@ -276,7 +278,7 @@ class Searchpair extends Component {
       </p>
       <form //onSubmit={this.handleSubmit}
       >
-        <FormGroup controlId="formControlsSelect">
+        <FormGroup responsive controlId="formControlsSelect">
           <Col componentClass={ControlLabel} sm={4}>
             Select a language
           </Col>
@@ -323,23 +325,28 @@ class Searchpair extends Component {
 
       </form>
 
-      <div className="progressBar">
-        <h2>Progress</h2>
-        <p>Your progress on completed challenges over time</p>
-        <Col className="innerProgressBar" sm={5}>
-          <Label> <Moment calendar>{today}</Moment> </Label>
-          <ProgressBar min={0} max={5} now={1} />
-          <Label> <Moment format="LL">{yesterday}</Moment> </Label>
-          <ProgressBar bsStyle="success" now={0} label={`${challengesCompleted}%`}/>
-          <Label> <Moment format="LL">{twoDaysAgo}</Moment> </Label>
-          <ProgressBar bsStyle="info" now={20} />
-          <Label> <Moment format="LL">{threeDaysAgo}</Moment> </Label>
-          <ProgressBar bsStyle="warning" now={60} />
-          <Label> <Moment format="LL">{fourDaysAgo}</Moment> </Label>
-          <ProgressBar bsStyle="danger" now={100} />
-        </Col>
-         </div>
+      <div className="statistics">
+        <div className="progressBar">
+          <PageHeader>Progress</PageHeader>
+           <Col className="innerProgressBar" sm={5}>
+            <p>Your progress on completed challenges throughout the most recent days</p>
+
+            <Label> <Moment calendar>{today}</Moment> </Label>
+            <ProgressBar min={0} max={5} now={2} label="2 challenges"/>
+            <Label> <Moment format="LL">{yesterday}</Moment> </Label>
+            <ProgressBar bsStyle="success" min={0} max={5} now={3} label={`${challengesCompleted}`}/>
+            <Label> <Moment format="LL">{twoDaysAgo}</Moment> </Label>
+            <ProgressBar bsStyle="info" min={0} max={5} now={1} label="1 challenge"/>
+            <Label> <Moment format="LL">{threeDaysAgo}</Moment> </Label><Button bsSize="xsmall"><Glyphicon glyph="star" /> Star</Button>
+            <ProgressBar bsStyle="warning" min={0} max={5} now={5} label="5 challenges"/>
+            <Label> <Moment format="LL">{fourDaysAgo}</Moment> </Label>
+            <ProgressBar bsStyle="danger" min={0} max={5} now={0} label="Boo 0 challenges"/>
+          </Col>
+        </div>
         <div className="pieChart">
+
+          <p>Your average difficulty level of the challenges completed</p>
+          <h1><Label className="avgDifficulty">{this.state.average}</Label></h1>
           <PieChart
             sectorStrokeWidth={2}
             slices={[
@@ -357,6 +364,7 @@ class Searchpair extends Component {
               },
             ]}
           />
+
         </div>
       </div>
 
@@ -524,6 +532,7 @@ class Searchpair extends Component {
         </Modal.Body>
       </Modal>
 
+      </div>
     </div>
   );
   }

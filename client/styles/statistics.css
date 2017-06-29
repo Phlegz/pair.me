@@ -4,19 +4,31 @@
   width: 84%;
   margin: auto;
   background-color: #eee;
-  margin-top: 10em;
+  margin-top: 23px;
   overflow: hidden;
   padding-bottom: 5em;
+  margin-left: 13px;
 }
 
 .pieChart {
   width: 20%;
   height: 25%;
   float: right;
-  margin-right: 11em;
-  margin-top: 2em;
+  margin-right: 10em;
+  margin-top: 0em;
 }
 
 .progressBar {
   margin-left: 4em;
+}
+
+.label {
+  font-size: 82%;
+}
+
+.avgDifficulty {
+  position: absolute;
+  margin: 54px;
+  border-radius: 47px;
+
 }
