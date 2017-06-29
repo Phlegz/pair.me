@@ -41,6 +41,10 @@ a:hover {
   margin-bottom: 10em;
 }
 
+.page-header {
+  border-bottom: 1px solid #999;
+}
+
 .navbar {
   min-height: 68px;
 }
@@ -48,6 +52,7 @@ a:hover {
 .logout {
   margin: 1em;
   padding: 5px;
+  background-color: #928DAB;
 }
 
 #popover-positioned-bottom {
@@ -69,6 +74,7 @@ a:hover {
 a.brand.navbar-brand {
   width: 5em;
   padding: 14px;
+  color: #928DAB;
 }
 
 .navbar-nav>li>a {

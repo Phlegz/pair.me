@@ -77,34 +77,25 @@ class Profile extends Component {
     //TO DO: input should only be emails
     //TO DO: Fix github url
     return (
-             <div className="middleContainer">
+        <div className="middleContainer">
         <PageHeader>
           Profile
         </PageHeader>
 
+
         <div className="profile-info">
-          <div className="wrapper">
-            <img src={profile.avatar} />
-          </div>
-          <h2> {profile.name} </h2>
+          <img src={profile.avatar} />
+          <h2 className='name'>{ profile.name }</h2>
         </div>
 
-        <div className="info">
+        <span className="info">
           <Jumbotron>
-          <p> <i className="fa fa-github" aria-hidden="true"></i>: {profile.github_username} </p>
-          <p> <i className="fa fa-github-alt" aria-hidden="true"></i>: github.com/{profile.github_username} </p>
-          <p> <i className="fa fa-envelope" aria-hidden="true"></i>: {profile.email} </p>
-          <p> Twitter Handle: {profile.twitter_handle} </p>
+          <p><i className="fa fa-github" aria-hidden="true"></i>: {profile.github_username}</p>
+          <p><i className="fa fa-github-alt" aria-hidden="true"></i>: github.com/{profile.github_username}</p>
+          <p><i className="fa fa-envelope" aria-hidden="true"></i>: {profile.email}</p>
           </Jumbotron>
-        </div>
+        </span>
 
-        <div className="about-me">
-            <p> About Me: {profile.about}</p>
-        </div>
-
-
-
-      <div className="edit-profile" style={{height: 200}}>
         <Button
           bsStyle="primary"
           bsSize="large"
@@ -112,6 +103,14 @@ class Profile extends Component {
         >
         Edit Profile
         </Button>
+
+        <span className="about-me">
+          <Jumbotron className="jumboAboutMe">
+            <p className='text'> About Me: {profile.about}</p>
+          </Jumbotron>
+        </span>
+
+        <div className="edit-profile" style={{height: 200}}>
 
         <Modal
           show={this.state.show}

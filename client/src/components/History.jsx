@@ -58,7 +58,7 @@ class History extends Component {
       return (
       <div className="historyContainer" key={index}>
           {/*call toggle handler and change state whenever button is pressed */}
-          <Button onClick={ toggle }>{hist.title}</Button>
+          <Button className="showAnswer" onClick={ toggle }>{hist.title}</Button>
           {/*undefined state when opened*/}
           <Panel collapsible expanded={this.state.openTab === hist}>
             <AceEditor
