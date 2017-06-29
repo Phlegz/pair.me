@@ -42,6 +42,7 @@ h1 {
   display: -webkit-inline-box;
   position: absolute;
   margin: auto;
+  /*margin-left: 40rem;*/
   top: 0;
   right: 0;
   bottom: 0;
@@ -61,6 +62,7 @@ h1 {
 
 .githublink {
   color: #eee;
+  font-size:28px;
 }
 
 span.blue {
@@ -77,4 +79,3 @@ span.pink {
 :hover.pink {
   color: orange;
 }
-

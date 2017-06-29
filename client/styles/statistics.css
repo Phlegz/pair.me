@@ -1,25 +1,29 @@
 .statistics {
-  position: relative;
-  padding-top: 2em;
-  width: 84%;
-  margin: auto;
+  /*position: relative;*/
+  padding-top: 1em;
+  margin-top: 72px;
+  /*width: 84%;*/
+  /*margin: auto;*/
   background-color: #eee;
-  margin-top: 23px;
   overflow: hidden;
   padding-bottom: 5em;
-  margin-left: 13px;
+  /*margin-left: 13px;*/
 }
 
 .pieChart {
-  width: 20%;
+  width: 30%;
   height: 25%;
-  float: right;
-  margin-right: 10em;
-  margin-top: 0em;
+  /*float: right;*/
+  /*margin-right: 10em;*/
+  margin-top: 6em;
+}
+
+.pieChart p {
+  padding-top: 35px;
 }
 
 .progressBar {
-  margin-left: 4em;
+  /*margin-left: 4em;*/
 }
 
 .label {
@@ -28,7 +32,7 @@
 
 .avgDifficulty {
   position: absolute;
-  margin: 54px;
+  margin: 100px;
   border-radius: 47px;
 
 }

@@ -137,7 +137,7 @@ body {
     .message-list {
       overflow-y:auto;
       border-bottom: 2px solid white;
-      height: 430px;
+      height:390px;
     }
 
     .message.from-me {

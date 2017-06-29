@@ -103,8 +103,10 @@ li.sideLinks {
   width: 84%;
   margin: auto;
   background-color: #eee;
-  padding: 116px;
-  margin-top: -132px;
+  /*padding: 116px;*/
+  padding: 70px;
+  /*margin-top: -132px;*/
+  margin-top: -65px;
   margin-left: 12px;
 }
 
