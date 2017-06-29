@@ -326,9 +326,9 @@ class Searchpair extends Component {
       </form>
 
       <div className="statistics">
-        <div className="progressBar">
+        <div className="progressBar col-md-7">
           <PageHeader>Progress</PageHeader>
-           <Col className="innerProgressBar" sm={5}>
+           <Col className="innerProgressBar">
             <p>Your progress on completed challenges throughout the most recent days</p>
 
             <Label> <Moment calendar>{today}</Moment> </Label>
@@ -343,7 +343,7 @@ class Searchpair extends Component {
             <ProgressBar bsStyle="danger" min={0} max={5} now={0} label="Boo 0 challenges"/>
           </Col>
         </div>
-        <div className="pieChart">
+        <div className="pieChart col-md-4">
 
           <p>Your average difficulty level of the challenges completed</p>
           <h1><Label className="avgDifficulty">{this.state.average}</Label></h1>
