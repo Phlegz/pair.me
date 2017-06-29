@@ -41,6 +41,10 @@ a:hover {
   margin-bottom: 10em;
 }
 
+.page-header {
+  border-bottom: 1px solid #999;
+}
+
 .navbar {
   min-height: 68px;
 }

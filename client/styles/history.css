@@ -1,0 +1,27 @@
+.historyHeader {
+   margin-left: -1em;
+   font-size: 36px;
+ }
+
+.historyContainer {
+   margin-left: -3em;
+   width: 95%;
+   margin: auto;
+ }
+
+/*.innerContainer {
+   float: left;
+ }*/
+
+.panel-body {
+   padding: 0px;
+ }
+
+.panel-default {
+    width: 402px;
+  }
+
+.showAnswer {
+  background-color: #928DAB ;
+   color: white;
+ }
