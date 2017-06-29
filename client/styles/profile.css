@@ -27,8 +27,9 @@ body {
 }
 
 .edit-profile {
-  float: right;
-  margin: 60px;
+  margin: 0 auto;
+  display: table;
+  align-items: center;
 }
 
 /*.profile-info {
