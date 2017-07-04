@@ -39,10 +39,6 @@ module.exports = {
         use: 'url-loader'
       }
     ]
-  },
-  // plugins: [new BundleAnalyzerPlugin({
-  //   analyzerHost: '0.0.0.0',
-  //   analyzerPort: 3000
-  // })]
+  }
 
 }

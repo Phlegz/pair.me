@@ -114,7 +114,6 @@ class Challenge extends Component {
 
   //function to track changes and send to server for broadcast
   liveCode() {
-    // console.log('calling function');
     let editor = ace.edit('codeChallenges');
     let code = editor.getValue();
     if (this.state.sendUpdate) {

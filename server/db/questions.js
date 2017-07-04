@@ -12,6 +12,9 @@ knex.raw('TRUNCATE TABLE questions CASCADE')
   ])
 })
   .then(languagesIds => {
+    
+    // All questions courtesy of http://www.w3resource.com/javascript-exercises/javascript-functions-exercises.php
+    
     return knex('questions').insert([
       {
        question: "Write a JavaScript function that reverse a number.",

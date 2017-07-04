@@ -48,11 +48,9 @@ class Searchpair extends Component {
       friend: this.friend.value
     };
     this.setState({challengeType: postData})
-    console.log("LANGUAGE,DIFFICULTY,",this.state.challengeType)
     axios.post('/api/dashboard', postData)
     .then((response) => {
       this.setState({pair: response.data});
-      // console.log("PAAAAAIIIIIRRRRR", this.state.pair)
     })
     .catch(error => {
       console.log(error);
@@ -68,7 +66,6 @@ class Searchpair extends Component {
       acceptingUserId: this.state.pair.id
     })
     .then((response) => {
-    console.log(response.data);
     })
     .catch(error => {
       console.log(error);
@@ -79,12 +76,10 @@ class Searchpair extends Component {
     event.preventDefault();
     this.setState({ waitModal: false})
     this.setState({ recipientModal: false})
-      console.log("receiptor:",this.state.pair.id);
     axios.post('/api/notifications/cancel', {
       // acceptingUserId: this.state.pair.id
     })
     .then((response) => {
-    console.log(response.data);
     })
     .catch(error => {
       console.log(error);
@@ -97,7 +92,6 @@ class Searchpair extends Component {
     axios.post('/api/notifications/accept', {
     })
     .then((response) => {
-    console.log("ACCEPTED EVENT,",response.data);
     })
     .catch(error => {
       console.log(error);
@@ -111,7 +105,6 @@ class Searchpair extends Component {
     axios.post('/api/notifications/reject', {
     })
     .then((response) => {
-    console.log(response.data);
     })
     .catch(error => {
       console.log(error);
@@ -123,18 +116,11 @@ class Searchpair extends Component {
     axios.get('/api/notifications')
       .then((response) => {
 
-        console.log(response.data);
         let requestArr = response.data;
-        console.log("LENGTH",requestArr.length);
         if(requestArr.length > 0) {
           requestArr.forEach((request) => {
-            console.log('RRRRRRRRRRRrequest:', request);
             if (request.user_id === this.state.currentUser.id) {
-              console.log(this.state.currentUser.id);
-              console.log(request.user_id);
               if (request.status === 'pending') {
-
-                console.log("there's a request pending for me");
                 if (request.initiator) {   // I initiated this!
                   this.setState({senderUser: {
                     id: request.user_id,
@@ -195,7 +181,6 @@ class Searchpair extends Component {
     .then((response)=> {
       this.setState({data: response.data.rows});
       const data = this.state.data;
-      // console.log(data, 'current state of data');
       const difficultyList = [];
 
       if(data != null) {
